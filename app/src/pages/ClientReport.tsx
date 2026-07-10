@@ -1,9 +1,11 @@
+import { Fragment } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { useAppData } from '../lib/store';
 import { recommendDietApproaches } from '../lib/dietEngine';
 import { generateRation } from '../lib/rationGenerator';
 import { buildReportText } from '../lib/reportText';
-import { bmiCategory } from '../lib/kbju';
+import { ACTIVITY_OPTIONS, bmiCategory } from '../lib/kbju';
+import { FOOD_GROUPS, FREQUENCY_LABEL, PORTION_LABEL } from '../lib/foodFrequency';
 import { formatDate, formatNumber } from '../lib/format';
 import { IconMail, IconPrinter } from '../components/ui/icons';
 import uiStyles from '../components/ui/ui.module.css';
@@ -20,6 +22,8 @@ export function ClientReport() {
   const recommendations = recommendDietApproaches(client);
   const ration = lastCalc ? generateRation(client, lastCalc) : null;
   const reportText = buildReportText(client, specialist, lastCalc, recommendations, ration);
+  const activity = ACTIVITY_OPTIONS.find((a) => a.value === client.activityLevel);
+  const trackedFrequency = FOOD_GROUPS.filter((g) => client.foodFrequency?.[g.id]);
 
   const mailtoHref = `mailto:?subject=${encodeURIComponent(`Заключение — ${client.name}`)}&body=${encodeURIComponent(reportText)}`;
 
@@ -96,8 +100,78 @@ export function ClientReport() {
             <dd>{client.conditions || '—'}</dd>
             <dt>Предпочтения</dt>
             <dd>{client.preferences || '—'}</dd>
+            <dt>Физическая активность</dt>
+            <dd>{activity ? `${activity.label} — ${activity.hint}` : '—'}</dd>
           </dl>
         </div>
+
+        {client.biometrics && (
+          <div className={styles.section}>
+            <h2>Биометрия</h2>
+            <dl className={styles.kv}>
+              <dt>Рост / талия / бёдра</dt>
+              <dd>
+                {client.biometrics.heightCm} см / {client.biometrics.waistCm} см / {client.biometrics.hipCm} см
+              </dd>
+              <dt>Давление / пульс</dt>
+              <dd>
+                {client.biometrics.systolic}/{client.biometrics.diastolic} · {client.biometrics.pulse} уд/мин
+              </dd>
+              <dt>Дата замера</dt>
+              <dd>{formatDate(client.biometrics.measuredAt)}</dd>
+              {client.biometrics.note && (
+                <>
+                  <dt>Заметка</dt>
+                  <dd>{client.biometrics.note}</dd>
+                </>
+              )}
+            </dl>
+          </div>
+        )}
+
+        {(client.bodyComposition || client.energyExpenditure) && (
+          <div className={styles.section}>
+            <h2>Состав тела и энергообмен</h2>
+            <dl className={styles.kv}>
+              {client.bodyComposition && (
+                <>
+                  <dt>Жир / мышечная масса / висцеральный жир</dt>
+                  <dd>
+                    {client.bodyComposition.fatPercent}% / {client.bodyComposition.muscleMassKg} кг /{' '}
+                    {client.bodyComposition.visceralFat}
+                  </dd>
+                </>
+              )}
+              {client.energyExpenditure && (
+                <>
+                  <dt>Базовый обмен (RMR) / фактический расход</dt>
+                  <dd>
+                    {client.energyExpenditure.restingKcal} ккал / {client.energyExpenditure.totalKcal} ккал
+                  </dd>
+                </>
+              )}
+            </dl>
+          </div>
+        )}
+
+        {trackedFrequency.length > 0 && (
+          <div className={styles.section}>
+            <h2>Фактическое питание</h2>
+            <dl className={styles.kv}>
+              {trackedFrequency.map((g) => {
+                const entry = client.foodFrequency![g.id];
+                return (
+                  <Fragment key={g.id}>
+                    <dt>{g.label}</dt>
+                    <dd>
+                      {FREQUENCY_LABEL[entry.frequency]}, порция — {PORTION_LABEL[entry.portion]}
+                    </dd>
+                  </Fragment>
+                );
+              })}
+            </dl>
+          </div>
+        )}
 
         <div className={styles.section}>
           <h2>Рекомендованный подход к питанию</h2>
