@@ -375,18 +375,12 @@ export function IconChefHat(props: SVGProps<SVGSVGElement>) {
 export function IconTelegram(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="10" fill="#26A5E4" />
       <path
-        d="M20.9 4.3 3.4 11.2c-.95.37-.94 1.72.02 2.08l4.4 1.6 1.7 5.5c.3.94 1.48 1.19 2.14.44l2.35-2.68 4.5 3.3c.85.63 2.07.17 2.27-.88l3.1-15.05c.2-1.05-.86-1.88-1.86-1.5Z"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinejoin="round"
+        d="M17.15 6.9 5.75 11.35c-.68.27-.67 1.23.02 1.48l3.06 1.11 1.18 3.83c.2.65 1.02.83 1.48.31l1.64-1.87 3.15 2.32c.6.44 1.45.11 1.6-.62l2.1-10.48c.14-.72-.6-1.28-1.28-1.01Z"
+        fill="#fff"
       />
-      <path
-        d="M9.1 15.3 18.5 8"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
+      <path d="M9 15.7 15.9 9.4c.28-.2.55.12.31.35l-5.8 5.8-.2 2.32c-.03.28-.4.32-.5.06Z" fill="#c8e6fa" />
     </svg>
   );
 }
@@ -394,17 +388,8 @@ export function IconTelegram(props: SVGProps<SVGSVGElement>) {
 export function IconVk(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...base} {...props}>
-      <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.6" />
-      <text
-        x="12"
-        y="15.5"
-        textAnchor="middle"
-        fontSize="9.5"
-        fontWeight="700"
-        fontFamily="var(--sans, sans-serif)"
-        fill="currentColor"
-        stroke="none"
-      >
+      <rect x="2" y="2" width="20" height="20" rx="6" fill="#0077FF" />
+      <text x="12" y="15.7" textAnchor="middle" fontSize="10.5" fontWeight="700" fontFamily="var(--sans, sans-serif)" fill="#fff">
         VK
       </text>
     </svg>
