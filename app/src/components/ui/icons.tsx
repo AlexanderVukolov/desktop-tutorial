@@ -371,3 +371,42 @@ export function IconChefHat(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function IconTelegram(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path
+        d="M20.9 4.3 3.4 11.2c-.95.37-.94 1.72.02 2.08l4.4 1.6 1.7 5.5c.3.94 1.48 1.19 2.14.44l2.35-2.68 4.5 3.3c.85.63 2.07.17 2.27-.88l3.1-15.05c.2-1.05-.86-1.88-1.86-1.5Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9.1 15.3 18.5 8"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function IconVk(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.6" />
+      <text
+        x="12"
+        y="15.5"
+        textAnchor="middle"
+        fontSize="9.5"
+        fontWeight="700"
+        fontFamily="var(--sans, sans-serif)"
+        fill="currentColor"
+        stroke="none"
+      >
+        VK
+      </text>
+    </svg>
+  );
+}

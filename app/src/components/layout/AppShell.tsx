@@ -15,10 +15,15 @@ import {
   IconSettings,
   IconSun,
   IconTarget,
+  IconTelegram,
   IconUtensils,
+  IconVk,
 } from '../ui/icons';
+import { SOCIAL_LINKS } from '../../lib/social';
 import { ReminderEngine } from './ReminderEngine';
 import styles from './AppShell.module.css';
+
+const SOCIAL_ICONS = { telegram: IconTelegram, vk: IconVk } as const;
 
 const NAV_MAIN = [
   { to: '/app/my-cabinet', label: 'Мой кабинет', icon: IconTarget },
@@ -82,6 +87,16 @@ export function AppShell() {
             </div>
           </div>
           <div className={styles.brandCaption}>Лига Нутрициологии · NSL</div>
+          <div className={styles.socialRow}>
+            {SOCIAL_LINKS.map(({ key, label, href }) => {
+              const Icon = SOCIAL_ICONS[key];
+              return (
+                <a key={key} href={href} target="_blank" rel="noreferrer" className={styles.socialLink} aria-label={label} title={label}>
+                  <Icon width={15} height={15} />
+                </a>
+              );
+            })}
+          </div>
         </div>
 
         <nav className={styles.navGroup}>

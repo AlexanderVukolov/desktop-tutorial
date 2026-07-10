@@ -1,10 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { useSession } from '../lib/useSession';
-import { IconLock } from '../components/ui/icons';
+import { IconLock, IconTelegram, IconVk } from '../components/ui/icons';
 import { OrganicBanner } from '../components/ui/OrganicBanner';
 import { NSL_LOGO_FULL, NSL_LOGO_ICON } from '../assets/nslLogo';
+import { SOCIAL_LINKS } from '../lib/social';
 import uiStyles from '../components/ui/ui.module.css';
 import styles from './Login.module.css';
+
+const SOCIAL_ICONS = { telegram: IconTelegram, vk: IconVk } as const;
 
 const MODULES = [
   { color: 'var(--c-edu)', label: 'Учебное ядро — диплом и специализации' },
@@ -52,6 +55,18 @@ export function Login() {
         <div className={styles.poweredBy}>
           <img src={NSL_LOGO_FULL} alt="NSL — Лига Нутрициологии" className={styles.poweredByLogo} />
           <span>Официальная платформа школы «Лига Нутрициологии»</span>
+        </div>
+
+        <div className={styles.socialRow}>
+          <span>Мы в соцсетях:</span>
+          {SOCIAL_LINKS.map(({ key, label, href }) => {
+            const Icon = SOCIAL_ICONS[key];
+            return (
+              <a key={key} href={href} target="_blank" rel="noreferrer" className={styles.socialLink} aria-label={label} title={label}>
+                <Icon width={16} height={16} />
+              </a>
+            );
+          })}
         </div>
       </section>
 
