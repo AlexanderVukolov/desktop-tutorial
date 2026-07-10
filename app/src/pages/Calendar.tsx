@@ -15,6 +15,7 @@ import {
   formatWeekdayDate,
   getMonthGrid,
   getWeekdayLabels,
+  timeInputValue,
 } from '../lib/calendar';
 import type { Appointment, AppointmentFormat, AppointmentType } from '../lib/types';
 import uiStyles from '../components/ui/ui.module.css';
@@ -23,13 +24,14 @@ import styles from './Calendar.module.css';
 const MONTH_LABEL = new Intl.DateTimeFormat('ru-RU', { month: 'long', year: 'numeric' });
 
 export function Calendar() {
-  const { clients, appointments, addAppointment, cancelAppointment, completeAppointment } = useAppData();
+  const { clients, appointments, addAppointment, updateAppointment, cancelAppointment, completeAppointment } = useAppData();
   const [params] = useSearchParams();
   const preselectedClientId = params.get('clientId');
   const today = new Date();
   const [cursor, setCursor] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [selectedKey, setSelectedKey] = useState(dateKey(today));
   const [modalOpen, setModalOpen] = useState(!!preselectedClientId);
+  const [rescheduleTarget, setRescheduleTarget] = useState<Appointment | null>(null);
   const [notifPermission, setNotifPermission] = useState<NotificationPermission | 'unsupported'>(
     typeof Notification !== 'undefined' ? Notification.permission : 'unsupported',
   );
@@ -85,6 +87,19 @@ export function Calendar() {
     setModalOpen(false);
   }
 
+  function handleReschedule(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!rescheduleTarget) return;
+    const form = new FormData(e.currentTarget);
+    const date = String(form.get('date') || '');
+    const time = String(form.get('time') || '09:00');
+    if (!date) return;
+    const startsAt = new Date(`${date}T${time}:00`).toISOString();
+    updateAppointment(rescheduleTarget.id, { startsAt, reminderSent: false });
+    setSelectedKey(dateKey(new Date(date)));
+    setRescheduleTarget(null);
+  }
+
   function renderAppointment(a: Appointment) {
     return (
       <div key={a.id} className={styles.apptRow}>
@@ -102,6 +117,9 @@ export function Calendar() {
           <div className={styles.apptActions}>
             <button className={`${uiStyles.btn} ${uiStyles.btnGhost} ${uiStyles.btnSm}`} onClick={() => completeAppointment(a.id)}>
               Завершить
+            </button>
+            <button className={`${uiStyles.btn} ${uiStyles.btnGhost} ${uiStyles.btnSm}`} onClick={() => setRescheduleTarget(a)}>
+              Перенести
             </button>
             <button className={`${uiStyles.btn} ${uiStyles.btnGhost} ${uiStyles.btnSm}`} onClick={() => cancelAppointment(a.id)}>
               Отменить
@@ -291,6 +309,31 @@ export function Calendar() {
               </button>
               <button type="submit" className={`${uiStyles.btn} ${uiStyles.btnPrimary}`}>
                 Запланировать
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
+
+      {rescheduleTarget && (
+        <Modal title={`Перенести консультацию — ${clientName(rescheduleTarget.clientId)}`} onClose={() => setRescheduleTarget(null)}>
+          <form className={uiStyles.form} onSubmit={handleReschedule}>
+            <div className={styles.formRow}>
+              <div className={uiStyles.field}>
+                <label htmlFor="reschedule-date">Дата</label>
+                <input id="reschedule-date" name="date" type="date" required defaultValue={dateKey(new Date(rescheduleTarget.startsAt))} />
+              </div>
+              <div className={uiStyles.field}>
+                <label htmlFor="reschedule-time">Время</label>
+                <input id="reschedule-time" name="time" type="time" required defaultValue={timeInputValue(rescheduleTarget.startsAt)} />
+              </div>
+            </div>
+            <div className={uiStyles.actions}>
+              <button type="button" className={`${uiStyles.btn} ${uiStyles.btnGhost}`} onClick={() => setRescheduleTarget(null)}>
+                Отмена
+              </button>
+              <button type="submit" className={`${uiStyles.btn} ${uiStyles.btnPrimary}`}>
+                Перенести
               </button>
             </div>
           </form>

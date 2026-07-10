@@ -53,6 +53,12 @@ export function formatTime(iso: string): string {
   return new Intl.DateTimeFormat('ru-RU', { hour: '2-digit', minute: '2-digit' }).format(new Date(iso));
 }
 
+/** HH:mm in local time, suitable as an <input type="time"> defaultValue. */
+export function timeInputValue(iso: string): string {
+  const d = new Date(iso);
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+}
+
 export function formatWeekdayDate(iso: string): string {
   return new Intl.DateTimeFormat('ru-RU', { weekday: 'short', day: 'numeric', month: 'short' }).format(new Date(iso));
 }
