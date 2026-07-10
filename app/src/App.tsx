@@ -3,7 +3,6 @@ import { RequireAuth } from './components/RequireAuth';
 import { AppShell } from './components/layout/AppShell';
 import { PortalShell } from './components/portal/PortalShell';
 import { Login } from './pages/Login';
-import { Dashboard } from './pages/Dashboard';
 import { Clients } from './pages/Clients';
 import { ClientDetail } from './pages/ClientDetail';
 import { ClientReport } from './pages/ClientReport';
@@ -28,13 +27,12 @@ import { Chat } from './pages/portal/Chat';
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/app/dashboard" replace />} />
+      <Route path="/" element={<Navigate to="/app/my-cabinet" replace />} />
       <Route path="/login" element={<Login />} />
 
       <Route element={<RequireAuth />}>
         <Route path="/app" element={<AppShell />}>
-          <Route index element={<Navigate to="dashboard" replace />} />
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route index element={<Navigate to="my-cabinet" replace />} />
           <Route path="clients" element={<Clients />} />
           <Route path="clients/:id" element={<ClientDetail />} />
           <Route path="clients/:id/report" element={<ClientReport />} />

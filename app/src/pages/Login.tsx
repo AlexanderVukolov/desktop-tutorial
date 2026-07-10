@@ -20,7 +20,7 @@ export function Login() {
 
   function enter() {
     signIn();
-    navigate('/app/dashboard', { replace: true });
+    navigate('/app/my-cabinet', { replace: true });
   }
 
   return (

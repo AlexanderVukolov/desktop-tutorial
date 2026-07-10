@@ -9,7 +9,6 @@ import {
   IconCalendar,
   IconChefHat,
   IconCommunity,
-  IconGrid,
   IconHandshake,
   IconMoon,
   IconNewspaper,
@@ -24,13 +23,12 @@ import { ReminderEngine } from './ReminderEngine';
 import styles from './AppShell.module.css';
 
 const NAV_MAIN = [
-  { to: '/app/dashboard', label: 'Дашборд', icon: IconGrid },
+  { to: '/app/my-cabinet', label: 'Мой кабинет', icon: IconTarget },
   { to: '/app/clients', label: 'Клиенты', icon: IconUsers },
   { to: '/app/calendar', label: 'Календарь', icon: IconCalendar },
   { to: '/app/planner', label: 'Планнер', icon: IconNotebook },
   { to: '/app/kbju', label: 'КБЖУ-калькулятор', icon: IconCalculator },
   { to: '/app/food-calculator', label: 'Калькулятор еды', icon: IconUtensils },
-  { to: '/app/my-cabinet', label: 'Мой кабинет', icon: IconTarget },
   { to: '/app/recipes', label: 'Рецепты', icon: IconChefHat },
   { to: '/app/partner', label: 'Партнёрская программа', icon: IconHandshake },
 ];
@@ -43,13 +41,12 @@ const NAV_ECOSYSTEM = [
 ];
 
 const PAGE_META: { match: string; crumb: string; title: string }[] = [
-  { match: '/app/dashboard', crumb: 'Nutri.OS', title: 'Дашборд' },
+  { match: '/app/my-cabinet', crumb: 'Nutri.OS', title: 'Мой кабинет' },
   { match: '/app/clients', crumb: 'Nutri.OS', title: 'Клиенты' },
   { match: '/app/calendar', crumb: 'Nutri.OS', title: 'Календарь' },
   { match: '/app/planner', crumb: 'Nutri.OS', title: 'Планнер' },
   { match: '/app/kbju', crumb: 'Nutri.OS', title: 'КБЖУ-калькулятор' },
   { match: '/app/food-calculator', crumb: 'Nutri.OS', title: 'Калькулятор еды' },
-  { match: '/app/my-cabinet', crumb: 'Nutri.OS', title: 'Мой кабинет' },
   { match: '/app/recipes', crumb: 'Nutri.OS', title: 'Рецепты' },
   { match: '/app/partner', crumb: 'Nutri.OS', title: 'Партнёрская программа' },
   { match: '/app/career', crumb: 'Nutri.OS · экосистема', title: 'Карьерный центр' },
