@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import type { PortalContext } from '../../components/portal/PortalShell';
 import { useAppData } from '../../lib/store';
@@ -6,15 +6,10 @@ import type { AiEstimate, MealType } from '../../lib/types';
 import { MEAL_TYPE_LABEL, MEAL_TYPE_OPTIONS } from '../../lib/diary';
 import { recognizeMeal } from '../../lib/foodRecognition';
 import { IconCamera } from '../../components/ui/icons';
-import { formatNumber } from '../../lib/format';
+import { MacroProgress } from '../../components/ui/MacroProgress';
+import { formatDayLabel, shiftDateKey, sumEntryMacros, todayDateKey } from '../../lib/tracker';
 import uiStyles from '../../components/ui/ui.module.css';
 import styles from './Diary.module.css';
-
-function isToday(iso: string): boolean {
-  const d = new Date(iso);
-  const now = new Date();
-  return d.toDateString() === now.toDateString();
-}
 
 export function Diary() {
   const { clientId } = useOutletContext<PortalContext>();
@@ -24,11 +19,27 @@ export function Diary() {
   const [photo, setPhoto] = useState<string | null>(null);
   const [aiState, setAiState] = useState<'idle' | 'loading' | 'ready'>('idle');
   const [aiResult, setAiResult] = useState<AiEstimate | null>(null);
+  const [selectedDate, setSelectedDate] = useState(todayDateKey());
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const entries = diary.filter((d) => d.clientId === clientId).sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
-  const target = calculations.find((k) => k.clientId === clientId);
-  const kcalToday = entries.filter((e) => isToday(e.createdAt)).reduce((sum, e) => sum + (e.aiEstimate?.kcal ?? 0), 0);
+  const entries = useMemo(
+    () => diary.filter((d) => d.clientId === clientId).sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)),
+    [diary, clientId],
+  );
+  const lastCalc = useMemo(
+    () =>
+      [...calculations]
+        .filter((k) => k.clientId === clientId)
+        .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))[0],
+    [calculations, clientId],
+  );
+  const target = lastCalc
+    ? { kcal: lastCalc.targetCalories, proteinG: lastCalc.proteinG, fatG: lastCalc.fatG, carbsG: lastCalc.carbsG }
+    : null;
+
+  const dayEntries = entries.filter((e) => e.createdAt.slice(0, 10) === selectedDate);
+  const totals = sumEntryMacros(dayEntries);
+  const isToday = selectedDate === todayDateKey();
 
   function handlePhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -69,21 +80,39 @@ export function Diary() {
 
   return (
     <div>
-      {target && (
-        <div className={styles.summary}>
-          <span>
-            Сегодня: <strong className="tabular">{formatNumber(kcalToday)}</strong> из{' '}
-            <strong className="tabular">{formatNumber(target.targetCalories)}</strong> ккал
-          </span>
-          <div className={styles.summaryTrack}>
-            <div
-              className={styles.summaryFill}
-              style={{ width: `${Math.min((kcalToday / target.targetCalories) * 100, 100)}%` }}
-            />
-          </div>
+      <div className={styles.trackerHead}>
+        <button className={styles.dayNavBtn} onClick={() => setSelectedDate((d) => shiftDateKey(d, -1))} aria-label="Предыдущий день">
+          ‹
+        </button>
+        <span className={styles.dayLabel}>{formatDayLabel(selectedDate)}</span>
+        <button
+          className={styles.dayNavBtn}
+          onClick={() => setSelectedDate((d) => shiftDateKey(d, 1))}
+          disabled={isToday}
+          aria-label="Следующий день"
+        >
+          ›
+        </button>
+      </div>
+
+      <div className={styles.summary}>
+        <MacroProgress actual={totals} target={target} />
+      </div>
+
+      {!isToday && (
+        <div className={styles.pastDayHint}>
+          <span>Записи можно добавлять только за сегодня.</span>
+          <button
+            type="button"
+            className={`${uiStyles.btn} ${uiStyles.btnGhost} ${uiStyles.btnSm}`}
+            onClick={() => setSelectedDate(todayDateKey())}
+          >
+            Вернуться к сегодня
+          </button>
         </div>
       )}
 
+      {isToday && (
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.formRow}>
           <label htmlFor="mealType">Приём пищи</label>
@@ -140,10 +169,11 @@ export function Diary() {
           Добавить запись
         </button>
       </form>
+      )}
 
       <div className={styles.entries}>
-        {entries.length === 0 && <div className={styles.empty}>Записей пока нет — добавьте первый приём пищи выше.</div>}
-        {entries.map((entry) => (
+        {dayEntries.length === 0 && <div className={styles.empty}>За этот день записей нет.</div>}
+        {dayEntries.map((entry) => (
           <div key={entry.id} className={styles.entry}>
             {entry.photo && <img src={entry.photo} alt="" className={styles.entryPhoto} />}
             <div className={styles.entryBody}>

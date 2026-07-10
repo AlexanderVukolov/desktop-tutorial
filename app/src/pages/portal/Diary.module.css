@@ -1,25 +1,56 @@
+.trackerHead {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-bottom: 0.8rem;
+}
+
+.dayNavBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.dayNavBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.dayLabel {
+  font-size: 0.86rem;
+  font-weight: 600;
+  min-width: 9rem;
+  text-align: center;
+}
+
 .summary {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 0.85rem 1.1rem;
+  padding: 0.95rem 1.1rem;
   margin-bottom: 1rem;
-  font-size: 0.84rem;
-  color: var(--ink-2);
 }
 
-.summaryTrack {
-  height: 6px;
-  border-radius: 999px;
+.pastDayHint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
   background: var(--surface-2);
-  margin-top: 0.6rem;
-  overflow: hidden;
-}
-
-.summaryFill {
-  height: 100%;
-  background: var(--c-edu);
-  border-radius: 999px;
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.3rem;
+  font-size: 0.82rem;
+  color: var(--ink-2);
 }
 
 .form {
