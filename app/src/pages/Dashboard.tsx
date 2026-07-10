@@ -180,7 +180,7 @@ export function Dashboard() {
         <Card
           title="Недавние клиенты"
           action={
-            <Link to="/app/clients" className={`${uiStyles.btn} ${uiStyles.btnGhost} ${uiStyles.btnSm}`}>
+            <Link to="/app/my-cabinet?tab=clients" className={`${uiStyles.btn} ${uiStyles.btnGhost} ${uiStyles.btnSm}`}>
               Все клиенты
             </Link>
           }
@@ -228,7 +228,7 @@ export function Dashboard() {
                 </div>
                 <IconCalculator width={18} height={18} />
               </Link>
-              <Link to="/app/clients" className={styles.actionRow}>
+              <Link to="/app/my-cabinet?tab=clients" className={styles.actionRow}>
                 <div>
                   <div className="title">Добавить клиента</div>
                   <div className="desc">Завести карточку и начать сопровождение</div>

@@ -3,7 +3,6 @@ import { RequireAuth } from './components/RequireAuth';
 import { AppShell } from './components/layout/AppShell';
 import { PortalShell } from './components/portal/PortalShell';
 import { Login } from './pages/Login';
-import { Clients } from './pages/Clients';
 import { ClientDetail } from './pages/ClientDetail';
 import { ClientReport } from './pages/ClientReport';
 import { Calendar } from './pages/Calendar';
@@ -32,7 +31,6 @@ export default function App() {
       <Route element={<RequireAuth />}>
         <Route path="/app" element={<AppShell />}>
           <Route index element={<Navigate to="my-cabinet" replace />} />
-          <Route path="clients" element={<Clients />} />
           <Route path="clients/:id" element={<ClientDetail />} />
           <Route path="clients/:id/report" element={<ClientReport />} />
           <Route path="calendar" element={<Calendar />} />

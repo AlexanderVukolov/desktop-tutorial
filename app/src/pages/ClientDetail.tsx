@@ -47,7 +47,7 @@ export function ClientDetail() {
   const [tab, setTab] = useState<(typeof TABS)[number]['key']>('overview');
   const photoInput = useRef<HTMLInputElement>(null);
 
-  if (!client) return <Navigate to="/app/clients" replace />;
+  if (!client) return <Navigate to="/app/my-cabinet?tab=clients" replace />;
 
   const goalLabel = GOAL_OPTIONS.find((g) => g.value === client.goal)?.label ?? client.goal;
   const clientCalcs = calculations.filter((k) => k.clientId === client.id);
@@ -78,7 +78,7 @@ export function ClientDetail() {
 
   return (
     <div>
-      <Link to="/app/clients" className={styles.back}>
+      <Link to="/app/my-cabinet?tab=clients" className={styles.back}>
         ← Все клиенты
       </Link>
 

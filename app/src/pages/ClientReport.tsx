@@ -17,7 +17,7 @@ export function ClientReport() {
   const { clients, calculations, specialist } = useAppData();
   const client = clients.find((c) => c.id === id);
 
-  if (!client) return <Navigate to="/app/clients" replace />;
+  if (!client) return <Navigate to="/app/my-cabinet?tab=clients" replace />;
 
   const lastCalc = calculations.find((k) => k.clientId === client.id);
   const recommendations = recommendDietApproaches(client);

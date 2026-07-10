@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { OrganicBanner } from '../components/ui/OrganicBanner';
+import { Clients } from './Clients';
 import { Dashboard } from './Dashboard';
 import { MyCabinetTemplates } from './MyCabinetTemplates';
 import { Partner } from './Partner';
 import styles from './MyCabinet.module.css';
 
 const TABS = [
+  { key: 'clients', label: 'Клиенты' },
   { key: 'dashboard', label: 'Дашборд' },
   { key: 'templates', label: 'Шаблоны' },
   { key: 'partner', label: 'Партнёрская программа' },
@@ -37,7 +39,7 @@ export function MyCabinet() {
         size="md"
         badge="NSL · Лига Нутрициологии"
         title="Мой кабинет"
-        subtitle="Обзор практики, готовые шаблоны рационов и партнёрская программа — в одном месте."
+        subtitle="Клиенты, обзор практики, готовые шаблоны рационов и партнёрская программа — в одном месте."
       />
 
       <div className={styles.tabBar}>
@@ -52,6 +54,7 @@ export function MyCabinet() {
         ))}
       </div>
 
+      {tab === 'clients' && <Clients />}
       {tab === 'dashboard' && <Dashboard />}
       {tab === 'templates' && <MyCabinetTemplates />}
       {tab === 'partner' && <Partner />}

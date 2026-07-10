@@ -15,7 +15,6 @@ import {
   IconSettings,
   IconSun,
   IconTarget,
-  IconUsers,
   IconUtensils,
 } from '../ui/icons';
 import { ReminderEngine } from './ReminderEngine';
@@ -23,7 +22,6 @@ import styles from './AppShell.module.css';
 
 const NAV_MAIN = [
   { to: '/app/my-cabinet', label: 'Мой кабинет', icon: IconTarget },
-  { to: '/app/clients', label: 'Клиенты', icon: IconUsers },
   { to: '/app/calendar', label: 'Календарь', icon: IconCalendar },
   { to: '/app/planner', label: 'Планнер', icon: IconNotebook },
   { to: '/app/kbju', label: 'КБЖУ-калькулятор', icon: IconCalculator },
