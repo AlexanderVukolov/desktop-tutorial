@@ -1,6 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import { useSession } from '../lib/useSession';
-import { IconLock, IconTelegram, IconVk, IconYoutube } from '../components/ui/icons';
+import {
+  IconBook,
+  IconCalculator,
+  IconChefHat,
+  IconClipboard,
+  IconHandshake,
+  IconLock,
+  IconTarget,
+  IconTelegram,
+  IconUsers,
+  IconVk,
+  IconYoutube,
+} from '../components/ui/icons';
 import { OrganicBanner } from '../components/ui/OrganicBanner';
 import { NSL_LOGO_FULL, NSL_LOGO_ICON } from '../assets/nslLogo';
 import { SOCIAL_LINKS } from '../lib/social';
@@ -9,12 +21,49 @@ import styles from './Login.module.css';
 
 const SOCIAL_ICONS = { telegram: IconTelegram, vk: IconVk, youtube: IconYoutube } as const;
 
-const MODULES = [
-  { color: 'var(--c-edu)', label: 'Учебное ядро — диплом и специализации' },
-  { color: 'var(--c-saas)', label: 'КБЖУ-калькулятор и CRM клиентов' },
-  { color: 'var(--c-career)', label: 'Карьерный маркетплейс и партнёрка' },
-  { color: 'var(--c-know)', label: 'База знаний и CME' },
-  { color: 'var(--c-comm)', label: 'Комьюнити выпускников' },
+const OFFERS = [
+  {
+    icon: IconUsers,
+    color: 'var(--c-saas)',
+    title: 'CRM клиентов без хаоса',
+    desc: 'Анкеты, биометрия, оплаты и история расчётов — в одной карточке',
+  },
+  {
+    icon: IconCalculator,
+    color: 'var(--c-career)',
+    title: 'КБЖУ с научным разбором',
+    desc: 'BMR, NEAT и EAT отдельно — расчёт, который легко объяснить клиенту',
+  },
+  {
+    icon: IconTarget,
+    color: 'var(--c-comm)',
+    title: 'Трекер калорий и БЖУ',
+    desc: 'Дневная и недельная сводка прогресса клиента, как в FatSecret',
+  },
+  {
+    icon: IconChefHat,
+    color: 'var(--c-know)',
+    title: 'Рационы и рецепты',
+    desc: 'Готовые шаблоны на 5 калорийных диапазонов и рецепты по категориям',
+  },
+  {
+    icon: IconClipboard,
+    color: 'var(--c-edu)',
+    title: 'Оценка питания анкетой',
+    desc: 'Структурированные вопросы вместо догадок по дневнику клиента',
+  },
+  {
+    icon: IconHandshake,
+    color: 'var(--c-career)',
+    title: 'Доход с партнёрской программы',
+    desc: 'Реферальные начисления и конверсия — прямо в кабинете',
+  },
+  {
+    icon: IconBook,
+    color: 'var(--c-edu)',
+    title: 'Обучение и комьюнити Лиги',
+    desc: 'База знаний, CME-часы, карьерный центр и вебинары под одним логином',
+  },
 ];
 
 function SocialLinks({ className }: { className?: string }) {
@@ -55,15 +104,20 @@ export function Login() {
 
         <OrganicBanner
           badge="NSL · Лига Нутрициологии"
-          title="Личный кабинет специалиста, который растёт вместе с вами"
-          subtitle="Один вход — обучение, практика, клиенты и доход собраны в одном месте."
+          title="Всё для практики нутрициолога — в одном личном кабинете"
+          subtitle="От анкеты и КБЖУ до трекера питания, рецептов и дохода с рефералов — без таблиц и лишних вкладок."
         />
 
-        <div className={styles.moduleStrip}>
-          {MODULES.map((m) => (
-            <div className={styles.moduleRow} key={m.label}>
-              <span className={styles.moduleDot} style={{ background: m.color }} />
-              {m.label}
+        <div className={styles.offerList}>
+          {OFFERS.map((o) => (
+            <div className={styles.offerRow} key={o.title}>
+              <span className={styles.offerIcon} style={{ background: o.color }}>
+                <o.icon width={16} height={16} />
+              </span>
+              <div>
+                <div className={styles.offerTitle}>{o.title}</div>
+                <div className={styles.offerDesc}>{o.desc}</div>
+              </div>
             </div>
           ))}
         </div>
@@ -80,6 +134,15 @@ export function Login() {
         <div className={styles.formCard}>
           <h1>С возвращением</h1>
           <p className={styles.sub}>Войдите в личный кабинет Nutri.OS</p>
+
+          <div className={styles.offersMobile}>
+            {OFFERS.slice(0, 5).map((o) => (
+              <span className={styles.offerChip} key={o.title}>
+                <o.icon width={13} height={13} />
+                {o.title}
+              </span>
+            ))}
+          </div>
 
           <form
             className={styles.form}
@@ -106,6 +169,7 @@ export function Login() {
           <button className={`${uiStyles.btn} ${uiStyles.btnGhost} ${styles.demoBtn}`} onClick={enter}>
             Демо-доступ — Мария Кузнецова
           </button>
+          <p className={styles.demoHint}>Весь функционал без ограничений — оцените кабинет перед тем, как подключать своих клиентов.</p>
 
           <div className={styles.footNote}>
             <IconLock width={14} height={14} />
