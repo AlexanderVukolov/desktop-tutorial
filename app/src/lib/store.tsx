@@ -1,6 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import type {
   ActivityFactor,
+  Appointment,
+  AppointmentFormat,
+  AppointmentType,
   Biometrics,
   BodyComposition,
   CareerLead,
@@ -30,6 +33,7 @@ import type {
 } from './types';
 import { getLevel } from './career';
 import {
+  APPOINTMENTS_SEED,
   CAREER_LEADS_SEED,
   CLIENTS_SEED,
   COMMUNITY_POSTS_SEED,
@@ -63,6 +67,7 @@ interface AppData {
   leaderboard: LeaderboardPeer[];
   labResults: LabResult[];
   favoriteWellness: string[];
+  appointments: Appointment[];
 }
 
 function defaultData(): AppData {
@@ -82,6 +87,7 @@ function defaultData(): AppData {
     leaderboard: LEADERBOARD_SEED,
     labResults: [],
     favoriteWellness: [],
+    appointments: APPOINTMENTS_SEED,
   };
 }
 
@@ -123,6 +129,7 @@ function migrate(data: AppData): AppData {
     careerLeads: (data.careerLeads ?? []).map(migrateCareerLead),
     labResults: data.labResults ?? [],
     favoriteWellness: data.favoriteWellness ?? [],
+    appointments: data.appointments ?? [],
   };
 }
 
@@ -179,6 +186,19 @@ interface AppDataContextValue extends AppData {
   subscribeToPlan: (plan: SubscriptionPlan, method: PaymentMethod) => void;
   cancelSubscription: () => void;
   toggleWellnessFavorite: (articleId: string) => void;
+  addAppointment: (input: {
+    clientId: string;
+    startsAt: string;
+    durationMinutes: number;
+    type: AppointmentType;
+    format: AppointmentFormat;
+    reminderMinutesBefore: number;
+    notes: string;
+  }) => Appointment;
+  updateAppointment: (id: string, patch: Partial<Omit<Appointment, 'id'>>) => void;
+  cancelAppointment: (id: string) => void;
+  completeAppointment: (id: string) => void;
+  markReminderSent: (id: string) => void;
 }
 
 const AppDataContext = createContext<AppDataContextValue | null>(null);
@@ -402,6 +422,40 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
           favoriteWellness: prev.favoriteWellness.includes(articleId)
             ? prev.favoriteWellness.filter((id) => id !== articleId)
             : [...prev.favoriteWellness, articleId],
+        }));
+      },
+      addAppointment: (input) => {
+        const appointment: Appointment = {
+          id: makeId('ap'),
+          status: 'scheduled',
+          reminderSent: false,
+          ...input,
+        };
+        setData((prev) => ({ ...prev, appointments: [...prev.appointments, appointment] }));
+        return appointment;
+      },
+      updateAppointment: (id, patch) => {
+        setData((prev) => ({
+          ...prev,
+          appointments: prev.appointments.map((a) => (a.id === id ? { ...a, ...patch } : a)),
+        }));
+      },
+      cancelAppointment: (id) => {
+        setData((prev) => ({
+          ...prev,
+          appointments: prev.appointments.map((a) => (a.id === id ? { ...a, status: 'cancelled' } : a)),
+        }));
+      },
+      completeAppointment: (id) => {
+        setData((prev) => ({
+          ...prev,
+          appointments: prev.appointments.map((a) => (a.id === id ? { ...a, status: 'completed' } : a)),
+        }));
+      },
+      markReminderSent: (id) => {
+        setData((prev) => ({
+          ...prev,
+          appointments: prev.appointments.map((a) => (a.id === id ? { ...a, reminderSent: true } : a)),
         }));
       },
     }),

@@ -1,0 +1,50 @@
+.stack {
+  position: fixed;
+  bottom: 1.2rem;
+  right: 1.2rem;
+  z-index: 60;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.6rem;
+  max-width: 320px;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-3);
+  padding: 0.85rem 0.9rem;
+}
+
+.icon {
+  color: var(--c-career);
+  flex: none;
+  margin-top: 0.1rem;
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.text {
+  font-size: 0.8rem;
+  color: var(--ink-2);
+  margin-top: 0.15rem;
+}
+
+.close {
+  color: var(--muted);
+  flex: none;
+  font-size: 0.9rem;
+  line-height: 1;
+}

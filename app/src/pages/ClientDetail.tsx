@@ -6,7 +6,7 @@ import { ClientStatusBadge } from '../components/ui/Badge';
 import { WeightChart } from '../components/charts/WeightChart';
 import { HealthTab } from '../components/client/HealthTab';
 import { NutritionSection } from '../components/client/NutritionSection';
-import { IconCalculator, IconCamera, IconExternalLink, IconFile } from '../components/ui/icons';
+import { IconCalculator, IconCalendar, IconCamera, IconExternalLink, IconFile } from '../components/ui/icons';
 import { formatDate, formatRub, daysSince } from '../lib/format';
 import { GOAL_OPTIONS } from '../lib/kbju';
 import { MEAL_TYPE_LABEL } from '../lib/diary';
@@ -130,6 +130,9 @@ export function ClientDetail() {
           </select>
           <Link to={`/app/kbju?clientId=${client.id}`} className={`${uiStyles.btn} ${uiStyles.btnPrimary}`}>
             <IconCalculator width={16} height={16} /> Рассчитать КБЖУ
+          </Link>
+          <Link to={`/app/calendar?clientId=${client.id}`} className={`${uiStyles.btn} ${uiStyles.btnGhost}`}>
+            <IconCalendar width={16} height={16} /> Записать на консультацию
           </Link>
           <Link to={`/app/clients/${client.id}/report`} className={`${uiStyles.btn} ${uiStyles.btnGhost}`}>
             <IconFile width={16} height={16} /> Заключение

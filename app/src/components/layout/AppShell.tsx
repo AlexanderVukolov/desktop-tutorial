@@ -5,6 +5,7 @@ import {
   IconBook,
   IconBriefcase,
   IconCalculator,
+  IconCalendar,
   IconCommunity,
   IconGrid,
   IconHandshake,
@@ -15,11 +16,13 @@ import {
   IconUsers,
   IconUtensils,
 } from '../ui/icons';
+import { ReminderEngine } from './ReminderEngine';
 import styles from './AppShell.module.css';
 
 const NAV_MAIN = [
   { to: '/app/dashboard', label: 'Дашборд', icon: IconGrid },
   { to: '/app/clients', label: 'Клиенты', icon: IconUsers },
+  { to: '/app/calendar', label: 'Календарь', icon: IconCalendar },
   { to: '/app/kbju', label: 'КБЖУ-калькулятор', icon: IconCalculator },
   { to: '/app/food-calculator', label: 'Калькулятор еды', icon: IconUtensils },
   { to: '/app/partner', label: 'Партнёрская программа', icon: IconHandshake },
@@ -35,6 +38,7 @@ const NAV_ECOSYSTEM = [
 const PAGE_META: { match: string; crumb: string; title: string }[] = [
   { match: '/app/dashboard', crumb: 'Nutri.OS', title: 'Дашборд' },
   { match: '/app/clients', crumb: 'Nutri.OS', title: 'Клиенты' },
+  { match: '/app/calendar', crumb: 'Nutri.OS', title: 'Календарь' },
   { match: '/app/kbju', crumb: 'Nutri.OS', title: 'КБЖУ-калькулятор' },
   { match: '/app/food-calculator', crumb: 'Nutri.OS', title: 'Калькулятор еды' },
   { match: '/app/partner', crumb: 'Nutri.OS', title: 'Партнёрская программа' },
@@ -158,6 +162,8 @@ export function AppShell() {
           </NavLink>
         ))}
       </nav>
+
+      <ReminderEngine />
     </div>
   );
 }

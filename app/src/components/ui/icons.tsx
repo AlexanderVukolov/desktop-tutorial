@@ -281,3 +281,32 @@ export function IconBookmark(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function IconCalendar(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3.5" y="4.5" width="17" height="16" rx="2" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M3.5 9.5h17" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M8 3v3M16 3v3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <circle cx="8" cy="13.2" r="1.1" fill="currentColor" />
+      <circle cx="12" cy="13.2" r="1.1" fill="currentColor" />
+      <circle cx="16" cy="13.2" r="1.1" fill="currentColor" />
+      <circle cx="8" cy="17" r="1.1" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function IconBell(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path
+        d="M6 10.5a6 6 0 0 1 12 0c0 3.4 1 5 2 6H4c1-1 2-2.6 2-6Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M9.5 19.5a2.5 2.5 0 0 0 5 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}

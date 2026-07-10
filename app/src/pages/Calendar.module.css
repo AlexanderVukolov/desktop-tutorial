@@ -1,0 +1,198 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.notifRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.notifText {
+  flex: 1;
+  min-width: 220px;
+  font-size: 0.84rem;
+  color: var(--ink-2);
+}
+
+.disclaimer {
+  font-size: 0.76rem;
+  color: var(--muted);
+  margin-top: 0.7rem;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 1.2rem;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .grid2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.monthNav {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 0.4rem;
+}
+
+.weekdays span {
+  text-align: center;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.monthGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.dayCell {
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.3rem;
+  color: var(--ink);
+  min-width: 0;
+}
+
+.dayCellMuted {
+  color: var(--muted);
+  background: transparent;
+  border-color: transparent;
+}
+
+.dayCellToday {
+  border-color: var(--c-career);
+}
+
+.dayCellSelected {
+  background: var(--ink);
+  color: var(--page);
+  border-color: var(--ink);
+}
+
+.dayNumber {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.dayChips {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-height: 8px;
+}
+
+.dayChip {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.dayChipMore {
+  font-size: 0.6rem;
+  color: inherit;
+  opacity: 0.7;
+}
+
+.sideStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.emptyHint {
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.apptList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.apptRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.7rem 0.85rem;
+  flex-wrap: wrap;
+}
+
+.apptTime {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  flex: none;
+  padding-top: 0.1rem;
+}
+
+.apptMain {
+  flex: 1;
+  min-width: 140px;
+}
+
+.apptClient {
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.apptMeta {
+  font-size: 0.76rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.apptNotes {
+  font-size: 0.8rem;
+  color: var(--ink-2);
+  margin-top: 0.3rem;
+}
+
+.apptActions {
+  display: flex;
+  gap: 0.4rem;
+  flex: none;
+}
+
+.apptStatus {
+  font-size: 0.78rem;
+  color: var(--muted);
+  flex: none;
+  align-self: center;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}

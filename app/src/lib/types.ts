@@ -236,3 +236,20 @@ export interface LeaderboardPeer {
   rating: number;
   clients: number;
 }
+
+export type AppointmentType = 'initial' | 'followup';
+export type AppointmentFormat = 'online' | 'offline';
+export type AppointmentStatus = 'scheduled' | 'completed' | 'cancelled';
+
+export interface Appointment {
+  id: string;
+  clientId: string;
+  startsAt: string;
+  durationMinutes: number;
+  type: AppointmentType;
+  format: AppointmentFormat;
+  status: AppointmentStatus;
+  reminderMinutesBefore: number;
+  reminderSent: boolean;
+  notes: string;
+}

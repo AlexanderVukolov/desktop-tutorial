@@ -1,4 +1,5 @@
 import type {
+  Appointment,
   CareerLead,
   ChatMessage,
   Client,
@@ -31,6 +32,17 @@ function monthsAgo(n: number): string {
   d.setMonth(d.getMonth() - n);
   d.setDate(1);
   return d.toISOString();
+}
+
+function atDaysHour(dayOffset: number, hour: number, minute = 0): string {
+  const d = new Date();
+  d.setDate(d.getDate() + dayOffset);
+  d.setHours(hour, minute, 0, 0);
+  return d.toISOString();
+}
+
+function inMinutesFromNow(n: number): string {
+  return new Date(Date.now() + n * 60_000).toISOString();
 }
 
 export const SPECIALIST_SEED: Specialist = {
@@ -684,4 +696,79 @@ export const PARTNER_ORGS_SEED: PartnerOrg[] = [
   { id: 'p3', name: 'ДМС-программа «Тонус Корп»', kind: 'corporate', format: 'Онлайн · вся Россия', leadsPerMonth: 12, status: 'pending' },
   { id: 'p4', name: 'Клиника «ЛабЗдоровье»', kind: 'clinic', format: 'Офлайн · Москва', leadsPerMonth: 3, status: 'available' },
   { id: 'p5', name: 'Корпоративный wellness «Синергия HR»', kind: 'corporate', format: 'Онлайн · вся Россия', leadsPerMonth: 8, status: 'available' },
+];
+
+export const APPOINTMENTS_SEED: Appointment[] = [
+  {
+    id: 'ap1',
+    clientId: 'c1',
+    startsAt: inMinutesFromNow(12),
+    durationMinutes: 45,
+    type: 'followup',
+    format: 'online',
+    status: 'scheduled',
+    reminderMinutesBefore: 60,
+    reminderSent: false,
+    notes: 'Разбор дневника питания за неделю',
+  },
+  {
+    id: 'ap2',
+    clientId: 'c3',
+    startsAt: atDaysHour(0, 17, 0),
+    durationMinutes: 30,
+    type: 'followup',
+    format: 'online',
+    status: 'scheduled',
+    reminderMinutesBefore: 60,
+    reminderSent: false,
+    notes: '',
+  },
+  {
+    id: 'ap3',
+    clientId: 'c4',
+    startsAt: atDaysHour(1, 11, 30),
+    durationMinutes: 60,
+    type: 'initial',
+    format: 'offline',
+    status: 'scheduled',
+    reminderMinutesBefore: 120,
+    reminderSent: false,
+    notes: 'Первичная консультация, принести анализы',
+  },
+  {
+    id: 'ap4',
+    clientId: 'c2',
+    startsAt: atDaysHour(2, 14, 0),
+    durationMinutes: 30,
+    type: 'followup',
+    format: 'online',
+    status: 'scheduled',
+    reminderMinutesBefore: 30,
+    reminderSent: false,
+    notes: '',
+  },
+  {
+    id: 'ap5',
+    clientId: 'c5',
+    startsAt: atDaysHour(5, 10, 0),
+    durationMinutes: 45,
+    type: 'followup',
+    format: 'offline',
+    status: 'scheduled',
+    reminderMinutesBefore: 60,
+    reminderSent: false,
+    notes: 'Коррекция рациона после отпуска',
+  },
+  {
+    id: 'ap6',
+    clientId: 'c1',
+    startsAt: atDaysHour(-3, 16, 0),
+    durationMinutes: 45,
+    type: 'followup',
+    format: 'online',
+    status: 'completed',
+    reminderMinutesBefore: 60,
+    reminderSent: true,
+    notes: 'Прошлая консультация — обсудили замену молочных продуктов',
+  },
 ];
