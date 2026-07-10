@@ -147,6 +147,7 @@ export function ClientDetail() {
                 {entry.photo && <img src={entry.photo} alt="" className={styles.diaryPhoto} />}
                 <div>
                   <span className={styles.diaryMealBadge}>{MEAL_TYPE_LABEL[entry.mealType]}</span>
+                  {entry.aiEstimate && <span className={styles.diaryKcalBadge}>{entry.aiEstimate.kcal} ккал</span>}
                   <span className={styles.diaryMeta}>{formatDate(entry.createdAt)}</span>
                   <div className={styles.diaryText}>{entry.description}</div>
                 </div>

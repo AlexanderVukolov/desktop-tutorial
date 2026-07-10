@@ -7,7 +7,6 @@ import type {
   KbjuCalculation,
   KbjuInput,
   KbjuResult,
-  MealType,
   MessageSender,
   ReferralEntry,
   RevenuePoint,
@@ -61,7 +60,7 @@ interface AppDataContextValue extends AppData {
   addKbjuCalculation: (input: KbjuInput, result: KbjuResult, clientId: string | null) => KbjuCalculation;
   inviteReferral: (name: string) => void;
   withdraw: () => void;
-  addDiaryEntry: (clientId: string, entry: { mealType: MealType; description: string; photo?: string }) => void;
+  addDiaryEntry: (clientId: string, entry: Omit<DiaryEntry, 'id' | 'clientId' | 'createdAt'>) => void;
   addMessage: (clientId: string, from: MessageSender, text: string) => void;
 }
 

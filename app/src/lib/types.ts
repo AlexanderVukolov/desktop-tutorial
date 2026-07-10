@@ -47,6 +47,14 @@ export interface Client {
   notes: string;
 }
 
+export interface AiEstimate {
+  label: string;
+  kcal: number;
+  proteinG: number;
+  fatG: number;
+  carbsG: number;
+}
+
 export interface DiaryEntry {
   id: string;
   clientId: string;
@@ -54,6 +62,7 @@ export interface DiaryEntry {
   mealType: MealType;
   description: string;
   photo?: string;
+  aiEstimate?: AiEstimate;
 }
 
 export interface ChatMessage {

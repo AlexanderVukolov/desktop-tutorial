@@ -146,6 +146,16 @@
   flex: none;
 }
 
+.diaryKcalBadge {
+  font-size: 0.66rem;
+  font-weight: 600;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--c-saas) 16%, transparent);
+  color: var(--c-saas);
+  margin-right: 0.4rem;
+}
+
 .diaryMealBadge {
   font-size: 0.66rem;
   font-weight: 600;
