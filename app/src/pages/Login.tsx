@@ -17,6 +17,22 @@ const MODULES = [
   { color: 'var(--c-comm)', label: 'Комьюнити выпускников' },
 ];
 
+function SocialLinks({ className }: { className?: string }) {
+  return (
+    <div className={className}>
+      <span>Мы в соцсетях:</span>
+      {SOCIAL_LINKS.map(({ key, label, href }) => {
+        const Icon = SOCIAL_ICONS[key];
+        return (
+          <a key={key} href={href} target="_blank" rel="noreferrer" className={styles.socialLink} aria-label={label} title={label}>
+            <Icon width={16} height={16} />
+          </a>
+        );
+      })}
+    </div>
+  );
+}
+
 export function Login() {
   const { signIn } = useSession();
   const navigate = useNavigate();
@@ -57,17 +73,7 @@ export function Login() {
           <span>Официальная платформа школы «Лига Нутрициологии»</span>
         </div>
 
-        <div className={styles.socialRow}>
-          <span>Мы в соцсетях:</span>
-          {SOCIAL_LINKS.map(({ key, label, href }) => {
-            const Icon = SOCIAL_ICONS[key];
-            return (
-              <a key={key} href={href} target="_blank" rel="noreferrer" className={styles.socialLink} aria-label={label} title={label}>
-                <Icon width={16} height={16} />
-              </a>
-            );
-          })}
-        </div>
+        <SocialLinks className={styles.socialRow} />
       </section>
 
       <section className={styles.formSide}>
@@ -105,6 +111,8 @@ export function Login() {
             <IconLock width={14} height={14} />
             Демо-режим: данные хранятся только в этом браузере
           </div>
+
+          <SocialLinks className={styles.socialRowMobile} />
         </div>
       </section>
     </div>

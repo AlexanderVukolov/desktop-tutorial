@@ -177,12 +177,24 @@ export function AppShell() {
       </div>
 
       <nav className={`${styles.mobileNav} noPrint`}>
-        {NAV_MAIN.map(({ to, label, icon: Icon }) => (
-          <NavLink key={to} to={to} className={({ isActive }) => `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`}>
-            <Icon width={18} height={18} />
-            {label.split(' ')[0]}
-          </NavLink>
-        ))}
+        <div className={styles.mobileNavRow}>
+          {NAV_MAIN.map(({ to, label, icon: Icon }) => (
+            <NavLink key={to} to={to} className={({ isActive }) => `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`}>
+              <Icon width={18} height={18} />
+              {label.split(' ')[0]}
+            </NavLink>
+          ))}
+        </div>
+        <div className={styles.mobileSocialRow}>
+          {SOCIAL_LINKS.map(({ key, label, href }) => {
+            const Icon = SOCIAL_ICONS[key];
+            return (
+              <a key={key} href={href} target="_blank" rel="noreferrer" className={styles.socialLink} aria-label={label} title={label}>
+                <Icon width={16} height={16} />
+              </a>
+            );
+          })}
+        </div>
       </nav>
 
       <ReminderEngine />

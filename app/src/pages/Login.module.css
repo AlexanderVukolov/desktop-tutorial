@@ -178,3 +178,26 @@
   align-items: center;
   gap: 0.4rem;
 }
+
+.socialRowMobile {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .socialRowMobile {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .socialRowMobile .socialLink {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+  }
+}
