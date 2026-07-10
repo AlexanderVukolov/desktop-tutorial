@@ -5,6 +5,11 @@ export type ClientStatus = 'active' | 'paused' | 'new';
 export type ReferralStatus = 'invited' | 'trial' | 'paid';
 export type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack';
 export type MessageSender = 'client' | 'specialist';
+export type LeadKind = 'client' | 'partner';
+export type LeadFormat = 'online' | 'offline';
+export type LeadStatus = 'new' | 'responded' | 'declined';
+export type PartnerKind = 'fitness' | 'wellness' | 'clinic' | 'corporate';
+export type PartnerStatus = 'available' | 'pending' | 'partnered';
 
 export interface KbjuInput {
   gender: Gender;
@@ -95,4 +100,27 @@ export interface Specialist {
   referralCode: string;
   balance: number;
   payoutThreshold: number;
+}
+
+export interface CareerLead {
+  id: string;
+  kind: LeadKind;
+  title: string;
+  org: string;
+  format: LeadFormat;
+  city: string;
+  payout: number;
+  minRating: number;
+  matchReason: string;
+  status: LeadStatus;
+  postedAt: string;
+}
+
+export interface PartnerOrg {
+  id: string;
+  name: string;
+  kind: PartnerKind;
+  format: string;
+  leadsPerMonth: number;
+  status: PartnerStatus;
 }

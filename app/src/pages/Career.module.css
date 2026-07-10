@@ -1,0 +1,194 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.levelCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.levelBadge {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--c-career) 16%, transparent);
+  color: var(--accent-text);
+  flex: none;
+}
+
+.levelNote {
+  font-size: 0.84rem;
+  color: var(--ink-2);
+}
+
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.filterBtn {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8rem;
+}
+
+.filterBtnActive {
+  background: var(--ink);
+  color: var(--page);
+  border-color: var(--ink);
+}
+
+.leadList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.lead {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.1rem;
+  background: var(--surface);
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.leadLocked {
+  opacity: 0.6;
+}
+
+.leadMain {
+  flex: 1;
+  min-width: 220px;
+}
+
+.leadHead {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.kindBadge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+}
+
+.kindClient {
+  background: color-mix(in srgb, var(--c-edu) 15%, transparent);
+  color: var(--c-edu);
+}
+
+.kindPartner {
+  background: color-mix(in srgb, var(--c-know) 15%, transparent);
+  color: var(--c-know);
+}
+
+.leadTitle {
+  font-size: 0.94rem;
+  font-weight: 600;
+}
+
+.leadMeta {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.leadReason {
+  font-size: 0.8rem;
+  color: var(--ink-2);
+  margin-top: 0.4rem;
+  font-style: italic;
+}
+
+.leadAside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.6rem;
+  flex: none;
+}
+
+.payout {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+}
+
+.lockNote {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-align: right;
+  max-width: 160px;
+}
+
+.respondedNote {
+  font-size: 0.78rem;
+  color: var(--good);
+  font-weight: 600;
+}
+
+.partnerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.9rem;
+}
+
+.partnerCard {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.partnerKind {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.partnerName {
+  font-size: 0.94rem;
+  font-weight: 600;
+}
+
+.partnerMeta {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.partnerStatus {
+  margin-top: 0.3rem;
+}
+
+.statusPartnered {
+  font-size: 0.78rem;
+  color: var(--good);
+  font-weight: 600;
+}
+
+.statusPending {
+  font-size: 0.78rem;
+  color: var(--accent-text);
+  font-weight: 600;
+}

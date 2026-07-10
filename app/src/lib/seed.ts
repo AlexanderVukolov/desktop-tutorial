@@ -1,4 +1,4 @@
-import type { ChatMessage, Client, DiaryEntry, ReferralEntry, RevenuePoint, Specialist } from './types';
+import type { CareerLead, ChatMessage, Client, DiaryEntry, PartnerOrg, ReferralEntry, RevenuePoint, Specialist } from './types';
 
 function daysAgo(n: number): string {
   const d = new Date();
@@ -205,4 +205,93 @@ export const REVENUE_SEED: RevenuePoint[] = [
   { month: monthsAgo(2), consulting: 97000, referral: 2400 },
   { month: monthsAgo(1), consulting: 101000, referral: 3600 },
   { month: monthsAgo(0), consulting: 117000, referral: 3600 },
+];
+
+export const CAREER_LEADS_SEED: CareerLead[] = [
+  {
+    id: 'lead1',
+    kind: 'client',
+    title: 'Клиент ищет нутрициолога для снижения веса',
+    org: 'Заявка с сайта школы',
+    format: 'online',
+    city: 'Москва',
+    payout: 18000,
+    minRating: 4.0,
+    matchReason: 'Совпадает с вашей специализацией — снижение веса',
+    status: 'new',
+    postedAt: daysAgo(1),
+  },
+  {
+    id: 'lead2',
+    kind: 'partner',
+    title: 'Нутрициолог-консультант, 2 дня в неделю',
+    org: 'Фитнес-клуб «Энергия»',
+    format: 'offline',
+    city: 'Москва',
+    payout: 45000,
+    minRating: 4.0,
+    matchReason: 'Ищут специалиста с опытом коррекции веса',
+    status: 'new',
+    postedAt: daysAgo(2),
+  },
+  {
+    id: 'lead3',
+    kind: 'client',
+    title: 'Клиент интересуется спортивным питанием',
+    org: 'Заявка с сайта школы',
+    format: 'online',
+    city: 'Санкт-Петербург',
+    payout: 22000,
+    minRating: 4.5,
+    matchReason: 'Премиальный клиент — нужен рейтинг 4.5+',
+    status: 'responded',
+    postedAt: daysAgo(4),
+  },
+  {
+    id: 'lead4',
+    kind: 'partner',
+    title: 'Wellness-консультации для сотрудников',
+    org: 'ДМС-программа «Тонус Корп»',
+    format: 'online',
+    city: 'вся Россия',
+    payout: 60000,
+    minRating: 4.7,
+    matchReason: 'Корпоративный контракт — высокие требования к рейтингу',
+    status: 'new',
+    postedAt: daysAgo(3),
+  },
+  {
+    id: 'lead5',
+    kind: 'client',
+    title: 'Восстановление питания после родов',
+    org: 'Заявка с сайта школы',
+    format: 'online',
+    city: 'Казань',
+    payout: 16000,
+    minRating: 4.0,
+    matchReason: 'Подходит по формату онлайн-сопровождения',
+    status: 'new',
+    postedAt: daysAgo(6),
+  },
+  {
+    id: 'lead6',
+    kind: 'partner',
+    title: 'Скрининг-консультации в клинике',
+    org: 'Клиника «ЛабЗдоровье»',
+    format: 'offline',
+    city: 'Москва',
+    payout: 38000,
+    minRating: 5.0,
+    matchReason: 'Партнёр отбирает только специалистов с идеальным рейтингом',
+    status: 'new',
+    postedAt: daysAgo(1),
+  },
+];
+
+export const PARTNER_ORGS_SEED: PartnerOrg[] = [
+  { id: 'p1', name: 'Фитнес-клуб «Энергия»', kind: 'fitness', format: 'Офлайн · Москва', leadsPerMonth: 6, status: 'available' },
+  { id: 'p2', name: 'Wellness-центр «Баланс»', kind: 'wellness', format: 'Гибрид · Санкт-Петербург', leadsPerMonth: 4, status: 'partnered' },
+  { id: 'p3', name: 'ДМС-программа «Тонус Корп»', kind: 'corporate', format: 'Онлайн · вся Россия', leadsPerMonth: 12, status: 'pending' },
+  { id: 'p4', name: 'Клиника «ЛабЗдоровье»', kind: 'clinic', format: 'Офлайн · Москва', leadsPerMonth: 3, status: 'available' },
+  { id: 'p5', name: 'Корпоративный wellness «Синергия HR»', kind: 'corporate', format: 'Онлайн · вся Россия', leadsPerMonth: 8, status: 'available' },
 ];

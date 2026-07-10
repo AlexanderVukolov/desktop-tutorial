@@ -22,9 +22,9 @@ const NAV_MAIN = [
 ];
 
 const NAV_ECOSYSTEM = [
-  { to: '/app/career', label: 'Карьерный центр', icon: IconBriefcase },
-  { to: '/app/knowledge', label: 'База знаний', icon: IconBook },
-  { to: '/app/community', label: 'Комьюнити', icon: IconCommunity },
+  { to: '/app/career', label: 'Карьерный центр', icon: IconBriefcase, soon: false },
+  { to: '/app/knowledge', label: 'База знаний', icon: IconBook, soon: true },
+  { to: '/app/community', label: 'Комьюнити', icon: IconCommunity, soon: true },
 ];
 
 const PAGE_META: { match: string; crumb: string; title: string }[] = [
@@ -78,7 +78,7 @@ export function AppShell() {
           ))}
 
           <div className={styles.navGroupLabel}>Экосистема</div>
-          {NAV_ECOSYSTEM.map(({ to, label, icon: Icon }) => (
+          {NAV_ECOSYSTEM.map(({ to, label, icon: Icon, soon }) => (
             <NavLink
               key={to}
               to={to}
@@ -88,7 +88,7 @@ export function AppShell() {
                 <Icon width={17} height={17} />
               </span>
               {label}
-              <span className={styles.soon}>скоро</span>
+              {soon && <span className={styles.soon}>скоро</span>}
             </NavLink>
           ))}
         </nav>

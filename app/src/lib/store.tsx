@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import type {
+  CareerLead,
   ChatMessage,
   Client,
   DiaryEntry,
@@ -7,12 +8,24 @@ import type {
   KbjuCalculation,
   KbjuInput,
   KbjuResult,
+  LeadStatus,
   MessageSender,
+  PartnerOrg,
+  PartnerStatus,
   ReferralEntry,
   RevenuePoint,
   Specialist,
 } from './types';
-import { CLIENTS_SEED, DIARY_SEED, MESSAGES_SEED, REFERRALS_SEED, REVENUE_SEED, SPECIALIST_SEED } from './seed';
+import {
+  CAREER_LEADS_SEED,
+  CLIENTS_SEED,
+  DIARY_SEED,
+  MESSAGES_SEED,
+  PARTNER_ORGS_SEED,
+  REFERRALS_SEED,
+  REVENUE_SEED,
+  SPECIALIST_SEED,
+} from './seed';
 
 const STORAGE_KEY = 'nutrios:v1';
 
@@ -24,6 +37,8 @@ interface AppData {
   calculations: KbjuCalculation[];
   diary: DiaryEntry[];
   messages: ChatMessage[];
+  careerLeads: CareerLead[];
+  partners: PartnerOrg[];
 }
 
 function defaultData(): AppData {
@@ -35,6 +50,8 @@ function defaultData(): AppData {
     calculations: [],
     diary: DIARY_SEED,
     messages: MESSAGES_SEED,
+    careerLeads: CAREER_LEADS_SEED,
+    partners: PARTNER_ORGS_SEED,
   };
 }
 
@@ -62,6 +79,8 @@ interface AppDataContextValue extends AppData {
   withdraw: () => void;
   addDiaryEntry: (clientId: string, entry: Omit<DiaryEntry, 'id' | 'clientId' | 'createdAt'>) => void;
   addMessage: (clientId: string, from: MessageSender, text: string) => void;
+  setLeadStatus: (leadId: string, status: LeadStatus) => void;
+  setPartnerStatus: (partnerId: string, status: PartnerStatus) => void;
 }
 
 const AppDataContext = createContext<AppDataContextValue | null>(null);
@@ -161,6 +180,18 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
           createdAt: new Date().toISOString(),
         };
         setData((prev) => ({ ...prev, messages: [...prev.messages, message] }));
+      },
+      setLeadStatus: (leadId, status) => {
+        setData((prev) => ({
+          ...prev,
+          careerLeads: prev.careerLeads.map((l) => (l.id === leadId ? { ...l, status } : l)),
+        }));
+      },
+      setPartnerStatus: (partnerId, status) => {
+        setData((prev) => ({
+          ...prev,
+          partners: prev.partners.map((p) => (p.id === partnerId ? { ...p, status } : p)),
+        }));
       },
     }),
     [data],
