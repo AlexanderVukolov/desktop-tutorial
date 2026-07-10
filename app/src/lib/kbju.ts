@@ -35,7 +35,7 @@ export function calcEatKcal(sessionsPerWeek: number, sessionMinutes: number, int
 export const GOAL_OPTIONS: { value: Goal; label: string }[] = [
   { value: 'loss', label: 'Снижение веса' },
   { value: 'maintenance', label: 'Поддержание' },
-  { value: 'gain', label: 'Набор массы' },
+  { value: 'gain', label: 'Набор мышечной массы' },
 ];
 
 const GOAL_CALORIE_MULTIPLIER: Record<Goal, number> = {

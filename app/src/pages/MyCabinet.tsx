@@ -10,13 +10,16 @@ import {
   buildRationPlan,
   dishOptionsFor,
   formatPlanText,
+  inferExcludeTags,
+  nearestCalorieTarget,
   planTotals,
   shuffleRationPlan,
   swapSlotDish,
   targetMacros,
   type RationPlan,
 } from '../lib/rationTemplates';
-import type { MealType } from '../lib/types';
+import type { Goal, MealType } from '../lib/types';
+import { GOAL_OPTIONS } from '../lib/kbju';
 import { MEAL_TYPE_LABEL } from '../lib/diary';
 import uiStyles from '../components/ui/ui.module.css';
 import styles from './MyCabinet.module.css';
@@ -29,9 +32,11 @@ function pct(macroG: number, kcalPerG: number, totalKcal: number) {
 const MEAL_TYPES: MealType[] = ['breakfast', 'lunch', 'dinner', 'snack'];
 
 export function MyCabinet() {
-  const { clients, updateNotes, customDishes, customTemplates, addCustomDish, saveCustomTemplate, removeCustomTemplate } = useAppData();
+  const { clients, calculations, updateNotes, customDishes, customTemplates, addCustomDish, saveCustomTemplate, removeCustomTemplate } =
+    useAppData();
   const [calorieTarget, setCalorieTarget] = useState<number>(2000);
   const [excludeTags, setExcludeTags] = useState<string[]>([]);
+  const [activeGoal, setActiveGoal] = useState<Goal>('maintenance');
   const [plan, setPlan] = useState<RationPlan>(() =>
     buildRationPlan(2000, [], CALORIE_TARGETS.indexOf(2000 as (typeof CALORIE_TARGETS)[number])),
   );
@@ -50,11 +55,26 @@ export function MyCabinet() {
   }, [calorieTarget, excludeTags]);
 
   const totals = planTotals(plan);
-  const target = targetMacros(calorieTarget);
+  const target = targetMacros(calorieTarget, activeGoal);
   const kcalDelta = totals.kcal - calorieTarget;
 
   function toggleTag(tag: string) {
     setExcludeTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
+  }
+
+  function handleClientChange(id: string) {
+    setSelectedClientId(id);
+    const client = clients.find((c) => c.id === id);
+    if (!client) {
+      setActiveGoal('maintenance');
+      return;
+    }
+    setActiveGoal(client.goal);
+    setExcludeTags(inferExcludeTags(client.allergies));
+    const lastCalc = [...calculations]
+      .filter((k) => k.clientId === client.id)
+      .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))[0];
+    if (lastCalc) setCalorieTarget(nearestCalorieTarget(lastCalc.targetCalories));
   }
 
   function handleSwap(mealType: MealType, dishId: string) {
@@ -134,6 +154,24 @@ export function MyCabinet() {
       />
 
       <Card>
+        <div className={uiStyles.field} style={{ marginBottom: '1rem', maxWidth: 360 }}>
+          <label htmlFor="planClient">Клиент</label>
+          <select id="planClient" value={selectedClientId} onChange={(e) => handleClientChange(e.target.value)}>
+            <option value="">Без привязки — свободный конструктор</option>
+            {clients.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+          {selectedClientId && (
+            <div className={styles.goalHint}>
+              Цель клиента: {GOAL_OPTIONS.find((g) => g.value === activeGoal)?.label} — калорийность и БЖУ подобраны автоматически
+              {excludeTags.length > 0 && `, исключено: ${excludeTags.map((t) => ALLERGEN_FILTERS.find((f) => f.tag === t)?.label).join(', ')}`}
+            </div>
+          )}
+        </div>
+
         <div className={styles.tierRow}>
           {CALORIE_TARGETS.map((t) => (
             <button
@@ -246,22 +284,12 @@ export function MyCabinet() {
               </div>
             </div>
             <div className={styles.targetNote}>
-              Ориентир (25/30/45%): Б {target.proteinG} г · Ж {target.fatG} г · У {target.carbsG} г
+              Ориентир для цели «{GOAL_OPTIONS.find((g) => g.value === activeGoal)?.label}»: Б {target.proteinG} г · Ж {target.fatG} г · У{' '}
+              {target.carbsG} г
             </div>
           </Card>
 
-          <Card title="Применить">
-            <div className={uiStyles.field}>
-              <label htmlFor="planClient">Сохранить в заметки клиента</label>
-              <select id="planClient" value={selectedClientId} onChange={(e) => setSelectedClientId(e.target.value)}>
-                <option value="">Выберите клиента</option>
-                {clients.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <Card title="Применить" hint={selectedClientId ? clients.find((c) => c.id === selectedClientId)?.name : 'Клиент не выбран'}>
             <div className={styles.applyActions}>
               <button
                 className={`${uiStyles.btn} ${uiStyles.btnPrimary} ${uiStyles.btnSm}`}

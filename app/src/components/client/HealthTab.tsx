@@ -19,6 +19,11 @@ export function HealthTab({ clientId }: { clientId: string }) {
   const [heightCm, setHeightCm] = useState(client?.biometrics?.heightCm ?? 0);
   const [waistCm, setWaistCm] = useState(client?.biometrics?.waistCm ?? 0);
   const [hipCm, setHipCm] = useState(client?.biometrics?.hipCm ?? 0);
+  const [neckCm, setNeckCm] = useState(client?.biometrics?.neckCm ?? 0);
+  const [chestCm, setChestCm] = useState(client?.biometrics?.chestCm ?? 0);
+  const [bicepCm, setBicepCm] = useState(client?.biometrics?.bicepCm ?? 0);
+  const [thighCm, setThighCm] = useState(client?.biometrics?.thighCm ?? 0);
+  const [calfCm, setCalfCm] = useState(client?.biometrics?.calfCm ?? 0);
   const [systolic, setSystolic] = useState(client?.biometrics?.systolic ?? 0);
   const [diastolic, setDiastolic] = useState(client?.biometrics?.diastolic ?? 0);
   const [pulse, setPulse] = useState(client?.biometrics?.pulse ?? 0);
@@ -46,6 +51,11 @@ export function HealthTab({ clientId }: { clientId: string }) {
         heightCm,
         waistCm,
         hipCm,
+        neckCm: neckCm || undefined,
+        chestCm: chestCm || undefined,
+        bicepCm: bicepCm || undefined,
+        thighCm: thighCm || undefined,
+        calfCm: calfCm || undefined,
         systolic,
         diastolic,
         pulse,
@@ -184,14 +194,6 @@ export function HealthTab({ clientId }: { clientId: string }) {
               <input type="number" value={heightCm || ''} onChange={(e) => setHeightCm(Number(e.target.value))} />
             </div>
             <div className={uiStyles.field}>
-              <label>Талия, см</label>
-              <input type="number" value={waistCm || ''} onChange={(e) => setWaistCm(Number(e.target.value))} />
-            </div>
-            <div className={uiStyles.field}>
-              <label>Бёдра, см</label>
-              <input type="number" value={hipCm || ''} onChange={(e) => setHipCm(Number(e.target.value))} />
-            </div>
-            <div className={uiStyles.field}>
               <label>АД сист.</label>
               <input type="number" value={systolic || ''} onChange={(e) => setSystolic(Number(e.target.value))} />
             </div>
@@ -202,6 +204,38 @@ export function HealthTab({ clientId }: { clientId: string }) {
             <div className={uiStyles.field}>
               <label>Пульс</label>
               <input type="number" value={pulse || ''} onChange={(e) => setPulse(Number(e.target.value))} />
+            </div>
+          </div>
+
+          <div className={styles.subheading}>Окружности тела, см</div>
+          <div className={styles.fieldGrid}>
+            <div className={uiStyles.field}>
+              <label>Шея</label>
+              <input type="number" value={neckCm || ''} onChange={(e) => setNeckCm(Number(e.target.value))} />
+            </div>
+            <div className={uiStyles.field}>
+              <label>Грудь</label>
+              <input type="number" value={chestCm || ''} onChange={(e) => setChestCm(Number(e.target.value))} />
+            </div>
+            <div className={uiStyles.field}>
+              <label>Талия</label>
+              <input type="number" value={waistCm || ''} onChange={(e) => setWaistCm(Number(e.target.value))} />
+            </div>
+            <div className={uiStyles.field}>
+              <label>Бёдра</label>
+              <input type="number" value={hipCm || ''} onChange={(e) => setHipCm(Number(e.target.value))} />
+            </div>
+            <div className={uiStyles.field}>
+              <label>Бицепс</label>
+              <input type="number" value={bicepCm || ''} onChange={(e) => setBicepCm(Number(e.target.value))} />
+            </div>
+            <div className={uiStyles.field}>
+              <label>Бедро</label>
+              <input type="number" value={thighCm || ''} onChange={(e) => setThighCm(Number(e.target.value))} />
+            </div>
+            <div className={uiStyles.field}>
+              <label>Голень</label>
+              <input type="number" value={calfCm || ''} onChange={(e) => setCalfCm(Number(e.target.value))} />
             </div>
           </div>
           <div className={uiStyles.field} style={{ marginTop: '0.8rem' }}>

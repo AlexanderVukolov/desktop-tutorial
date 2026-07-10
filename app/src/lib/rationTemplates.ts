@@ -1,4 +1,4 @@
-import type { MealType } from './types';
+import type { Goal, MealType } from './types';
 import { MEAL_TYPE_LABEL } from './diary';
 
 export const CALORIE_TARGETS = [1500, 1800, 2000, 2200, 2500] as const;
@@ -13,17 +13,43 @@ const MEAL_SHARE: Record<MealType, number> = {
 
 const MEAL_ORDER: MealType[] = ['breakfast', 'lunch', 'dinner', 'snack'];
 
-/** Reference macro split used across templates — a standard, general-purpose
- * balanced ratio (25% protein / 30% fat / 45% carbs of total kcal), not a
+/** Reference macro split used across templates — general, goal-adjusted
+ * ratios (higher protein for loss/gain, balanced for maintenance), not a
  * client-specific prescription. */
-export const MACRO_SPLIT = { protein: 0.25, fat: 0.3, carbs: 0.45 };
+export const GOAL_MACRO_SPLIT: Record<Goal, { protein: number; fat: number; carbs: number }> = {
+  loss: { protein: 0.3, fat: 0.3, carbs: 0.4 },
+  maintenance: { protein: 0.25, fat: 0.3, carbs: 0.45 },
+  gain: { protein: 0.3, fat: 0.25, carbs: 0.45 },
+};
 
-export function targetMacros(calorieTarget: number) {
+export function targetMacros(calorieTarget: number, goal: Goal = 'maintenance') {
+  const split = GOAL_MACRO_SPLIT[goal];
   return {
-    proteinG: Math.round((calorieTarget * MACRO_SPLIT.protein) / 4),
-    fatG: Math.round((calorieTarget * MACRO_SPLIT.fat) / 9),
-    carbsG: Math.round((calorieTarget * MACRO_SPLIT.carbs) / 4),
+    proteinG: Math.round((calorieTarget * split.protein) / 4),
+    fatG: Math.round((calorieTarget * split.fat) / 9),
+    carbsG: Math.round((calorieTarget * split.carbs) / 4),
   };
+}
+
+/** Nearest available calorie tier to a raw target, e.g. from a saved KBJU calculation. */
+export function nearestCalorieTarget(rawTarget: number): (typeof CALORIE_TARGETS)[number] {
+  return CALORIE_TARGETS.reduce((closest, t) => (Math.abs(t - rawTarget) < Math.abs(closest - rawTarget) ? t : closest), CALORIE_TARGETS[0]);
+}
+
+/** Infers likely allergen-filter tags from a free-text allergy note — a
+ * simple keyword match, the same approach used by the diet-recommendation
+ * engine elsewhere in the app. */
+export function inferExcludeTags(allergiesText: string): string[] {
+  const lower = (allergiesText ?? '').toLowerCase();
+  const tags: string[] = [];
+  if (lower.includes('лактоз') || lower.includes('молок')) tags.push('dairy');
+  if (lower.includes('глютен') || lower.includes('целиак')) tags.push('gluten');
+  if (lower.includes('орех') || lower.includes('арахис')) tags.push('nuts');
+  if (lower.includes('яйц')) tags.push('eggs');
+  if (lower.includes('рыб') || lower.includes('морепродукт')) tags.push('fish');
+  if (lower.includes('бобов') || lower.includes('чечевиц')) tags.push('legumes');
+  if (lower.includes('сою') || lower.includes('соя') || lower.includes('соев')) tags.push('soy');
+  return tags;
 }
 
 export interface DishOption {

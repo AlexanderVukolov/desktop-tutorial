@@ -71,6 +71,11 @@ export interface Biometrics {
   heightCm: number;
   waistCm: number;
   hipCm: number;
+  neckCm?: number;
+  chestCm?: number;
+  bicepCm?: number;
+  thighCm?: number;
+  calfCm?: number;
   systolic: number;
   diastolic: number;
   pulse: number;

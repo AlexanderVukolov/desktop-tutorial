@@ -29,6 +29,15 @@
   }
 }
 
+.subheading {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-weight: 600;
+  margin: 1rem 0 0.6rem;
+}
+
 .measuredNote {
   font-size: 0.74rem;
   color: var(--muted);

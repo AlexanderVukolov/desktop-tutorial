@@ -40,6 +40,14 @@ export function buildReportText(
     lines.push(
       `Рост ${b.heightCm} см · Талия ${b.waistCm} см · Бёдра ${b.hipCm} см · АД ${b.systolic}/${b.diastolic} · Пульс ${b.pulse} (замер от ${formatDate(b.measuredAt)})`,
     );
+    const extraCircumference = [
+      b.neckCm && `шея ${b.neckCm} см`,
+      b.chestCm && `грудь ${b.chestCm} см`,
+      b.bicepCm && `бицепс ${b.bicepCm} см`,
+      b.thighCm && `бедро ${b.thighCm} см`,
+      b.calfCm && `голень ${b.calfCm} см`,
+    ].filter(Boolean);
+    if (extraCircumference.length > 0) lines.push(`Другие окружности: ${extraCircumference.join(' · ')}`);
     if (b.note) lines.push(`Заметка: ${b.note}`);
     lines.push('');
   }

@@ -121,6 +121,22 @@ export function ClientReport() {
               <dd>
                 {client.biometrics.systolic}/{client.biometrics.diastolic} · {client.biometrics.pulse} уд/мин
               </dd>
+              {(client.biometrics.neckCm || client.biometrics.chestCm || client.biometrics.bicepCm || client.biometrics.thighCm || client.biometrics.calfCm) && (
+                <>
+                  <dt>Другие окружности</dt>
+                  <dd>
+                    {[
+                      client.biometrics.neckCm && `шея ${client.biometrics.neckCm} см`,
+                      client.biometrics.chestCm && `грудь ${client.biometrics.chestCm} см`,
+                      client.biometrics.bicepCm && `бицепс ${client.biometrics.bicepCm} см`,
+                      client.biometrics.thighCm && `бедро ${client.biometrics.thighCm} см`,
+                      client.biometrics.calfCm && `голень ${client.biometrics.calfCm} см`,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')}
+                  </dd>
+                </>
+              )}
               <dt>Дата замера</dt>
               <dd>{formatDate(client.biometrics.measuredAt)}</dd>
               {client.biometrics.note && (
