@@ -1,0 +1,244 @@
+.shell {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+@media (max-width: 880px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  border-right: 1px solid var(--border);
+  padding: 1.5rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  background: var(--surface);
+}
+
+@media (max-width: 880px) {
+  .sidebar {
+    display: none;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.15rem;
+  padding: 0 0.4rem;
+}
+
+.brand .dot {
+  color: var(--accent-text);
+}
+
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.navGroupLabel {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  padding: 0 0.6rem;
+  margin: 0.6rem 0 0.35rem;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.6rem;
+  border-radius: 9px;
+  color: var(--ink-2);
+  font-size: 0.88rem;
+  text-decoration: none;
+  position: relative;
+}
+
+.navLink:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.navLinkActive {
+  background: var(--surface-2);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.navLinkActive::before {
+  content: '';
+  position: absolute;
+  left: -1.1rem;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--accent);
+}
+
+.navIcon {
+  flex: none;
+  display: flex;
+  opacity: 0.85;
+}
+
+.soon {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--muted);
+  background: var(--surface-3);
+  padding: 0.1rem 0.35rem;
+  border-radius: 999px;
+}
+
+.sidebarFooter {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--c-edu);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 0.95rem;
+  flex: none;
+}
+
+.who {
+  min-width: 0;
+}
+
+.who .name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.who .role {
+  font-size: 0.72rem;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* topbar */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem clamp(1rem, 3vw, 2rem);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: color-mix(in srgb, var(--page) 88%, transparent);
+  backdrop-filter: blur(6px);
+  z-index: 10;
+}
+
+.crumb {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.pageTitle {
+  font-size: 1.1rem;
+  margin-top: 0.15rem;
+}
+
+.topbarActions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.iconBtn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+
+.iconBtn:hover {
+  color: var(--ink);
+  background: var(--surface-2);
+}
+
+.content {
+  padding: 1.6rem clamp(1rem, 3vw, 2rem) 4rem;
+  max-width: 1180px;
+  width: 100%;
+}
+
+/* mobile bottom nav */
+.mobileNav {
+  display: none;
+}
+
+@media (max-width: 880px) {
+  .mobileNav {
+    display: flex;
+    position: sticky;
+    bottom: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 0.5rem 0.4rem;
+    justify-content: space-around;
+    z-index: 10;
+  }
+
+  .mobileNavLink {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    color: var(--muted);
+    font-size: 0.62rem;
+    text-decoration: none;
+    padding: 0.3rem 0.5rem;
+    border-radius: 8px;
+  }
+
+  .mobileNavLinkActive {
+    color: var(--ink);
+    background: var(--surface-2);
+  }
+}

@@ -1,0 +1,144 @@
+import type { SVGProps } from 'react';
+
+const base = { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none' } as const;
+
+export function IconGrid(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3.5" y="3.5" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+      <rect x="13.5" y="3.5" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+      <rect x="3.5" y="13.5" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+      <rect x="13.5" y="13.5" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  );
+}
+
+export function IconUsers(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="9" cy="8" r="3" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <circle cx="17" cy="7.5" r="2.4" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M15.5 12.2c2.4.4 4.5 2.1 4.5 4.8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconCalculator(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" strokeWidth="1.6" />
+      <line x1="7.5" y1="7" x2="16.5" y2="7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      {[10.2, 13.4, 16.6].map((y) => (
+        <g key={y}>
+          <circle cx="8" cy={y} r="0.9" fill="currentColor" />
+          <circle cx="12" cy={y} r="0.9" fill="currentColor" />
+          <circle cx="16" cy={y} r="0.9" fill="currentColor" />
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+export function IconHandshake(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M3 11l4-3.2c.7-.6 1.7-.6 2.4 0l1.4 1.2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M21 11l-4-3.2c-.7-.6-1.7-.6-2.4 0l-3.7 3.1c-.6.5-.6 1.5 0 2 .6.5 1.5.5 2 0l1.8-1.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3 11v5.2c0 .5.3.9.8 1.1l3 1.1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M21 11v5.2c0 .5-.3.9-.8 1.1l-3 1.1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconBriefcase(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3.5" y="7.5" width="17" height="11.5" rx="2" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M8.5 7.5V6a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5" stroke="currentColor" strokeWidth="1.6" />
+      <line x1="3.5" y1="12.5" x2="20.5" y2="12.5" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  );
+}
+
+export function IconBook(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4 5.5A2 2 0 0 1 6 3.5h5v17H6a2 2 0 0 1-2-2v-13Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+      <path d="M20 5.5a2 2 0 0 0-2-2h-5v17h5a2 2 0 0 0 2-2v-13Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconCommunity(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="7" r="2.6" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="5.5" cy="16" r="2.2" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="18.5" cy="16" r="2.2" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M12 9.6v3.4M7.3 15 10 12.4M16.7 15 14 12.4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconSun(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.6" />
+      <g stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+        <line x1="12" y1="2.5" x2="12" y2="4.5" />
+        <line x1="12" y1="19.5" x2="12" y2="21.5" />
+        <line x1="4.2" y1="4.2" x2="5.6" y2="5.6" />
+        <line x1="18.4" y1="18.4" x2="19.8" y2="19.8" />
+        <line x1="2.5" y1="12" x2="4.5" y2="12" />
+        <line x1="19.5" y1="12" x2="21.5" y2="12" />
+        <line x1="4.2" y1="19.8" x2="5.6" y2="18.4" />
+        <line x1="18.4" y1="5.6" x2="19.8" y2="4.2" />
+      </g>
+    </svg>
+  );
+}
+
+export function IconMoon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconPlus(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconCopy(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="8.5" y="8.5" width="11" height="11" rx="2" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M6.5 15h-1a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  );
+}
+
+export function IconArrowRight(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <line x1="4" y1="12" x2="19" y2="12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M13 6.5 19 12l-6 5.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconLock(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="5" y="10.5" width="14" height="9.5" rx="2" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  );
+}

@@ -1,0 +1,72 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  flex-wrap: wrap;
+}
+
+.svgBox {
+  position: relative;
+  width: 168px;
+  height: 168px;
+  flex: none;
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.center .value {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.center .label {
+  font-size: 0.68rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  min-width: 180px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.sw {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex: none;
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.rowText .name {
+  font-size: 0.82rem;
+  color: var(--ink-2);
+}
+
+.rowText .val {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink);
+}

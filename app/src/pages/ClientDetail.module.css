@@ -1,0 +1,128 @@
+.head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+  flex-wrap: wrap;
+}
+
+.back {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.82rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.9rem;
+}
+
+.back:hover {
+  color: var(--ink);
+}
+
+.avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.3rem;
+  flex: none;
+}
+
+.name {
+  font-size: 1.3rem;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-top: 0.2rem;
+}
+
+.headActions {
+  margin-left: auto;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 1.2rem;
+  align-items: start;
+}
+
+@media (max-width: 920px) {
+  .grid2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.inlineForm {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.inlineForm input {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.calcRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.84rem;
+}
+
+.calcRow:last-child {
+  border-bottom: none;
+}
+
+.calcMacros {
+  display: flex;
+  gap: 0.7rem;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+.notesArea {
+  width: 100%;
+  min-height: 110px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+  font-size: 0.86rem;
+  resize: vertical;
+}
+
+.statusSelect {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.82rem;
+}

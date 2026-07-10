@@ -1,0 +1,54 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  max-width: 560px;
+  padding: 2.4rem 0;
+}
+
+.iconBox {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.wrap h2 {
+  font-size: 1.4rem;
+}
+
+.wrap p {
+  color: var(--ink-2);
+  font-size: 0.92rem;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 0.4rem;
+}
+
+.listItem {
+  display: flex;
+  gap: 0.6rem;
+  font-size: 0.86rem;
+  color: var(--ink-2);
+}
+
+.listItem .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+  margin-top: 0.5rem;
+  flex: none;
+}
+
+.notify {
+  margin-top: 0.6rem;
+}

@@ -1,0 +1,86 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  align-items: start;
+}
+
+@media (max-width: 920px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+}
+
+.resultStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.metricRow {
+  display: flex;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.metric {
+  flex: 1;
+  background: var(--surface);
+  padding: 0.9rem 1rem;
+  text-align: center;
+}
+
+.metric .v {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+}
+
+.metric .l {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.disclaimer {
+  font-size: 0.76rem;
+  color: var(--muted);
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+  line-height: 1.45;
+}
+
+.saveRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.historyRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.82rem;
+}
+
+.historyRow:last-child {
+  border-bottom: none;
+}
