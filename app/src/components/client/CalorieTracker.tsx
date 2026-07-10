@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react';
 import { useAppData } from '../../lib/store';
 import { Card } from '../ui/Card';
 import { MacroProgress } from '../ui/MacroProgress';
-import { formatDayLabel, last7DateKeys, shiftDateKey, sumEntryMacros, todayDateKey } from '../../lib/tracker';
+import { WeeklySummary } from './WeeklySummary';
+import { formatDayLabel, shiftDateKey, sumEntryMacros, todayDateKey } from '../../lib/tracker';
 import { MEAL_TYPE_LABEL } from '../../lib/diary';
 import { formatDate } from '../../lib/format';
 import styles from './CalorieTracker.module.css';
@@ -37,11 +38,6 @@ export function CalorieTracker({ clientId }: { clientId: string }) {
     ? { kcal: lastCalc.targetCalories, proteinG: lastCalc.proteinG, fatG: lastCalc.fatG, carbsG: lastCalc.carbsG }
     : null;
 
-  const trend = last7DateKeys(selectedDate).map((dateKey) => ({
-    dateKey,
-    kcal: sumEntryMacros(clientEntries.filter((e) => e.createdAt.slice(0, 10) === dateKey)).kcal,
-  }));
-  const maxTrendKcal = Math.max(target?.kcal ?? 0, ...trend.map((t) => t.kcal), 1);
   const isToday = selectedDate === todayDateKey();
 
   return (
@@ -68,25 +64,16 @@ export function CalorieTracker({ clientId }: { clientId: string }) {
       >
         <MacroProgress actual={totals} target={target} />
 
-        <div className={styles.trendRow}>
-          {trend.map((t) => (
-            <button
-              key={t.dateKey}
-              className={`${styles.trendBar} ${t.dateKey === selectedDate ? styles.trendBarActive : ''}`}
-              onClick={() => setSelectedDate(t.dateKey)}
-              title={`${formatDayLabel(t.dateKey)}: ${Math.round(t.kcal)} ккал`}
-            >
-              <span className={styles.trendFill} style={{ height: `${Math.min(100, Math.round((t.kcal / maxTrendKcal) * 100))}%` }} />
-            </button>
-          ))}
-        </div>
-
         {!lastCalc && (
           <p className={styles.emptyHint} style={{ marginTop: '0.8rem' }}>
             Без расчёта КБЖУ показываются только фактические итоги — сохраните расчёт для этого клиента, чтобы видеть
             % от цели.
           </p>
         )}
+      </Card>
+
+      <Card title="Сводка за неделю" hint="Калории по дням недели с целевой линией — как недельная сводка в трекерах питания">
+        <WeeklySummary entries={clientEntries} target={target} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
       </Card>
 
       <Card title="Записи за день" hint={dayEntries.length > 0 ? `${dayEntries.length} приём(ов) пищи` : undefined}>

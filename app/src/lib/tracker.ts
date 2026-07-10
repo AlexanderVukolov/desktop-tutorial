@@ -41,3 +41,20 @@ export function formatDayLabel(dateKey: string): string {
 export function last7DateKeys(endDateKey: string): string[] {
   return Array.from({ length: 7 }, (_, i) => shiftDateKey(endDateKey, -(6 - i)));
 }
+
+/** Monday of the calendar week containing dateKey (ISO-style, week starts Monday). */
+export function startOfWeekKey(dateKey: string): string {
+  const d = new Date(`${dateKey}T00:00:00.000Z`);
+  const day = d.getUTCDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  d.setUTCDate(d.getUTCDate() + diff);
+  return d.toISOString().slice(0, 10);
+}
+
+export function weekDateKeys(startKey: string): string[] {
+  return Array.from({ length: 7 }, (_, i) => shiftDateKey(startKey, i));
+}
+
+export function formatShortDate(dateKey: string): string {
+  return new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'short' }).format(new Date(`${dateKey}T00:00:00.000Z`));
+}

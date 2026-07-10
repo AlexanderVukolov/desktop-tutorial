@@ -7,6 +7,7 @@ import { MEAL_TYPE_LABEL, MEAL_TYPE_OPTIONS } from '../../lib/diary';
 import { recognizeMeal } from '../../lib/foodRecognition';
 import { IconCamera } from '../../components/ui/icons';
 import { MacroProgress } from '../../components/ui/MacroProgress';
+import { WeeklySummary } from '../../components/client/WeeklySummary';
 import { formatDayLabel, shiftDateKey, sumEntryMacros, todayDateKey } from '../../lib/tracker';
 import uiStyles from '../../components/ui/ui.module.css';
 import styles from './Diary.module.css';
@@ -97,6 +98,10 @@ export function Diary() {
 
       <div className={styles.summary}>
         <MacroProgress actual={totals} target={target} />
+      </div>
+
+      <div className={styles.summary}>
+        <WeeklySummary entries={entries} target={target} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
       </div>
 
       {!isToday && (

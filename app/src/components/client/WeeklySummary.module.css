@@ -1,0 +1,159 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.weekNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+}
+
+.navBtn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.navBtn:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+
+.navBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.weekLabel {
+  font-size: 0.82rem;
+  font-weight: 600;
+  min-width: 8.5rem;
+  text-align: center;
+}
+
+.chart {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  height: 130px;
+  padding-top: 0.5rem;
+}
+
+.targetLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px dashed var(--c-saas);
+}
+
+.targetLineLabel {
+  position: absolute;
+  right: 0;
+  top: -1.1rem;
+  font-size: 0.62rem;
+  color: var(--c-saas);
+  font-weight: 600;
+}
+
+.dayCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  height: 100%;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.dayCol:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.dayKcal {
+  font-size: 0.66rem;
+  color: var(--muted);
+  font-family: var(--mono);
+  white-space: nowrap;
+}
+
+.bar {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  background: var(--surface-2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.barFill {
+  width: 100%;
+  min-height: 2px;
+  background: var(--c-saas);
+  border-radius: 4px;
+}
+
+.dayColActive .barFill {
+  background: var(--ink);
+}
+
+.dayColActive .dayName {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.dayName {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.averagesRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+@media (max-width: 560px) {
+  .averagesRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.averageTile {
+  background: var(--surface);
+  padding: 0.7rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.averageLabel {
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
+.averageValue {
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
