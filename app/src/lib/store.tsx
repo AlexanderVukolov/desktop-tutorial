@@ -175,7 +175,7 @@ function migrate(data: AppData): AppData {
     waterLogs: data.waterLogs ?? [],
     sleepLogs: data.sleepLogs ?? [],
     supplements: data.supplements ?? [],
-    nutritionQuestionnaires: data.nutritionQuestionnaires ?? [],
+    nutritionQuestionnaires: (data.nutritionQuestionnaires ?? []).map((q) => ({ ...q, mainRequest: q.mainRequest ?? '' })),
   };
 }
 
@@ -265,7 +265,7 @@ interface AppDataContextValue extends AppData {
   removeSupplement: (id: string) => void;
   toggleSupplementActive: (id: string) => void;
   toggleSupplementTaken: (id: string, date: string) => void;
-  saveNutritionQuestionnaire: (clientId: string, answers: Record<string, string>) => void;
+  saveNutritionQuestionnaire: (clientId: string, mainRequest: string, answers: Record<string, string>) => void;
 }
 
 const AppDataContext = createContext<AppDataContextValue | null>(null);
@@ -647,7 +647,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
           ),
         }));
       },
-      saveNutritionQuestionnaire: (clientId, answers) => {
+      saveNutritionQuestionnaire: (clientId, mainRequest, answers) => {
         setData((prev) => {
           const completedAt = new Date().toISOString();
           const existing = prev.nutritionQuestionnaires.find((q) => q.clientId === clientId);
@@ -655,11 +655,14 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
             return {
               ...prev,
               nutritionQuestionnaires: prev.nutritionQuestionnaires.map((q) =>
-                q.clientId === clientId ? { ...q, answers, completedAt } : q,
+                q.clientId === clientId ? { ...q, mainRequest, answers, completedAt } : q,
               ),
             };
           }
-          return { ...prev, nutritionQuestionnaires: [...prev.nutritionQuestionnaires, { clientId, answers, completedAt }] };
+          return {
+            ...prev,
+            nutritionQuestionnaires: [...prev.nutritionQuestionnaires, { clientId, mainRequest, answers, completedAt }],
+          };
         });
       },
     }),

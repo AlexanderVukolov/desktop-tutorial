@@ -9,6 +9,7 @@ import {
   questionsByCategory,
   scoreCategory,
   type CategoryScore,
+  type Question,
   type QuestionCategory,
 } from '../../lib/nutritionQuestionnaire';
 import { formatDate } from '../../lib/format';
@@ -16,6 +17,44 @@ import uiStyles from '../ui/ui.module.css';
 import styles from './NutritionAssessment.module.css';
 
 const CATEGORIES: QuestionCategory[] = ['structure', 'regimen', 'patterns'];
+
+function QuestionField({
+  question,
+  value,
+  onChange,
+}: {
+  question: Question;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const isPreset = question.options.some((o) => o.value === value);
+  const customValue = isPreset ? '' : value;
+
+  return (
+    <div className={uiStyles.field}>
+      <label>{question.text}</label>
+      <div className={uiStyles.segmented}>
+        {question.options.map((opt) => (
+          <button
+            key={opt.value}
+            type="button"
+            className={`${uiStyles.segmentedBtn} ${value === opt.value ? uiStyles.segmentedBtnActive : ''}`}
+            onClick={() => onChange(opt.value)}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+      <input
+        type="text"
+        className={styles.customInput}
+        value={customValue}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="Свой вариант ответа"
+      />
+    </div>
+  );
+}
 
 function CategorySummary({
   score,
@@ -30,7 +69,7 @@ function CategorySummary({
     <>
       <div className={`${styles.scoreBadge} ${styles[`tone_${score.tone}`]}`}>
         {score.label}
-        {score.avgScore !== null && (
+        {score.answered > 0 && (
           <span className={styles.scoreMeta}>
             {' '}
             · {score.answered}/{score.total} отвечено
@@ -41,10 +80,13 @@ function CategorySummary({
         {questionsByCategory(category).map((q) => {
           const answer = answers[q.id];
           const option = q.options.find((o) => o.value === answer);
+          const isCustom = !option && !!answer;
           return (
             <div key={q.id} className={styles.answerRow}>
               <span className={styles.answerQuestion}>{q.text}</span>
-              <span className={styles.answerValue}>{option ? option.label : '—'}</span>
+              <span className={`${styles.answerValue} ${isCustom ? styles.answerValueCustom : ''}`}>
+                {option ? option.label : answer || '—'}
+              </span>
             </div>
           );
         })}
@@ -58,43 +100,40 @@ export function NutritionAssessment({ clientId }: { clientId: string }) {
   const existing = nutritionQuestionnaires.find((q) => q.clientId === clientId);
   const [editing, setEditing] = useState(!existing);
   const [draft, setDraft] = useState<Record<string, string>>(existing?.answers ?? {});
+  const [mainRequest, setMainRequest] = useState(existing?.mainRequest ?? '');
 
   function setAnswer(questionId: string, value: string) {
     setDraft((prev) => ({ ...prev, [questionId]: value }));
   }
 
   function handleSave() {
-    saveNutritionQuestionnaire(clientId, draft);
+    saveNutritionQuestionnaire(clientId, mainRequest, draft);
     setEditing(false);
   }
 
   function handleEdit() {
     setDraft(existing?.answers ?? {});
+    setMainRequest(existing?.mainRequest ?? '');
     setEditing(true);
   }
 
   if (editing) {
     return (
       <div className={styles.stack}>
+        <Card title="Основной запрос клиента" hint="С чем клиент обратился, его главная цель или жалоба">
+          <textarea
+            className={styles.mainRequestInput}
+            value={mainRequest}
+            onChange={(e) => setMainRequest(e.target.value)}
+            placeholder="Например: хочет снизить вес к лету, жалуется на вздутие и усталость после еды"
+          />
+        </Card>
+
         {CATEGORIES.map((cat) => (
           <Card key={cat} title={CATEGORY_LABEL[cat]}>
             <div className={styles.questionList}>
               {questionsByCategory(cat).map((q) => (
-                <div key={q.id} className={uiStyles.field}>
-                  <label>{q.text}</label>
-                  <div className={uiStyles.segmented}>
-                    {q.options.map((opt) => (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        className={`${uiStyles.segmentedBtn} ${draft[q.id] === opt.value ? uiStyles.segmentedBtnActive : ''}`}
-                        onClick={() => setAnswer(q.id, opt.value)}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                <QuestionField key={q.id} question={q} value={draft[q.id] ?? ''} onChange={(v) => setAnswer(q.id, v)} />
               ))}
             </div>
           </Card>
@@ -126,7 +165,7 @@ export function NutritionAssessment({ clientId }: { clientId: string }) {
   return (
     <div className={styles.stack}>
       <Card
-        title="Структура рациона"
+        title="Основной запрос клиента"
         hint={`Анкета заполнена: ${formatDate(existing!.completedAt)}`}
         action={
           <button className={`${uiStyles.btn} ${uiStyles.btnGhost} ${uiStyles.btnSm}`} onClick={handleEdit}>
@@ -134,6 +173,10 @@ export function NutritionAssessment({ clientId }: { clientId: string }) {
           </button>
         }
       >
+        <p className={styles.mainRequestText}>{existing!.mainRequest || 'Не указан'}</p>
+      </Card>
+
+      <Card title="Структура рациона">
         <CategorySummary score={structureScore} category="structure" answers={existing!.answers} />
       </Card>
 

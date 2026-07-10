@@ -98,6 +98,44 @@
   white-space: nowrap;
 }
 
+.answerValueCustom {
+  font-style: italic;
+  white-space: normal;
+  text-align: right;
+}
+
+.customInput {
+  margin-top: 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.82rem;
+  color: var(--ink);
+}
+
+.customInput:focus {
+  border-color: var(--c-saas);
+}
+
+.mainRequestInput {
+  width: 100%;
+  min-height: 80px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+  font-size: 0.88rem;
+  resize: vertical;
+}
+
+.mainRequestText {
+  font-size: 0.9rem;
+  color: var(--ink-2);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
 .disclaimer {
   font-size: 0.76rem;
   color: var(--muted);

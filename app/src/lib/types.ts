@@ -71,6 +71,7 @@ export interface WaterLog {
 
 export interface NutritionQuestionnaire {
   clientId: string;
+  mainRequest: string;
   answers: Record<string, string>;
   completedAt: string;
 }

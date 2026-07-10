@@ -326,28 +326,36 @@ export interface CategoryScore {
   answered: number;
   total: number;
   avgScore: number | null;
-  label: 'Хорошо' | 'Средне' | 'Требует внимания' | 'Нет данных';
+  label: 'Хорошо' | 'Средне' | 'Требует внимания' | 'Свои варианты ответов' | 'Нет данных';
   tone: PatternTone | 'neutral';
 }
 
+/** A custom free-text answer (not one of the preset options) has no score
+ * and is excluded from the average, but still counts as "answered". */
 export function scoreCategory(category: QuestionCategory, answers: Record<string, string>): CategoryScore {
   const questions = questionsByCategory(category);
   const scores: number[] = [];
+  let answeredNum = 0;
   questions.forEach((q) => {
     const answer = answers[q.id];
+    if (!answer) return;
+    answeredNum += 1;
     const option = q.options.find((o) => o.value === answer);
     if (option) scores.push(option.score);
   });
 
-  if (scores.length === 0) {
+  if (answeredNum === 0) {
     return { answered: 0, total: questions.length, avgScore: null, label: 'Нет данных', tone: 'neutral' };
+  }
+  if (scores.length === 0) {
+    return { answered: answeredNum, total: questions.length, avgScore: null, label: 'Свои варианты ответов', tone: 'neutral' };
   }
 
   const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
   const label = avgScore >= 2.3 ? 'Хорошо' : avgScore >= 1.3 ? 'Средне' : 'Требует внимания';
   const tone: PatternTone = avgScore >= 2.3 ? 'good' : avgScore >= 1.3 ? 'info' : 'warn';
 
-  return { answered: scores.length, total: questions.length, avgScore, label, tone };
+  return { answered: answeredNum, total: questions.length, avgScore, label, tone };
 }
 
 export interface FoodPatternFinding {
