@@ -9,6 +9,7 @@ import {
   IconGrid,
   IconHandshake,
   IconMoon,
+  IconNewspaper,
   IconSettings,
   IconSun,
   IconUsers,
@@ -27,6 +28,7 @@ const NAV_MAIN = [
 const NAV_ECOSYSTEM = [
   { to: '/app/career', label: 'Карьерный центр', icon: IconBriefcase, soon: false },
   { to: '/app/knowledge', label: 'База знаний', icon: IconBook, soon: false },
+  { to: '/app/wellness-news', label: 'Wellness новости', icon: IconNewspaper, soon: false },
   { to: '/app/community', label: 'Комьюнити', icon: IconCommunity, soon: false },
 ];
 
@@ -38,6 +40,7 @@ const PAGE_META: { match: string; crumb: string; title: string }[] = [
   { match: '/app/partner', crumb: 'Nutri.OS', title: 'Партнёрская программа' },
   { match: '/app/career', crumb: 'Nutri.OS · экосистема', title: 'Карьерный центр' },
   { match: '/app/knowledge', crumb: 'Nutri.OS · экосистема', title: 'База знаний' },
+  { match: '/app/wellness-news', crumb: 'Nutri.OS · экосистема', title: 'Wellness новости' },
   { match: '/app/community', crumb: 'Nutri.OS · экосистема', title: 'Комьюнити' },
   { match: '/app/settings', crumb: 'Nutri.OS', title: 'Настройки' },
 ];

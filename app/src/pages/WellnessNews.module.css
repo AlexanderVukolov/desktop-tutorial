@@ -1,0 +1,140 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.disclaimer {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8rem;
+}
+
+.filterBtnActive {
+  background: var(--ink);
+  color: var(--page);
+  border-color: var(--ink);
+}
+
+.search {
+  width: 100%;
+  background: var(--page);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.86rem;
+  margin-bottom: 1.1rem;
+}
+
+.blockGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.blockCard {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.blockSwatch {
+  position: relative;
+  height: 72px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0.7rem;
+}
+
+.blockPill {
+  position: relative;
+  z-index: 1;
+  background: rgba(20, 22, 18, 0.72);
+  color: #fff;
+  font-size: 0.66rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.favBtn {
+  position: relative;
+  z-index: 1;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--nsl-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.favBtn:hover {
+  background: #fff;
+}
+
+.swatchSage {
+  background: linear-gradient(135deg, var(--nsl-sage-soft), var(--nsl-sage));
+}
+
+.swatchDust {
+  background: linear-gradient(135deg, var(--nsl-dust-soft), var(--nsl-dust));
+}
+
+.swatchBlush {
+  background: linear-gradient(135deg, var(--nsl-blush-soft), var(--nsl-blush));
+}
+
+.swatchSand {
+  background: linear-gradient(135deg, var(--nsl-sand), var(--nsl-dust-soft));
+}
+
+.blockBody {
+  padding: 0.9rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.meta {
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.summary {
+  font-size: 0.82rem;
+  color: var(--ink-2);
+  line-height: 1.45;
+}

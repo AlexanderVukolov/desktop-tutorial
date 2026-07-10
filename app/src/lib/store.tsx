@@ -62,6 +62,7 @@ interface AppData {
   communityPosts: CommunityPost[];
   leaderboard: LeaderboardPeer[];
   labResults: LabResult[];
+  favoriteWellness: string[];
 }
 
 function defaultData(): AppData {
@@ -80,6 +81,7 @@ function defaultData(): AppData {
     communityPosts: COMMUNITY_POSTS_SEED,
     leaderboard: LEADERBOARD_SEED,
     labResults: [],
+    favoriteWellness: [],
   };
 }
 
@@ -120,6 +122,7 @@ function migrate(data: AppData): AppData {
     specialist: migrateSpecialist(data.specialist),
     careerLeads: (data.careerLeads ?? []).map(migrateCareerLead),
     labResults: data.labResults ?? [],
+    favoriteWellness: data.favoriteWellness ?? [],
   };
 }
 
@@ -175,6 +178,7 @@ interface AppDataContextValue extends AppData {
   updateSpecialist: (patch: Partial<Pick<Specialist, 'name' | 'role' | 'photo' | 'birthDate' | 'country' | 'city'>>) => void;
   subscribeToPlan: (plan: SubscriptionPlan, method: PaymentMethod) => void;
   cancelSubscription: () => void;
+  toggleWellnessFavorite: (articleId: string) => void;
 }
 
 const AppDataContext = createContext<AppDataContextValue | null>(null);
@@ -390,6 +394,14 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
         setData((prev) => ({
           ...prev,
           specialist: { ...prev.specialist, plan: 'none', paymentMethod: null, nextChargeDate: null },
+        }));
+      },
+      toggleWellnessFavorite: (articleId) => {
+        setData((prev) => ({
+          ...prev,
+          favoriteWellness: prev.favoriteWellness.includes(articleId)
+            ? prev.favoriteWellness.filter((id) => id !== articleId)
+            : [...prev.favoriteWellness, articleId],
         }));
       },
     }),

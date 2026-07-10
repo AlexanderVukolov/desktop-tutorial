@@ -12,6 +12,7 @@ import { FoodCalculator } from './pages/FoodCalculator';
 import { Partner } from './pages/Partner';
 import { Career } from './pages/Career';
 import { Knowledge } from './pages/Knowledge';
+import { WellnessNews } from './pages/WellnessNews';
 import { Community } from './pages/Community';
 import { Settings } from './pages/Settings';
 import { Diary } from './pages/portal/Diary';
@@ -36,6 +37,7 @@ export default function App() {
           <Route path="partner" element={<Partner />} />
           <Route path="career" element={<Career />} />
           <Route path="knowledge" element={<Knowledge />} />
+          <Route path="wellness-news" element={<WellnessNews />} />
           <Route path="community" element={<Community />} />
           <Route path="settings" element={<Settings />} />
         </Route>

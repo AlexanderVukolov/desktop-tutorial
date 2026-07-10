@@ -263,3 +263,21 @@ export function IconFile(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function IconNewspaper(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3" y="5" width="14" height="14" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M7 9h6M7 12h6M7 15h3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M17 8h2.5A1.5 1.5 0 0 1 21 9.5v9a2.5 2.5 0 0 1-2.5 2.5H8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconBookmark(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M6.5 4h11a1 1 0 0 1 1 1v15l-6.5-3.8L5.5 20V5a1 1 0 0 1 1-1Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+    </svg>
+  );
+}
