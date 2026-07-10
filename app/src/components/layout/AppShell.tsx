@@ -9,7 +9,6 @@ import {
   IconCalendar,
   IconChefHat,
   IconCommunity,
-  IconHandshake,
   IconMoon,
   IconNewspaper,
   IconNotebook,
@@ -30,7 +29,6 @@ const NAV_MAIN = [
   { to: '/app/kbju', label: 'КБЖУ-калькулятор', icon: IconCalculator },
   { to: '/app/food-calculator', label: 'Калькулятор еды', icon: IconUtensils },
   { to: '/app/recipes', label: 'Рецепты', icon: IconChefHat },
-  { to: '/app/partner', label: 'Партнёрская программа', icon: IconHandshake },
 ];
 
 const NAV_ECOSYSTEM = [
@@ -48,7 +46,6 @@ const PAGE_META: { match: string; crumb: string; title: string }[] = [
   { match: '/app/kbju', crumb: 'Nutri.OS', title: 'КБЖУ-калькулятор' },
   { match: '/app/food-calculator', crumb: 'Nutri.OS', title: 'Калькулятор еды' },
   { match: '/app/recipes', crumb: 'Nutri.OS', title: 'Рецепты' },
-  { match: '/app/partner', crumb: 'Nutri.OS', title: 'Партнёрская программа' },
   { match: '/app/career', crumb: 'Nutri.OS · экосистема', title: 'Карьерный центр' },
   { match: '/app/knowledge', crumb: 'Nutri.OS · экосистема', title: 'База знаний' },
   { match: '/app/wellness-news', crumb: 'Nutri.OS · экосистема', title: 'Wellness новости' },

@@ -12,7 +12,6 @@ import { Kbju } from './pages/Kbju';
 import { FoodCalculator } from './pages/FoodCalculator';
 import { MyCabinet } from './pages/MyCabinet';
 import { Recipes } from './pages/Recipes';
-import { Partner } from './pages/Partner';
 import { Career } from './pages/Career';
 import { Knowledge } from './pages/Knowledge';
 import { WellnessNews } from './pages/WellnessNews';
@@ -42,7 +41,6 @@ export default function App() {
           <Route path="food-calculator" element={<FoodCalculator />} />
           <Route path="my-cabinet" element={<MyCabinet />} />
           <Route path="recipes" element={<Recipes />} />
-          <Route path="partner" element={<Partner />} />
           <Route path="career" element={<Career />} />
           <Route path="knowledge" element={<Knowledge />} />
           <Route path="wellness-news" element={<WellnessNews />} />

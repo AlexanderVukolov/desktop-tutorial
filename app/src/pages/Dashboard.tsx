@@ -244,7 +244,7 @@ export function Dashboard() {
             <p style={{ fontSize: '0.82rem', color: 'var(--ink-2)' }}>
               {referrals.filter((r) => r.status === 'paid').length} оплативших рефералов приносят доход каждый месяц
             </p>
-            <Link to="/app/partner" className={`${uiStyles.btn} ${uiStyles.btnPrimary} ${uiStyles.btnSm}`} style={{ alignSelf: 'flex-start' }}>
+            <Link to="/app/my-cabinet?tab=partner" className={`${uiStyles.btn} ${uiStyles.btnPrimary} ${uiStyles.btnSm}`} style={{ alignSelf: 'flex-start' }}>
               Открыть кабинет партнёра <IconArrowRight width={15} height={15} />
             </Link>
           </div>
