@@ -83,12 +83,52 @@ function defaultData(): AppData {
   };
 }
 
+function addDays(n: number): string {
+  return new Date(Date.now() + n * 86_400_000).toISOString();
+}
+
+// Backfills fields that didn't exist in older persisted localStorage snapshots,
+// so a returning visitor's saved state doesn't crash on newly-added required fields.
+function migrateClient(c: Client): Client {
+  return {
+    ...c,
+    nextPaymentDate: c.nextPaymentDate ?? addDays(30),
+    allergies: c.allergies ?? '',
+    conditions: c.conditions ?? '',
+    preferences: c.preferences ?? '',
+  };
+}
+
+function migrateSpecialist(s: Specialist): Specialist {
+  return {
+    ...s,
+    plan: s.plan ?? 'none',
+    paymentMethod: s.paymentMethod ?? null,
+    nextChargeDate: s.nextChargeDate ?? null,
+    cmeHoursTarget: s.cmeHoursTarget ?? 20,
+  };
+}
+
+function migrateCareerLead(l: CareerLead): CareerLead {
+  return { ...l, source: l.source ?? 'school' };
+}
+
+function migrate(data: AppData): AppData {
+  return {
+    ...data,
+    clients: (data.clients ?? []).map(migrateClient),
+    specialist: migrateSpecialist(data.specialist),
+    careerLeads: (data.careerLeads ?? []).map(migrateCareerLead),
+    labResults: data.labResults ?? [],
+  };
+}
+
 function loadInitial(): AppData {
   if (typeof window !== 'undefined') {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (raw) {
       try {
-        return { ...defaultData(), ...(JSON.parse(raw) as Partial<AppData>) };
+        return migrate({ ...defaultData(), ...(JSON.parse(raw) as Partial<AppData>) });
       } catch {
         /* fall through to seed */
       }
