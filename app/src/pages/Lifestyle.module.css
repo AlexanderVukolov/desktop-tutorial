@@ -1,0 +1,257 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  align-items: start;
+}
+
+@media (max-width: 920px) {
+  .grid2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.waterProgress {
+  margin: 0.4rem 0 0.9rem;
+}
+
+.waterBar {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.waterBarFill {
+  height: 100%;
+  background: var(--c-saas);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.waterMeta {
+  margin-top: 0.5rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.quickAddRow {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.8rem;
+}
+
+.quickAddBtn {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8rem;
+}
+
+.quickAddBtn:hover {
+  background: var(--surface-2);
+}
+
+.inlineForm {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.inlineForm input {
+  flex: 1;
+  background: var(--page);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.86rem;
+}
+
+.waterLogList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.9rem;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+.waterLogRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.waterLogRow .removeBtn {
+  margin-left: auto;
+}
+
+.disclaimer {
+  font-size: 0.76rem;
+  color: var(--muted);
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+  line-height: 1.45;
+  margin-top: 0.6rem;
+}
+
+.sleepForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.logList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.logRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.82rem;
+}
+
+.logRow:last-child {
+  border-bottom: none;
+}
+
+.qualityBadge {
+  font-size: 0.72rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.emptyHint {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.removeBtn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.removeBtn:hover {
+  background: color-mix(in srgb, var(--critical) 14%, var(--surface-2));
+  color: var(--critical);
+}
+
+.supForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-bottom: 1.1rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.formRow3 {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 0.8rem;
+}
+
+@media (max-width: 640px) {
+  .formRow3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.supList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.supRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.supRow:last-child {
+  border-bottom: none;
+}
+
+.supRowPaused {
+  opacity: 0.55;
+}
+
+.supInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.supName {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.supMeta {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.supActions {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.adherence {
+  font-size: 0.76rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.takenCheck {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}

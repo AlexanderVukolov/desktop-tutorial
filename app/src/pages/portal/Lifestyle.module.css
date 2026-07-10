@@ -1,0 +1,145 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.2rem;
+  box-shadow: var(--shadow-1);
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1rem;
+}
+
+.head h3 {
+  font-size: 0.98rem;
+}
+
+.delta {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.waterBar {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+  margin-bottom: 0.9rem;
+}
+
+.waterBarFill {
+  height: 100%;
+  background: var(--c-saas);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.quickAddRow {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.quickAddBtn {
+  border: 1px solid var(--border-strong);
+  background: var(--page);
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8rem;
+}
+
+.form {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.form input,
+.form select {
+  flex: 1;
+  background: var(--page);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.86rem;
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.86rem;
+  padding: 1.5rem 0;
+}
+
+.logList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.logRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.82rem;
+}
+
+.logRow:last-child {
+  border-bottom: none;
+}
+
+.qualityBadge {
+  font-size: 0.72rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.supList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.supRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.supRow:last-child {
+  border-bottom: none;
+}
+
+.supInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.supName {
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.supMeta {
+  font-size: 0.76rem;
+  color: var(--muted);
+}

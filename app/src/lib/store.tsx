@@ -32,9 +32,13 @@ import type {
   ProgressPhoto,
   ReferralEntry,
   RevenuePoint,
+  SleepLog,
+  SleepQuality,
   Specialist,
   SubscriptionPlan,
+  Supplement,
   TaskPriority,
+  WaterLog,
   Webinar,
 } from './types';
 import type { CustomRationTemplate, DishOption } from './rationTemplates';
@@ -83,6 +87,9 @@ interface AppData {
   customDishes: DishOption[];
   customTemplates: CustomRationTemplate[];
   progressPhotos: ProgressPhoto[];
+  waterLogs: WaterLog[];
+  sleepLogs: SleepLog[];
+  supplements: Supplement[];
 }
 
 function defaultData(): AppData {
@@ -110,6 +117,9 @@ function defaultData(): AppData {
     customDishes: [],
     customTemplates: [],
     progressPhotos: [],
+    waterLogs: [],
+    sleepLogs: [],
+    supplements: [],
   };
 }
 
@@ -159,6 +169,9 @@ function migrate(data: AppData): AppData {
     customDishes: data.customDishes ?? [],
     customTemplates: data.customTemplates ?? [],
     progressPhotos: data.progressPhotos ?? [],
+    waterLogs: data.waterLogs ?? [],
+    sleepLogs: data.sleepLogs ?? [],
+    supplements: data.supplements ?? [],
   };
 }
 
@@ -240,6 +253,14 @@ interface AppDataContextValue extends AppData {
   removeCustomTemplate: (id: string) => void;
   addProgressPhoto: (clientId: string, photo: string, note?: string) => ProgressPhoto;
   removeProgressPhoto: (id: string) => void;
+  addWaterLog: (clientId: string, ml: number) => WaterLog;
+  removeWaterLog: (id: string) => void;
+  addSleepLog: (clientId: string, hours: number, quality: SleepQuality) => SleepLog;
+  removeSleepLog: (id: string) => void;
+  addSupplement: (clientId: string, input: { name: string; dosage: string; timesPerDay: number; note?: string }) => Supplement;
+  removeSupplement: (id: string) => void;
+  toggleSupplementActive: (id: string) => void;
+  toggleSupplementTaken: (id: string, date: string) => void;
 }
 
 const AppDataContext = createContext<AppDataContextValue | null>(null);
@@ -568,6 +589,58 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       },
       removeProgressPhoto: (id) => {
         setData((prev) => ({ ...prev, progressPhotos: prev.progressPhotos.filter((p) => p.id !== id) }));
+      },
+      addWaterLog: (clientId, ml) => {
+        const entry: WaterLog = { id: makeId('wl'), clientId, ml, createdAt: new Date().toISOString() };
+        setData((prev) => ({ ...prev, waterLogs: [...prev.waterLogs, entry] }));
+        return entry;
+      },
+      removeWaterLog: (id) => {
+        setData((prev) => ({ ...prev, waterLogs: prev.waterLogs.filter((w) => w.id !== id) }));
+      },
+      addSleepLog: (clientId, hours, quality) => {
+        const entry: SleepLog = { id: makeId('sl'), clientId, hours, quality, createdAt: new Date().toISOString() };
+        setData((prev) => ({ ...prev, sleepLogs: [...prev.sleepLogs, entry] }));
+        return entry;
+      },
+      removeSleepLog: (id) => {
+        setData((prev) => ({ ...prev, sleepLogs: prev.sleepLogs.filter((s) => s.id !== id) }));
+      },
+      addSupplement: (clientId, input) => {
+        const supplement: Supplement = {
+          id: makeId('sup'),
+          clientId,
+          active: true,
+          createdAt: new Date().toISOString(),
+          takenDates: [],
+          ...input,
+        };
+        setData((prev) => ({ ...prev, supplements: [...prev.supplements, supplement] }));
+        return supplement;
+      },
+      removeSupplement: (id) => {
+        setData((prev) => ({ ...prev, supplements: prev.supplements.filter((s) => s.id !== id) }));
+      },
+      toggleSupplementActive: (id) => {
+        setData((prev) => ({
+          ...prev,
+          supplements: prev.supplements.map((s) => (s.id === id ? { ...s, active: !s.active } : s)),
+        }));
+      },
+      toggleSupplementTaken: (id, date) => {
+        setData((prev) => ({
+          ...prev,
+          supplements: prev.supplements.map((s) =>
+            s.id === id
+              ? {
+                  ...s,
+                  takenDates: s.takenDates.includes(date)
+                    ? s.takenDates.filter((d) => d !== date)
+                    : [...s.takenDates, date],
+                }
+              : s,
+          ),
+        }));
       },
     }),
     [data],

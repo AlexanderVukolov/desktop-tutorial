@@ -3,7 +3,7 @@ import { NavLink, Outlet, useParams } from 'react-router-dom';
 import { useAppData } from '../../lib/store';
 import { useTheme } from '../../lib/useTheme';
 import { formatNumber } from '../../lib/format';
-import { IconCamera, IconChat, IconClipboard, IconMoon, IconSun, IconTrendUp } from '../ui/icons';
+import { IconCamera, IconChat, IconClipboard, IconDroplet, IconMoon, IconSun, IconTrendUp } from '../ui/icons';
 import styles from './PortalShell.module.css';
 
 export interface PortalContext {
@@ -118,6 +118,10 @@ export function PortalShell() {
           <NavLink to={`/client/${client.id}/progress`} className={({ isActive }) => `${styles.tab} ${isActive ? styles.tabActive : ''}`}>
             <IconTrendUp width={19} height={19} />
             Прогресс
+          </NavLink>
+          <NavLink to={`/client/${client.id}/lifestyle`} className={({ isActive }) => `${styles.tab} ${isActive ? styles.tabActive : ''}`}>
+            <IconDroplet width={19} height={19} />
+            Режим
           </NavLink>
           <NavLink to={`/client/${client.id}/chat`} className={({ isActive }) => `${styles.tab} ${isActive ? styles.tabActive : ''}`}>
             <IconChat width={19} height={19} />

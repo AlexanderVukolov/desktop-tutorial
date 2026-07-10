@@ -333,3 +333,25 @@ export function IconTarget(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function IconDroplet(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path
+        d="M12 3.5c3 4 6.2 7.7 6.2 11.2a6.2 6.2 0 1 1-12.4 0c0-3.5 3.2-7.2 6.2-11.2Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function IconPill(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="4" y="9.3" width="16" height="5.4" rx="2.7" transform="rotate(-45 12 12)" stroke="currentColor" strokeWidth="1.6" />
+      <line x1="9.2" y1="9.2" x2="14.8" y2="14.8" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  );
+}

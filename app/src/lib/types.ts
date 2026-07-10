@@ -62,6 +62,35 @@ export interface ProgressPhoto {
   note?: string;
 }
 
+export interface WaterLog {
+  id: string;
+  clientId: string;
+  ml: number;
+  createdAt: string;
+}
+
+export type SleepQuality = 'poor' | 'fair' | 'good';
+
+export interface SleepLog {
+  id: string;
+  clientId: string;
+  hours: number;
+  quality: SleepQuality;
+  createdAt: string;
+}
+
+export interface Supplement {
+  id: string;
+  clientId: string;
+  name: string;
+  dosage: string;
+  timesPerDay: number;
+  note?: string;
+  active: boolean;
+  createdAt: string;
+  takenDates: string[];
+}
+
 export interface BodyComposition {
   fatPercent: number;
   muscleMassKg: number;
