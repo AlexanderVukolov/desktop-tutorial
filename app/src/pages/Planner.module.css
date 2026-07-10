@@ -1,0 +1,383 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.dayNav {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.dayLabel {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-transform: capitalize;
+}
+
+.todayBadge {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: color-mix(in srgb, var(--c-career) 15%, transparent);
+  color: var(--c-career-text);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 1.2rem;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .grid2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mainStack,
+.sideStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Фокус дня */
+.focusList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.focusRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.focusIndex {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 0.74rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.focusInput {
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  padding: 0.4rem 0.1rem;
+  font-size: 0.9rem;
+}
+
+.focusInput:focus {
+  outline: none;
+  border-bottom-color: var(--c-career);
+}
+
+/* Задачи */
+.taskForm {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.taskInput {
+  flex: 1;
+  min-width: 160px;
+  background: var(--page);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.86rem;
+}
+
+.taskSelect {
+  background: var(--page);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.82rem;
+  color: var(--ink-2);
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.taskRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.75rem;
+}
+
+.taskRowDone {
+  opacity: 0.55;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--page);
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.checkboxDone {
+  background: var(--good);
+  border-color: var(--good);
+  color: #fff;
+}
+
+.priorityDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.taskMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.taskText {
+  font-size: 0.88rem;
+}
+
+.taskRowDone .taskText {
+  text-decoration: line-through;
+}
+
+.taskMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+}
+
+.overdueTag {
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--critical);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.taskClient {
+  font-size: 0.74rem;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.taskClient:hover {
+  text-decoration: underline;
+}
+
+.removeBtn {
+  color: var(--muted);
+  flex: none;
+  font-size: 0.8rem;
+}
+
+.emptyHint {
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+/* Дневник */
+.moodRow {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+
+.moodBtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  background: var(--surface-2);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.moodBtnActive {
+  border-color: var(--c-career);
+  background: color-mix(in srgb, var(--c-career) 15%, var(--surface-2));
+}
+
+.journalArea {
+  width: 100%;
+  min-height: 100px;
+  background: var(--page);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.65rem 0.8rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.journalHistory {
+  margin-top: 1.1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.journalHistoryLabel {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.journalHistoryRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-radius: 8px;
+}
+
+.journalHistoryRow:hover {
+  background: var(--surface-2);
+}
+
+.journalHistoryDate {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  text-transform: capitalize;
+}
+
+.journalHistoryText {
+  font-size: 0.8rem;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Расписание */
+.scheduleList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.scheduleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.75rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.scheduleRow:hover {
+  background: var(--surface-2);
+}
+
+.scheduleTime {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  flex: none;
+}
+
+.scheduleMain {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.scheduleClient {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.scheduleMeta {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+/* Привычки */
+.habitList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.habitRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.55rem 0.7rem;
+  background: var(--surface);
+  text-align: left;
+}
+
+.habitRowDone {
+  background: color-mix(in srgb, var(--good) 10%, var(--surface));
+  border-color: color-mix(in srgb, var(--good) 35%, var(--border));
+}
+
+.habitEmoji {
+  font-size: 1.1rem;
+  flex: none;
+}
+
+.habitLabel {
+  flex: 1;
+  font-size: 0.86rem;
+}
+
+.habitStreak {
+  font-size: 0.74rem;
+  color: var(--warning);
+  font-weight: 600;
+  flex: none;
+}

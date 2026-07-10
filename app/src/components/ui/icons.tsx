@@ -310,3 +310,26 @@ export function IconBell(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function IconNotebook(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="4.5" y="3.5" width="15" height="17" rx="2" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M8 3.5v17" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M11.5 8h4M11.5 11.5h4M11.5 15h2.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <circle cx="6" cy="7.5" r="0.9" fill="currentColor" />
+      <circle cx="6" cy="12" r="0.9" fill="currentColor" />
+      <circle cx="6" cy="16.5" r="0.9" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function IconTarget(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="12" cy="12" r="4.5" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="12" cy="12" r="1.2" fill="currentColor" />
+    </svg>
+  );
+}

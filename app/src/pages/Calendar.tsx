@@ -27,9 +27,11 @@ export function Calendar() {
   const { clients, appointments, addAppointment, updateAppointment, cancelAppointment, completeAppointment } = useAppData();
   const [params] = useSearchParams();
   const preselectedClientId = params.get('clientId');
+  const preselectedDate = params.get('date');
   const today = new Date();
-  const [cursor, setCursor] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
-  const [selectedKey, setSelectedKey] = useState(dateKey(today));
+  const initialFocusDate = preselectedDate ? new Date(`${preselectedDate}T00:00:00`) : today;
+  const [cursor, setCursor] = useState(new Date(initialFocusDate.getFullYear(), initialFocusDate.getMonth(), 1));
+  const [selectedKey, setSelectedKey] = useState(preselectedDate ?? dateKey(today));
   const [modalOpen, setModalOpen] = useState(!!preselectedClientId);
   const [rescheduleTarget, setRescheduleTarget] = useState<Appointment | null>(null);
   const [notifPermission, setNotifPermission] = useState<NotificationPermission | 'unsupported'>(

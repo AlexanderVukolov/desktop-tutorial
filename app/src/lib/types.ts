@@ -253,3 +253,34 @@ export interface Appointment {
   reminderSent: boolean;
   notes: string;
 }
+
+export type TaskPriority = 'low' | 'medium' | 'high';
+export type Mood = 'great' | 'good' | 'neutral' | 'tired' | 'stressed';
+
+export interface PlannerTask {
+  id: string;
+  text: string;
+  done: boolean;
+  clientId?: string;
+  dueDate: string;
+  priority: TaskPriority;
+  createdAt: string;
+}
+
+export interface JournalEntry {
+  id: string;
+  date: string;
+  mood?: Mood;
+  text: string;
+  updatedAt: string;
+}
+
+export interface DayFocus {
+  date: string;
+  items: string[];
+}
+
+export interface HabitCompletion {
+  habitId: string;
+  date: string;
+}

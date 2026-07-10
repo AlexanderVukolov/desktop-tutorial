@@ -10,10 +10,13 @@ import type {
   ChatMessage,
   Client,
   CommunityPost,
+  DayFocus,
   DiaryEntry,
   EnergyExpenditure,
   FoodFrequencyEntry,
   Goal,
+  HabitCompletion,
+  JournalEntry,
   KbjuCalculation,
   KbjuInput,
   KbjuResult,
@@ -25,10 +28,12 @@ import type {
   PartnerOrg,
   PartnerStatus,
   PaymentMethod,
+  PlannerTask,
   ReferralEntry,
   RevenuePoint,
   Specialist,
   SubscriptionPlan,
+  TaskPriority,
   Webinar,
 } from './types';
 import { getLevel } from './career';
@@ -43,6 +48,7 @@ import {
   LEADERBOARD_SEED,
   MESSAGES_SEED,
   PARTNER_ORGS_SEED,
+  PLANNER_TASKS_SEED,
   REFERRALS_SEED,
   REVENUE_SEED,
   SPECIALIST_SEED,
@@ -68,6 +74,10 @@ interface AppData {
   labResults: LabResult[];
   favoriteWellness: string[];
   appointments: Appointment[];
+  plannerTasks: PlannerTask[];
+  journalEntries: JournalEntry[];
+  dayFocus: DayFocus[];
+  habitLog: HabitCompletion[];
 }
 
 function defaultData(): AppData {
@@ -88,6 +98,10 @@ function defaultData(): AppData {
     labResults: [],
     favoriteWellness: [],
     appointments: APPOINTMENTS_SEED,
+    plannerTasks: PLANNER_TASKS_SEED,
+    journalEntries: [],
+    dayFocus: [],
+    habitLog: [],
   };
 }
 
@@ -130,6 +144,10 @@ function migrate(data: AppData): AppData {
     labResults: data.labResults ?? [],
     favoriteWellness: data.favoriteWellness ?? [],
     appointments: data.appointments ?? [],
+    plannerTasks: data.plannerTasks ?? [],
+    journalEntries: data.journalEntries ?? [],
+    dayFocus: data.dayFocus ?? [],
+    habitLog: data.habitLog ?? [],
   };
 }
 
@@ -199,6 +217,12 @@ interface AppDataContextValue extends AppData {
   cancelAppointment: (id: string) => void;
   completeAppointment: (id: string) => void;
   markReminderSent: (id: string) => void;
+  addPlannerTask: (input: { text: string; clientId?: string; dueDate: string; priority: TaskPriority }) => void;
+  togglePlannerTask: (id: string) => void;
+  removePlannerTask: (id: string) => void;
+  upsertJournalEntry: (date: string, patch: Partial<Pick<JournalEntry, 'mood' | 'text'>>) => void;
+  setDayFocus: (date: string, items: string[]) => void;
+  toggleHabit: (habitId: string, date: string) => void;
 }
 
 const AppDataContext = createContext<AppDataContextValue | null>(null);
@@ -457,6 +481,53 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
           ...prev,
           appointments: prev.appointments.map((a) => (a.id === id ? { ...a, reminderSent: true } : a)),
         }));
+      },
+      addPlannerTask: (input) => {
+        const task: PlannerTask = { id: makeId('task'), done: false, createdAt: new Date().toISOString(), ...input };
+        setData((prev) => ({ ...prev, plannerTasks: [...prev.plannerTasks, task] }));
+      },
+      togglePlannerTask: (id) => {
+        setData((prev) => ({
+          ...prev,
+          plannerTasks: prev.plannerTasks.map((t) => (t.id === id ? { ...t, done: !t.done } : t)),
+        }));
+      },
+      removePlannerTask: (id) => {
+        setData((prev) => ({ ...prev, plannerTasks: prev.plannerTasks.filter((t) => t.id !== id) }));
+      },
+      upsertJournalEntry: (date, patch) => {
+        setData((prev) => {
+          const existing = prev.journalEntries.find((j) => j.date === date);
+          const updatedAt = new Date().toISOString();
+          if (existing) {
+            return {
+              ...prev,
+              journalEntries: prev.journalEntries.map((j) => (j.date === date ? { ...j, ...patch, updatedAt } : j)),
+            };
+          }
+          const entry: JournalEntry = { id: makeId('jr'), date, text: '', updatedAt, ...patch };
+          return { ...prev, journalEntries: [...prev.journalEntries, entry] };
+        });
+      },
+      setDayFocus: (date, items) => {
+        setData((prev) => {
+          const existing = prev.dayFocus.find((f) => f.date === date);
+          if (existing) {
+            return { ...prev, dayFocus: prev.dayFocus.map((f) => (f.date === date ? { ...f, items } : f)) };
+          }
+          return { ...prev, dayFocus: [...prev.dayFocus, { date, items }] };
+        });
+      },
+      toggleHabit: (habitId, date) => {
+        setData((prev) => {
+          const exists = prev.habitLog.some((h) => h.habitId === habitId && h.date === date);
+          return {
+            ...prev,
+            habitLog: exists
+              ? prev.habitLog.filter((h) => !(h.habitId === habitId && h.date === date))
+              : [...prev.habitLog, { habitId, date }],
+          };
+        });
       },
     }),
     [data],
