@@ -8,6 +8,7 @@ import { ACTIVITY_OPTIONS, bmiCategory } from '../lib/kbju';
 import { FOOD_GROUPS, FREQUENCY_LABEL, PORTION_LABEL } from '../lib/foodFrequency';
 import { formatDate, formatNumber } from '../lib/format';
 import { IconMail, IconPrinter } from '../components/ui/icons';
+import { NSL_LOGO_ICON } from '../assets/nslLogo';
 import uiStyles from '../components/ui/ui.module.css';
 import styles from './ClientReport.module.css';
 
@@ -43,7 +44,10 @@ export function ClientReport() {
 
       <div className={styles.paper}>
         <div className={styles.paperHead}>
-          <h1>Заключение специалиста</h1>
+          <div className={styles.paperBrand}>
+            <img src={NSL_LOGO_ICON} alt="NSL" className={styles.paperLogo} />
+            <h1>Заключение специалиста</h1>
+          </div>
           <div className={styles.paperMeta}>
             {specialist.name}
             <br />

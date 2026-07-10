@@ -11,6 +11,7 @@ import { Calendar } from './pages/Calendar';
 import { Planner } from './pages/Planner';
 import { Kbju } from './pages/Kbju';
 import { FoodCalculator } from './pages/FoodCalculator';
+import { MyCabinet } from './pages/MyCabinet';
 import { Partner } from './pages/Partner';
 import { Career } from './pages/Career';
 import { Knowledge } from './pages/Knowledge';
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="planner" element={<Planner />} />
           <Route path="kbju" element={<Kbju />} />
           <Route path="food-calculator" element={<FoodCalculator />} />
+          <Route path="my-cabinet" element={<MyCabinet />} />
           <Route path="partner" element={<Partner />} />
           <Route path="career" element={<Career />} />
           <Route path="knowledge" element={<Knowledge />} />

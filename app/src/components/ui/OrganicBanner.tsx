@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { NSL_LOGO_ICON } from '../../assets/nslLogo';
 import styles from './OrganicBanner.module.css';
 
 export function OrganicBanner({
@@ -25,7 +26,12 @@ export function OrganicBanner({
         <span className={`${styles.blob} ${styles.blobDust}`} />
       </div>
       <div className={styles.content}>
-        {badge && <span className={styles.pill}>{badge}</span>}
+        {badge && (
+          <span className={styles.pill}>
+            <img src={NSL_LOGO_ICON} alt="" className={styles.pillLogo} />
+            {badge}
+          </span>
+        )}
         <h2 className={styles.title}>{title}</h2>
         {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
         {children}

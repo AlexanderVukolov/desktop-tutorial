@@ -38,6 +38,19 @@
   padding: 0 0.4rem;
 }
 
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brandLogo {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  flex: none;
+}
+
 .brand {
   display: flex;
   align-items: baseline;

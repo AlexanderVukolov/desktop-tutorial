@@ -65,15 +65,24 @@
 }
 
 .pill {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   background: var(--surface);
   color: var(--nsl-ink);
   font-size: 0.76rem;
   font-weight: 600;
-  padding: 0.35rem 0.9rem;
+  padding: 0.3rem 0.9rem 0.3rem 0.4rem;
   border-radius: 999px;
   box-shadow: var(--shadow-1);
   margin-bottom: 0.9rem;
+}
+
+.pillLogo {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex: none;
 }
 
 .title {

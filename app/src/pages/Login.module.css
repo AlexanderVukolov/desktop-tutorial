@@ -25,6 +25,18 @@
   }
 }
 
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brandLogo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
 .brand {
   font-family: var(--serif);
   font-weight: 700;
@@ -53,6 +65,23 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
+  flex: none;
+}
+
+.poweredBy {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.poweredByLogo {
+  height: 34px;
+  width: auto;
+  object-fit: contain;
   flex: none;
 }
 

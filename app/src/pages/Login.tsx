@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSession } from '../lib/useSession';
 import { IconLock } from '../components/ui/icons';
 import { OrganicBanner } from '../components/ui/OrganicBanner';
+import { NSL_LOGO_FULL, NSL_LOGO_ICON } from '../assets/nslLogo';
 import uiStyles from '../components/ui/ui.module.css';
 import styles from './Login.module.css';
 
@@ -25,9 +26,12 @@ export function Login() {
   return (
     <div className={styles.page}>
       <section className={styles.showcase}>
-        <div className={styles.brand}>
-          <span>Nutri</span>
-          <span className={styles.dot}>.OS</span>
+        <div className={styles.brandRow}>
+          <img src={NSL_LOGO_ICON} alt="NSL" className={styles.brandLogo} />
+          <div className={styles.brand}>
+            <span>Nutri</span>
+            <span className={styles.dot}>.OS</span>
+          </div>
         </div>
 
         <OrganicBanner
@@ -43,6 +47,11 @@ export function Login() {
               {m.label}
             </div>
           ))}
+        </div>
+
+        <div className={styles.poweredBy}>
+          <img src={NSL_LOGO_FULL} alt="NSL — Лига Нутрициологии" className={styles.poweredByLogo} />
+          <span>Официальная платформа школы «Лига Нутрициологии»</span>
         </div>
       </section>
 
