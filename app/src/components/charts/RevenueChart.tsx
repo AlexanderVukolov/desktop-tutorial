@@ -7,11 +7,20 @@ const WIDTH = 640;
 const HEIGHT = 220;
 const PAD = { top: 16, right: 12, bottom: 26, left: 12 };
 
+type Focus = 'both' | 'consulting' | 'referral';
+
+const SERIES_COLOR: Record<'consulting' | 'referral', string> = {
+  consulting: 'var(--c-edu)',
+  referral: 'var(--c-career)',
+};
+
 export function RevenueChart({ data }: { data: RevenuePoint[] }) {
   const [hover, setHover] = useState<number | null>(null);
+  const [focus, setFocus] = useState<Focus>('both');
 
   const totals = data.map((d) => d.consulting + d.referral);
-  const max = Math.max(...totals) * 1.15;
+  const singleValues = focus === 'referral' ? data.map((d) => d.referral) : data.map((d) => d.consulting);
+  const max = (focus === 'both' ? Math.max(...totals) : Math.max(...singleValues)) * 1.15 || 1;
 
   const plotW = WIDTH - PAD.left - PAD.right;
   const plotH = HEIGHT - PAD.top - PAD.bottom;
@@ -23,14 +32,20 @@ export function RevenueChart({ data }: { data: RevenuePoint[] }) {
     () => data.map((d, i) => [x(i), yFor(d.consulting)]),
     [data, max],
   );
+  const referralPoints = useMemo<[number, number][]>(
+    () => data.map((d, i) => [x(i), yFor(d.referral)]),
+    [data, max],
+  );
   const totalPoints = useMemo<[number, number][]>(
     () => data.map((d, i) => [x(i), yFor(d.consulting + d.referral)]),
     [data, max],
   );
 
   const consultingPath = useMemo(() => buildAreaPath(consultingPoints), [consultingPoints]);
+  const referralSoloPath = useMemo(() => buildAreaPath(referralPoints), [referralPoints]);
   const referralBandPath = useMemo(() => buildBandPath(totalPoints, consultingPoints), [totalPoints, consultingPoints]);
   const consultingLine = useMemo(() => buildLinePath(consultingPoints), [consultingPoints]);
+  const referralLine = useMemo(() => buildLinePath(referralPoints), [referralPoints]);
   const totalLine = useMemo(() => buildLinePath(totalPoints), [totalPoints]);
 
   const ticks = 4;
@@ -52,10 +67,24 @@ export function RevenueChart({ data }: { data: RevenuePoint[] }) {
   }
 
   const activePoint = hover !== null ? data[hover] : null;
+  const dotY = hover !== null ? (focus === 'referral' ? yFor(data[hover].referral) : focus === 'consulting' ? yFor(data[hover].consulting) : yFor(totals[hover])) : 0;
   const tooltipLeftPct = hover !== null ? (x(hover) / WIDTH) * 100 : 0;
+  const dotColor = focus === 'referral' ? SERIES_COLOR.referral : SERIES_COLOR.consulting;
 
   return (
     <div className={styles.wrap}>
+      <div className={styles.modeRow}>
+        {(['both', 'consulting', 'referral'] as Focus[]).map((f) => (
+          <button
+            key={f}
+            className={`${styles.modeBtn} ${focus === f ? styles.modeBtnActive : ''}`}
+            onClick={() => setFocus(f)}
+          >
+            {f === 'both' ? 'Оба графика' : f === 'consulting' ? 'Только консультации' : 'Только рефералы'}
+          </button>
+        ))}
+      </div>
+
       <svg className={styles.svg} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} preserveAspectRatio="none" role="img" aria-label="Динамика дохода по месяцам">
         {gridValues.map((v, i) => (
           <line key={i} className={styles.gridline} x1={PAD.left} x2={WIDTH - PAD.right} y1={yFor(v)} y2={yFor(v)} />
@@ -72,20 +101,35 @@ export function RevenueChart({ data }: { data: RevenuePoint[] }) {
           </linearGradient>
         </defs>
 
-        <path d={consultingPath} fill="url(#fillConsulting)" />
-        <path d={referralBandPath} fill="url(#fillReferral)" />
-
-        <path d={consultingLine} fill="none" stroke="var(--c-edu)" strokeWidth={2} strokeLinecap="round" />
-        <path d={totalLine} fill="none" stroke="var(--c-career)" strokeWidth={2} strokeLinecap="round" />
+        {focus === 'both' && (
+          <>
+            <path d={consultingPath} fill="url(#fillConsulting)" />
+            <path d={referralBandPath} fill="url(#fillReferral)" />
+            <path d={consultingLine} fill="none" stroke="var(--c-edu)" strokeWidth={2} strokeLinecap="round" />
+            <path d={totalLine} fill="none" stroke="var(--c-career)" strokeWidth={2} strokeLinecap="round" />
+          </>
+        )}
+        {focus === 'consulting' && (
+          <>
+            <path d={consultingPath} fill="url(#fillConsulting)" />
+            <path d={consultingLine} fill="none" stroke="var(--c-edu)" strokeWidth={2.5} strokeLinecap="round" />
+          </>
+        )}
+        {focus === 'referral' && (
+          <>
+            <path d={referralSoloPath} fill="url(#fillReferral)" />
+            <path d={referralLine} fill="none" stroke="var(--c-career)" strokeWidth={2.5} strokeLinecap="round" />
+          </>
+        )}
 
         {data.map((_, i) => (
           <circle
             key={i}
             className={styles.dot}
             cx={x(i)}
-            cy={yFor(totals[i])}
+            cy={hover === i ? dotY : 0}
             r={hover === i ? 4 : 0}
-            fill="var(--c-career)"
+            fill={dotColor}
             stroke="var(--surface)"
             strokeWidth={2}
           />
@@ -115,26 +159,36 @@ export function RevenueChart({ data }: { data: RevenuePoint[] }) {
       {activePoint && (
         <div className={styles.tooltip} style={{ left: `${tooltipLeftPct}%` }}>
           <div className={styles.head}>{formatMonth(activePoint.month)}</div>
-          <div className={styles.row}>
-            <span className={styles.sw} style={{ background: 'var(--c-edu)' }} />
-            Консультации: {formatRub(activePoint.consulting)}
-          </div>
-          <div className={styles.row}>
-            <span className={styles.sw} style={{ background: 'var(--c-career)' }} />
-            Реферальная программа: {formatRub(activePoint.referral)}
-          </div>
+          {focus !== 'referral' && (
+            <div className={styles.row}>
+              <span className={styles.sw} style={{ background: 'var(--c-edu)' }} />
+              Консультации: {formatRub(activePoint.consulting)}
+            </div>
+          )}
+          {focus !== 'consulting' && (
+            <div className={styles.row}>
+              <span className={styles.sw} style={{ background: 'var(--c-career)' }} />
+              Реферальная программа: {formatRub(activePoint.referral)}
+            </div>
+          )}
         </div>
       )}
 
       <div className={styles.legend}>
-        <div className={styles.legendItem}>
+        <button
+          className={`${styles.legendItem} ${styles.legendBtn} ${focus === 'referral' ? styles.legendDim : ''}`}
+          onClick={() => setFocus(focus === 'consulting' ? 'both' : 'consulting')}
+        >
           <span className={styles.sw} style={{ background: 'var(--c-edu)' }} />
           Доход от консультаций
-        </div>
-        <div className={styles.legendItem}>
+        </button>
+        <button
+          className={`${styles.legendItem} ${styles.legendBtn} ${focus === 'consulting' ? styles.legendDim : ''}`}
+          onClick={() => setFocus(focus === 'referral' ? 'both' : 'referral')}
+        >
           <span className={styles.sw} style={{ background: 'var(--c-career)' }} />
           Доход от рефералов
-        </div>
+        </button>
       </div>
     </div>
   );

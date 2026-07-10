@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useAppData } from '../../lib/store';
 import { useTheme } from '../../lib/useTheme';
 import {
@@ -9,8 +9,10 @@ import {
   IconGrid,
   IconHandshake,
   IconMoon,
+  IconSettings,
   IconSun,
   IconUsers,
+  IconUtensils,
 } from '../ui/icons';
 import styles from './AppShell.module.css';
 
@@ -18,6 +20,7 @@ const NAV_MAIN = [
   { to: '/app/dashboard', label: 'Дашборд', icon: IconGrid },
   { to: '/app/clients', label: 'Клиенты', icon: IconUsers },
   { to: '/app/kbju', label: 'КБЖУ-калькулятор', icon: IconCalculator },
+  { to: '/app/food-calculator', label: 'Калькулятор еды', icon: IconUtensils },
   { to: '/app/partner', label: 'Партнёрская программа', icon: IconHandshake },
 ];
 
@@ -31,10 +34,12 @@ const PAGE_META: { match: string; crumb: string; title: string }[] = [
   { match: '/app/dashboard', crumb: 'Nutri.OS', title: 'Дашборд' },
   { match: '/app/clients', crumb: 'Nutri.OS', title: 'Клиенты' },
   { match: '/app/kbju', crumb: 'Nutri.OS', title: 'КБЖУ-калькулятор' },
+  { match: '/app/food-calculator', crumb: 'Nutri.OS', title: 'Калькулятор еды' },
   { match: '/app/partner', crumb: 'Nutri.OS', title: 'Партнёрская программа' },
   { match: '/app/career', crumb: 'Nutri.OS · экосистема', title: 'Карьерный центр' },
   { match: '/app/knowledge', crumb: 'Nutri.OS · экосистема', title: 'База знаний' },
   { match: '/app/community', crumb: 'Nutri.OS · экосистема', title: 'Комьюнити' },
+  { match: '/app/settings', crumb: 'Nutri.OS', title: 'Настройки' },
 ];
 
 function useInitials(name: string) {
@@ -52,12 +57,13 @@ export function AppShell() {
   const location = useLocation();
   const initials = useInitials(specialist.name);
 
-  const meta =
-    PAGE_META.find((p) => location.pathname.startsWith(p.match)) ?? PAGE_META[0];
+  const meta = location.pathname.endsWith('/report')
+    ? { crumb: 'Nutri.OS', title: 'Заключение' }
+    : PAGE_META.find((p) => location.pathname.startsWith(p.match)) ?? PAGE_META[0];
 
   return (
     <div className={styles.shell}>
-      <aside className={styles.sidebar}>
+      <aside className={`${styles.sidebar} noPrint`}>
         <div className={styles.brand}>
           <span>Nutri</span>
           <span className={styles.dot}>.OS</span>
@@ -93,8 +99,12 @@ export function AppShell() {
           ))}
         </nav>
 
-        <div className={styles.sidebarFooter}>
-          <div className={styles.avatar}>{initials}</div>
+        <Link to="/app/settings" className={styles.sidebarFooter}>
+          {specialist.photo ? (
+            <img src={specialist.photo} alt="" className={styles.avatarPhoto} />
+          ) : (
+            <div className={styles.avatar}>{initials}</div>
+          )}
           <div className={styles.who}>
             <div className="name" style={{ fontSize: '0.85rem', fontWeight: 600 }}>
               {specialist.name}
@@ -103,11 +113,12 @@ export function AppShell() {
               {specialist.role}
             </div>
           </div>
-        </div>
+          <IconSettings width={16} height={16} style={{ color: 'var(--muted)', flex: 'none' }} />
+        </Link>
       </aside>
 
       <div>
-        <header className={styles.topbar}>
+        <header className={`${styles.topbar} noPrint`}>
           <div>
             <div className={styles.crumb}>{meta.crumb}</div>
             <h1 className={styles.pageTitle}>{meta.title}</h1>
@@ -116,9 +127,15 @@ export function AppShell() {
             <button className={styles.iconBtn} onClick={toggle} aria-label="Переключить тему">
               {theme === 'dark' ? <IconSun width={17} height={17} /> : <IconMoon width={17} height={17} />}
             </button>
-            <div className={styles.avatar} style={{ width: 32, height: 32, fontSize: '0.8rem' }}>
-              {initials}
-            </div>
+            <Link to="/app/settings" aria-label="Настройки профиля">
+              {specialist.photo ? (
+                <img src={specialist.photo} alt="" className={styles.avatarPhoto} style={{ width: 32, height: 32 }} />
+              ) : (
+                <div className={styles.avatar} style={{ width: 32, height: 32, fontSize: '0.8rem' }}>
+                  {initials}
+                </div>
+              )}
+            </Link>
           </div>
         </header>
 
@@ -127,7 +144,7 @@ export function AppShell() {
         </main>
       </div>
 
-      <nav className={styles.mobileNav}>
+      <nav className={`${styles.mobileNav} noPrint`}>
         {NAV_MAIN.map(({ to, label, icon: Icon }) => (
           <NavLink key={to} to={to} className={({ isActive }) => `${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ''}`}>
             <Icon width={18} height={18} />

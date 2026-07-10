@@ -34,6 +34,22 @@ export function calcBmr({ gender, weightKg, heightCm, age }: KbjuInput): number 
   return gender === 'male' ? base + 5 : base - 161;
 }
 
+export function calcBmi({ weightKg, heightCm }: { weightKg: number; heightCm: number }): number {
+  const heightM = heightCm / 100;
+  return weightKg / (heightM * heightM);
+}
+
+const BMI_CATEGORIES: { max: number; label: string }[] = [
+  { max: 18.5, label: 'Недостаток веса' },
+  { max: 25, label: 'Норма' },
+  { max: 30, label: 'Избыточный вес' },
+  { max: Infinity, label: 'Ожирение' },
+];
+
+export function bmiCategory(bmi: number): string {
+  return BMI_CATEGORIES.find((c) => bmi < c.max)!.label;
+}
+
 export function calcKbju(input: KbjuInput): KbjuResult {
   const bmr = calcBmr(input);
   const tdee = bmr * input.activity;
@@ -53,6 +69,7 @@ export function calcKbju(input: KbjuInput): KbjuResult {
     proteinG: Math.round(proteinG),
     fatG: Math.round(fatG),
     carbsG: Math.round(carbsG),
+    bmi: Math.round(calcBmi(input) * 10) / 10,
   };
 }
 

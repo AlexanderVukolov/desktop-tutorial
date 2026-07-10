@@ -11,6 +11,12 @@ export type LeadStatus = 'new' | 'responded' | 'declined';
 export type PartnerKind = 'fitness' | 'wellness' | 'clinic' | 'corporate';
 export type PartnerStatus = 'available' | 'pending' | 'partnered';
 export type SpecialistLevel = 'junior' | 'senior' | 'expert';
+export type LeadSource = 'school' | 'hh';
+export type SocialPlatform = 'vk' | 'telegram';
+export type SubscriptionPlan = 'none' | 'lite' | 'pro';
+export type PaymentMethod = 'card' | 'sbp';
+export type FrequencyLevel = 'daily' | 'few_week' | 'weekly' | 'rarely' | 'never';
+export type PortionSize = 'small' | 'medium' | 'large';
 
 export interface KbjuInput {
   gender: Gender;
@@ -28,6 +34,7 @@ export interface KbjuResult {
   proteinG: number;
   fatG: number;
   carbsG: number;
+  bmi: number;
 }
 
 export interface KbjuCalculation extends KbjuInput, KbjuResult {
@@ -41,6 +48,43 @@ export interface WeightPoint {
   weightKg: number;
 }
 
+export interface BodyComposition {
+  fatPercent: number;
+  muscleMassKg: number;
+  visceralFat: number;
+  measuredAt: string;
+}
+
+export interface EnergyExpenditure {
+  restingKcal: number;
+  totalKcal: number;
+  measuredAt: string;
+}
+
+export interface Biometrics {
+  heightCm: number;
+  waistCm: number;
+  hipCm: number;
+  systolic: number;
+  diastolic: number;
+  pulse: number;
+  measuredAt: string;
+}
+
+export interface LabResult {
+  id: string;
+  clientId: string;
+  title: string;
+  date: string;
+  fileName: string;
+  fileData: string;
+}
+
+export interface FoodFrequencyEntry {
+  frequency: FrequencyLevel;
+  portion: PortionSize;
+}
+
 export interface Client {
   id: string;
   name: string;
@@ -49,8 +93,18 @@ export interface Client {
   status: ClientStatus;
   startedAt: string;
   monthlyFee: number;
+  nextPaymentDate: string;
   weightHistory: WeightPoint[];
   notes: string;
+  photo?: string;
+  allergies: string;
+  conditions: string;
+  preferences: string;
+  activityLevel?: ActivityFactor;
+  bodyComposition?: BodyComposition;
+  energyExpenditure?: EnergyExpenditure;
+  biometrics?: Biometrics;
+  foodFrequency?: Record<string, FoodFrequencyEntry>;
 }
 
 export interface AiEstimate {
@@ -102,6 +156,10 @@ export interface Specialist {
   balance: number;
   payoutThreshold: number;
   cmeHoursTarget: number;
+  photo?: string;
+  plan: SubscriptionPlan;
+  paymentMethod: PaymentMethod | null;
+  nextChargeDate: string | null;
 }
 
 export interface CareerLead {
@@ -116,6 +174,16 @@ export interface CareerLead {
   matchReason: string;
   status: LeadStatus;
   postedAt: string;
+  source: LeadSource;
+  externalUrl?: string;
+}
+
+export interface SocialMention {
+  id: string;
+  platform: SocialPlatform;
+  author: string;
+  snippet: string;
+  foundAt: string;
 }
 
 export interface PartnerOrg {

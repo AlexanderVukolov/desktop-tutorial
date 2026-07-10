@@ -2,12 +2,20 @@ import { useMemo, useState } from 'react';
 import { useAppData } from '../lib/store';
 import { Card } from '../components/ui/Card';
 import { StatGrid, StatTile } from '../components/ui/StatTile';
+import { NUTRIENTS } from '../lib/nutrients';
 import uiStyles from '../components/ui/ui.module.css';
 import styles from './Knowledge.module.css';
 
 export function Knowledge() {
   const { specialist, articles, webinars, toggleArticleRead, toggleWebinarWatched } = useAppData();
   const [category, setCategory] = useState('Все');
+  const [nutrientQuery, setNutrientQuery] = useState('');
+
+  const visibleNutrients = useMemo(() => {
+    const q = nutrientQuery.trim().toLowerCase();
+    if (!q) return NUTRIENTS;
+    return NUTRIENTS.filter((n) => n.name.toLowerCase().includes(q) || n.role.toLowerCase().includes(q));
+  }, [nutrientQuery]);
 
   const categories = useMemo(() => ['Все', ...Array.from(new Set(articles.map((a) => a.category)))], [articles]);
   const visibleArticles = category === 'Все' ? articles : articles.filter((a) => a.category === category);
@@ -130,6 +138,34 @@ export function Knowledge() {
               </div>
             );
           })}
+        </div>
+      </Card>
+
+      <Card title="Нутриенты и ингредиенты" hint="Справочник по общедоступным данным нутрициологии">
+        <p className={styles.cmeNote} style={{ marginBottom: '0.9rem' }}>
+          Локальный справочник, а не live-подключение к PubMed: реальная интеграция с NCBI требует серверного
+          запроса, который недоступен из статичного приложения. Здесь — устоявшиеся общедоступные данные без
+          вымышленных ссылок на конкретные статьи.
+        </p>
+        <input
+          className={styles.nutrientSearch}
+          placeholder="Поиск нутриента, например «железо» или «сон»"
+          value={nutrientQuery}
+          onChange={(e) => setNutrientQuery(e.target.value)}
+        />
+        <div className={styles.nutrientList}>
+          {visibleNutrients.map((n) => (
+            <div key={n.id} className={styles.nutrientRow}>
+              <div className={styles.nutrientMain}>
+                <span className={styles.categoryBadge}>{n.category}</span>
+                <span className={styles.articleTitle}>{n.name}</span>
+                <div className={styles.articleMeta}>{n.role}</div>
+                <div className={styles.articleMeta}>Источники: {n.sources}</div>
+              </div>
+              <span className={styles.rdaBadge}>{n.rda}</span>
+            </div>
+          ))}
+          {visibleNutrients.length === 0 && <p className={styles.cmeNote}>Ничего не найдено.</p>}
         </div>
       </Card>
     </div>

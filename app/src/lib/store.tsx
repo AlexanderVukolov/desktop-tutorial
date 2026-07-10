@@ -1,23 +1,31 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import type {
+  ActivityFactor,
+  Biometrics,
+  BodyComposition,
   CareerLead,
   ChatMessage,
   Client,
   CommunityPost,
   DiaryEntry,
+  EnergyExpenditure,
+  FoodFrequencyEntry,
   Goal,
   KbjuCalculation,
   KbjuInput,
   KbjuResult,
   KnowledgeArticle,
+  LabResult,
   LeadStatus,
   LeaderboardPeer,
   MessageSender,
   PartnerOrg,
   PartnerStatus,
+  PaymentMethod,
   ReferralEntry,
   RevenuePoint,
   Specialist,
+  SubscriptionPlan,
   Webinar,
 } from './types';
 import { getLevel } from './career';
@@ -26,6 +34,7 @@ import {
   CLIENTS_SEED,
   COMMUNITY_POSTS_SEED,
   DIARY_SEED,
+  HH_LEAD_POOL,
   KNOWLEDGE_ARTICLES_SEED,
   LEADERBOARD_SEED,
   MESSAGES_SEED,
@@ -52,6 +61,7 @@ interface AppData {
   webinars: Webinar[];
   communityPosts: CommunityPost[];
   leaderboard: LeaderboardPeer[];
+  labResults: LabResult[];
 }
 
 function defaultData(): AppData {
@@ -69,6 +79,7 @@ function defaultData(): AppData {
     webinars: WEBINARS_SEED,
     communityPosts: COMMUNITY_POSTS_SEED,
     leaderboard: LEADERBOARD_SEED,
+    labResults: [],
   };
 }
 
@@ -91,6 +102,24 @@ interface AppDataContextValue extends AppData {
   addWeightPoint: (clientId: string, weightKg: number) => void;
   updateNotes: (clientId: string, notes: string) => void;
   setClientStatus: (clientId: string, status: Client['status']) => void;
+  setPaymentDate: (clientId: string, date: string) => void;
+  renewPayment: (clientId: string) => void;
+  setClientPhoto: (clientId: string, photo: string) => void;
+  updateHealthProfile: (
+    clientId: string,
+    patch: Partial<{
+      allergies: string;
+      conditions: string;
+      preferences: string;
+      activityLevel: ActivityFactor;
+      bodyComposition: BodyComposition;
+      energyExpenditure: EnergyExpenditure;
+      biometrics: Biometrics;
+    }>,
+  ) => void;
+  setFoodFrequency: (clientId: string, groupId: string, entry: FoodFrequencyEntry) => void;
+  addLabResult: (clientId: string, result: Omit<LabResult, 'id' | 'clientId'>) => void;
+  removeLabResult: (labId: string) => void;
   addKbjuCalculation: (input: KbjuInput, result: KbjuResult, clientId: string | null) => KbjuCalculation;
   inviteReferral: (name: string) => void;
   withdraw: () => void;
@@ -98,10 +127,14 @@ interface AppDataContextValue extends AppData {
   addMessage: (clientId: string, from: MessageSender, text: string) => void;
   setLeadStatus: (leadId: string, status: LeadStatus) => void;
   setPartnerStatus: (partnerId: string, status: PartnerStatus) => void;
+  refreshHhLeads: () => void;
   toggleArticleRead: (articleId: string) => void;
   toggleWebinarWatched: (webinarId: string) => void;
   addCommunityPost: (text: string) => void;
   toggleLikePost: (postId: string) => void;
+  updateSpecialist: (patch: Partial<Pick<Specialist, 'name' | 'role' | 'photo'>>) => void;
+  subscribeToPlan: (plan: SubscriptionPlan, method: PaymentMethod) => void;
+  cancelSubscription: () => void;
 }
 
 const AppDataContext = createContext<AppDataContextValue | null>(null);
@@ -131,7 +164,11 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
           status: 'new',
           startedAt: new Date().toISOString(),
           monthlyFee,
+          nextPaymentDate: new Date(Date.now() + 30 * 86_400_000).toISOString(),
           notes: '',
+          allergies: '',
+          conditions: '',
+          preferences: '',
           weightHistory: weightKg ? [{ date: new Date().toISOString(), weightKg }] : [],
         };
         setData((prev) => ({ ...prev, clients: [client, ...prev.clients] }));
@@ -158,6 +195,46 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
           ...prev,
           clients: prev.clients.map((c) => (c.id === clientId ? { ...c, status } : c)),
         }));
+      },
+      setPaymentDate: (clientId, date) => {
+        setData((prev) => ({
+          ...prev,
+          clients: prev.clients.map((c) => (c.id === clientId ? { ...c, nextPaymentDate: date } : c)),
+        }));
+      },
+      renewPayment: (clientId) => {
+        const next = new Date(Date.now() + 30 * 86_400_000).toISOString();
+        setData((prev) => ({
+          ...prev,
+          clients: prev.clients.map((c) => (c.id === clientId ? { ...c, nextPaymentDate: next } : c)),
+        }));
+      },
+      setClientPhoto: (clientId, photo) => {
+        setData((prev) => ({
+          ...prev,
+          clients: prev.clients.map((c) => (c.id === clientId ? { ...c, photo } : c)),
+        }));
+      },
+      updateHealthProfile: (clientId, patch) => {
+        setData((prev) => ({
+          ...prev,
+          clients: prev.clients.map((c) => (c.id === clientId ? { ...c, ...patch } : c)),
+        }));
+      },
+      setFoodFrequency: (clientId, groupId, entry) => {
+        setData((prev) => ({
+          ...prev,
+          clients: prev.clients.map((c) =>
+            c.id === clientId ? { ...c, foodFrequency: { ...c.foodFrequency, [groupId]: entry } } : c,
+          ),
+        }));
+      },
+      addLabResult: (clientId, result) => {
+        const item: LabResult = { id: makeId('lab'), clientId, ...result };
+        setData((prev) => ({ ...prev, labResults: [item, ...prev.labResults] }));
+      },
+      removeLabResult: (labId) => {
+        setData((prev) => ({ ...prev, labResults: prev.labResults.filter((l) => l.id !== labId) }));
       },
       addKbjuCalculation: (input, result, clientId) => {
         const calc: KbjuCalculation = {
@@ -214,6 +291,18 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
           partners: prev.partners.map((p) => (p.id === partnerId ? { ...p, status } : p)),
         }));
       },
+      refreshHhLeads: () => {
+        setData((prev) => {
+          const existingIds = new Set(prev.careerLeads.map((l) => l.id));
+          const candidate = HH_LEAD_POOL.find((l) => !existingIds.has(l.id));
+          if (!candidate) return prev;
+          const fresh: CareerLead = { ...candidate, postedAt: new Date().toISOString() };
+          const hhLeads = prev.careerLeads.filter((l) => l.source === 'hh');
+          const nonHhLeads = prev.careerLeads.filter((l) => l.source !== 'hh');
+          const keptHh = hhLeads.length >= 3 ? hhLeads.slice(1) : hhLeads;
+          return { ...prev, careerLeads: [...nonHhLeads, ...keptHh, fresh] };
+        });
+      },
       toggleArticleRead: (articleId) => {
         setData((prev) => ({
           ...prev,
@@ -245,6 +334,22 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
           communityPosts: prev.communityPosts.map((p) =>
             p.id === postId ? { ...p, likedByMe: !p.likedByMe, likes: p.likes + (p.likedByMe ? -1 : 1) } : p,
           ),
+        }));
+      },
+      updateSpecialist: (patch) => {
+        setData((prev) => ({ ...prev, specialist: { ...prev.specialist, ...patch } }));
+      },
+      subscribeToPlan: (plan, method) => {
+        const next = new Date(Date.now() + 30 * 86_400_000).toISOString();
+        setData((prev) => ({
+          ...prev,
+          specialist: { ...prev.specialist, plan, paymentMethod: method, nextChargeDate: next },
+        }));
+      },
+      cancelSubscription: () => {
+        setData((prev) => ({
+          ...prev,
+          specialist: { ...prev.specialist, plan: 'none', paymentMethod: null, nextChargeDate: null },
         }));
       },
     }),

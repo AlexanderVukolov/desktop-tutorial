@@ -1,0 +1,227 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 1.2rem;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.tabRow {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.tabBtn {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.82rem;
+}
+
+.tabBtnActive {
+  background: var(--ink);
+  color: var(--page);
+  border-color: var(--ink);
+}
+
+.photoRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.photoPreview {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.aiCard {
+  margin-top: 0.9rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--c-saas) 35%, var(--border));
+  background: color-mix(in srgb, var(--c-saas) 8%, var(--surface));
+}
+
+.searchRow {
+  margin-bottom: 0.9rem;
+}
+
+.searchRow input {
+  width: 100%;
+  background: var(--page);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.86rem;
+}
+
+.foodList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.foodRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.foodMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.foodName {
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.foodMeta {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+
+.gramInput {
+  width: 64px;
+  background: var(--page);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  padding: 0.35rem 0.4rem;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.trayList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.trayRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.trayMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.trayName {
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.trayMeta {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+
+.trayRemove {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.trayRemove:hover {
+  color: var(--critical);
+}
+
+.totalsRow {
+  display: flex;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.totalTile {
+  flex: 1;
+  background: var(--surface);
+  padding: 0.7rem 0.8rem;
+  text-align: center;
+}
+
+.totalTile .v {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+}
+
+.totalTile .l {
+  font-size: 0.66rem;
+  color: var(--muted);
+}
+
+.saveRow {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.saveRow select {
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.84rem;
+}
+
+.disclaimer {
+  font-size: 0.76rem;
+  color: var(--muted);
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 1rem;
+  line-height: 1.45;
+}
+
+.emptyHint {
+  color: var(--muted);
+  font-size: 0.86rem;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.savedNote {
+  color: var(--good);
+  font-size: 0.82rem;
+  font-weight: 600;
+}

@@ -1,0 +1,118 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.freqTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.freqTable th {
+  text-align: left;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--border-strong);
+}
+
+.freqTable td {
+  padding: 0.45rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.freqTable select {
+  width: 100%;
+  background: var(--page);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  padding: 0.3rem 0.4rem;
+  font-size: 0.8rem;
+}
+
+.recList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.recItem {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  background: var(--surface);
+}
+
+.recTitle {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.recReason {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.rationList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.rationRow {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.mealBadge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  flex: none;
+  min-width: 70px;
+  text-align: center;
+}
+
+.rationMain {
+  flex: 1;
+}
+
+.rationTitle {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.rationNote {
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+.rationKcal {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  flex: none;
+}
+
+.disclaimer {
+  font-size: 0.76rem;
+  color: var(--muted);
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  margin-top: 0.9rem;
+  line-height: 1.45;
+}

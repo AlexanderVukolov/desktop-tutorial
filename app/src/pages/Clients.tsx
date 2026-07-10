@@ -7,7 +7,7 @@ import { ClientStatusBadge } from '../components/ui/Badge';
 import { Sparkline } from '../components/charts/Sparkline';
 import { Modal } from '../components/ui/Modal';
 import { IconPlus } from '../components/ui/icons';
-import { formatRub, formatDate } from '../lib/format';
+import { formatRub, formatDate, daysSince } from '../lib/format';
 import { GOAL_OPTIONS } from '../lib/kbju';
 import uiStyles from '../components/ui/ui.module.css';
 import styles from './Clients.module.css';
@@ -70,39 +70,58 @@ export function Clients() {
                 <th>Цель</th>
                 <th>Статус</th>
                 <th>Тариф</th>
+                <th>Дата оплаты</th>
                 <th>Динамика веса</th>
                 <th>Начало работы</th>
               </tr>
             </thead>
             <tbody>
-              {visible.map((c) => (
-                <tr key={c.id}>
-                  <td>
-                    <div className={styles.nameCell}>
-                      <div className={styles.avatar} style={{ background: c.color }}>
-                        {c.name[0]}
+              {visible.map((c) => {
+                const overdueDays = daysSince(c.nextPaymentDate);
+                return (
+                  <tr key={c.id}>
+                    <td>
+                      <div className={styles.nameCell}>
+                        {c.photo ? (
+                          <img src={c.photo} alt="" className={styles.avatarPhoto} />
+                        ) : (
+                          <div className={styles.avatar} style={{ background: c.color }}>
+                            {c.name[0]}
+                          </div>
+                        )}
+                        <Link to={`/app/clients/${c.id}`} className={styles.link}>
+                          {c.name}
+                        </Link>
                       </div>
-                      <Link to={`/app/clients/${c.id}`} className={styles.link}>
-                        {c.name}
-                      </Link>
-                    </div>
-                  </td>
-                  <td>{GOAL_LABEL[c.goal]}</td>
-                  <td>
-                    <ClientStatusBadge status={c.status} />
-                  </td>
-                  <td className="tabular">{formatRub(c.monthlyFee)}</td>
-                  <td>
-                    <Sparkline points={c.weightHistory} />
-                  </td>
-                  <td className="tabular" style={{ color: 'var(--muted)' }}>
-                    {formatDate(c.startedAt)}
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td>{GOAL_LABEL[c.goal]}</td>
+                    <td>
+                      <ClientStatusBadge status={c.status} />
+                    </td>
+                    <td className="tabular">{formatRub(c.monthlyFee)}</td>
+                    <td className="tabular">
+                      <span
+                        style={{
+                          color: overdueDays > 0 ? 'var(--critical)' : overdueDays > -5 ? 'var(--warning)' : 'var(--muted)',
+                          fontWeight: overdueDays > -5 ? 600 : 400,
+                        }}
+                      >
+                        {formatDate(c.nextPaymentDate)}
+                        {overdueDays > 0 ? ` · просрочено ${overdueDays} дн.` : overdueDays > -5 ? ' · скоро' : ''}
+                      </span>
+                    </td>
+                    <td>
+                      <Sparkline points={c.weightHistory} />
+                    </td>
+                    <td className="tabular" style={{ color: 'var(--muted)' }}>
+                      {formatDate(c.startedAt)}
+                    </td>
+                  </tr>
+                );
+              })}
               {visible.length === 0 && (
                 <tr>
-                  <td colSpan={6} style={{ textAlign: 'center', color: 'var(--muted)', padding: '2rem' }}>
+                  <td colSpan={7} style={{ textAlign: 'center', color: 'var(--muted)', padding: '2rem' }}>
                     Клиентов с этим статусом пока нет
                   </td>
                 </tr>

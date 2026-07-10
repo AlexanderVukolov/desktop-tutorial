@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAppData } from '../lib/store';
 import type { ActivityFactor, Gender, Goal } from '../lib/types';
-import { ACTIVITY_OPTIONS, GOAL_OPTIONS, calcKbju } from '../lib/kbju';
+import { ACTIVITY_OPTIONS, GOAL_OPTIONS, bmiCategory, calcKbju } from '../lib/kbju';
 import { Card } from '../components/ui/Card';
 import { MacroDonut } from '../components/charts/MacroDonut';
 import { formatDate, formatNumber } from '../lib/format';
@@ -141,6 +141,10 @@ export function Kbju() {
             <div className={styles.metric}>
               <div className="v tabular">{formatNumber(result.targetCalories)}</div>
               <div className="l">Целевая калорийность</div>
+            </div>
+            <div className={styles.metric}>
+              <div className="v tabular">{result.bmi.toFixed(1)}</div>
+              <div className="l">ИМТ · {bmiCategory(result.bmi)}</div>
             </div>
           </div>
 

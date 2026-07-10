@@ -6,11 +6,14 @@ import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { Clients } from './pages/Clients';
 import { ClientDetail } from './pages/ClientDetail';
+import { ClientReport } from './pages/ClientReport';
 import { Kbju } from './pages/Kbju';
+import { FoodCalculator } from './pages/FoodCalculator';
 import { Partner } from './pages/Partner';
 import { Career } from './pages/Career';
 import { Knowledge } from './pages/Knowledge';
 import { Community } from './pages/Community';
+import { Settings } from './pages/Settings';
 import { Diary } from './pages/portal/Diary';
 import { Progress } from './pages/portal/Progress';
 import { Chat } from './pages/portal/Chat';
@@ -27,11 +30,14 @@ export default function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="clients" element={<Clients />} />
           <Route path="clients/:id" element={<ClientDetail />} />
+          <Route path="clients/:id/report" element={<ClientReport />} />
           <Route path="kbju" element={<Kbju />} />
+          <Route path="food-calculator" element={<FoodCalculator />} />
           <Route path="partner" element={<Partner />} />
           <Route path="career" element={<Career />} />
           <Route path="knowledge" element={<Knowledge />} />
           <Route path="community" element={<Community />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
       </Route>
 

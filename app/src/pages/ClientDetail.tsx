@@ -1,23 +1,44 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { useAppData } from '../lib/store';
 import { Card } from '../components/ui/Card';
 import { ClientStatusBadge } from '../components/ui/Badge';
 import { WeightChart } from '../components/charts/WeightChart';
-import { IconCalculator, IconExternalLink } from '../components/ui/icons';
+import { HealthTab } from '../components/client/HealthTab';
+import { NutritionSection } from '../components/client/NutritionSection';
+import { IconCalculator, IconCamera, IconExternalLink, IconFile } from '../components/ui/icons';
 import { formatDate, formatRub, daysSince } from '../lib/format';
 import { GOAL_OPTIONS } from '../lib/kbju';
 import { MEAL_TYPE_LABEL } from '../lib/diary';
 import uiStyles from '../components/ui/ui.module.css';
 import styles from './ClientDetail.module.css';
 
+const TABS = [
+  { key: 'overview', label: 'Обзор' },
+  { key: 'health', label: 'Здоровье и питание' },
+] as const;
+
 export function ClientDetail() {
   const { id } = useParams();
-  const { clients, calculations, diary, messages, addWeightPoint, updateNotes, setClientStatus, addMessage } = useAppData();
+  const {
+    clients,
+    calculations,
+    diary,
+    messages,
+    addWeightPoint,
+    updateNotes,
+    setClientStatus,
+    setPaymentDate,
+    renewPayment,
+    setClientPhoto,
+    addMessage,
+  } = useAppData();
   const client = clients.find((c) => c.id === id);
   const [weightInput, setWeightInput] = useState('');
   const [notes, setNotes] = useState(client?.notes ?? '');
   const [reply, setReply] = useState('');
+  const [tab, setTab] = useState<(typeof TABS)[number]['key']>('overview');
+  const photoInput = useRef<HTMLInputElement>(null);
 
   if (!client) return <Navigate to="/app/clients" replace />;
 
@@ -31,12 +52,21 @@ export function ClientDetail() {
   const clientThread = messages.filter((m) => m.clientId === client.id).sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt));
 
   const clientId = client.id;
+  const overdueDays = daysSince(client.nextPaymentDate);
 
   function handleReply(e: React.FormEvent) {
     e.preventDefault();
     if (!reply.trim()) return;
     addMessage(clientId, 'specialist', reply.trim());
     setReply('');
+  }
+
+  function handlePhoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setClientPhoto(clientId, reader.result as string);
+    reader.readAsDataURL(file);
   }
 
   return (
@@ -46,9 +76,19 @@ export function ClientDetail() {
       </Link>
 
       <div className={styles.head}>
-        <div className={styles.avatar} style={{ background: client.color }}>
-          {client.name[0]}
-        </div>
+        <label className={styles.avatarUpload} title="Загрузить фото клиента">
+          {client.photo ? (
+            <img src={client.photo} alt="" className={styles.avatarPhotoLg} />
+          ) : (
+            <div className={styles.avatar} style={{ background: client.color }}>
+              {client.name[0]}
+            </div>
+          )}
+          <span className={styles.avatarUploadHint}>
+            <IconCamera width={14} height={14} />
+          </span>
+          <input ref={photoInput} type="file" accept="image/*" onChange={handlePhoto} style={{ display: 'none' }} />
+        </label>
         <div>
           <h2 className={styles.name}>{client.name}</h2>
           <div className={styles.metaRow}>
@@ -56,6 +96,26 @@ export function ClientDetail() {
             <span>{goalLabel}</span>
             <span>· {formatRub(client.monthlyFee)}/мес</span>
             <span>· в работе {daysSince(client.startedAt)} дн.</span>
+          </div>
+          <div className={styles.paymentRow}>
+            <span
+              style={{
+                color: overdueDays > 0 ? 'var(--critical)' : overdueDays > -5 ? 'var(--warning)' : 'var(--muted)',
+                fontWeight: overdueDays > -5 ? 600 : 400,
+              }}
+            >
+              Оплата: {formatDate(client.nextPaymentDate)}
+              {overdueDays > 0 ? ` · просрочено ${overdueDays} дн.` : overdueDays > -5 ? ' · скоро' : ''}
+            </span>
+            <input
+              type="date"
+              className={styles.paymentInput}
+              value={client.nextPaymentDate.slice(0, 10)}
+              onChange={(e) => setPaymentDate(clientId, new Date(e.target.value).toISOString())}
+            />
+            <button className={`${uiStyles.btn} ${uiStyles.btnGhost} ${uiStyles.btnSm}`} onClick={() => renewPayment(clientId)}>
+              Отметить оплату
+            </button>
           </div>
         </div>
         <div className={styles.headActions}>
@@ -71,12 +131,35 @@ export function ClientDetail() {
           <Link to={`/app/kbju?clientId=${client.id}`} className={`${uiStyles.btn} ${uiStyles.btnPrimary}`}>
             <IconCalculator width={16} height={16} /> Рассчитать КБЖУ
           </Link>
+          <Link to={`/app/clients/${client.id}/report`} className={`${uiStyles.btn} ${uiStyles.btnGhost}`}>
+            <IconFile width={16} height={16} /> Заключение
+          </Link>
           <a href={`#/client/${client.id}`} target="_blank" rel="noreferrer" className={`${uiStyles.btn} ${uiStyles.btnGhost}`}>
             <IconExternalLink width={16} height={16} /> Портал клиента
           </a>
         </div>
       </div>
 
+      <div className={styles.tabBar}>
+        {TABS.map((t) => (
+          <button
+            key={t.key}
+            className={`${styles.tabBtn} ${tab === t.key ? styles.tabBtnActive : ''}`}
+            onClick={() => setTab(t.key)}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'health' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+          <HealthTab clientId={clientId} />
+          <NutritionSection clientId={clientId} />
+        </div>
+      )}
+
+      {tab === 'overview' && (
       <div className={styles.grid2}>
         <div className={styles.stack}>
           <Card
@@ -185,6 +268,7 @@ export function ClientDetail() {
           </Card>
         </div>
       </div>
+      )}
     </div>
   );
 }

@@ -1,0 +1,171 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 720px;
+}
+
+.profileRow {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.avatarUpload {
+  position: relative;
+  cursor: pointer;
+  flex: none;
+}
+
+.avatarPhotoLg {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.avatarPlaceholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--c-edu);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.avatarUploadHint {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-2);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+}
+
+.planGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 620px) {
+  .planGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.planCard {
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.1rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.planCardActive {
+  border-color: var(--c-career);
+  background: color-mix(in srgb, var(--c-career) 8%, var(--surface));
+}
+
+.planName {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.planPrice {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+}
+
+.planPrice span {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: var(--sans);
+}
+
+.planFeatures {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.planFeatures li {
+  font-size: 0.78rem;
+  color: var(--ink-2);
+}
+
+.methodRow {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.methodBtn {
+  flex: 1;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.84rem;
+  color: var(--ink-2);
+}
+
+.methodBtnActive {
+  border-color: var(--c-saas);
+  background: color-mix(in srgb, var(--c-saas) 10%, var(--surface));
+  color: var(--ink);
+}
+
+.currentPlanBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface-2);
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.currentPlanInfo .name {
+  font-weight: 700;
+  font-size: 0.98rem;
+}
+
+.currentPlanInfo .meta {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.savedNote {
+  color: var(--good);
+  font-size: 0.82rem;
+  font-weight: 600;
+}

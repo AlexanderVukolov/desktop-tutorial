@@ -76,6 +76,54 @@
   padding: 1.3rem 1.2rem 0.4rem;
 }
 
+.heroRow {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.myAvatarUpload {
+  position: relative;
+  cursor: pointer;
+  flex: none;
+}
+
+.myAvatarPhoto {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.myAvatarPlaceholder {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.myAvatarHint {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-2);
+}
+
 .hero h1 {
   font-size: 1.4rem;
 }

@@ -20,11 +20,15 @@ export function Dashboard() {
   const prevTotal = prevMonth.consulting + prevMonth.referral;
   const deltaPct = Math.round(((thisTotal - prevTotal) / prevTotal) * 100);
 
-  const attention = clients.filter((c) => {
-    if (c.status === 'new') return true;
-    const last = c.weightHistory[c.weightHistory.length - 1];
-    return last && daysSince(last.date) > 18 && c.status === 'active';
-  });
+  const attention = clients
+    .map((c) => {
+      const last = c.weightHistory[c.weightHistory.length - 1];
+      if (c.status === 'new') return { client: c, reason: `Провести первую консультацию — ${c.name}` };
+      if (daysSince(c.nextPaymentDate) > 0) return { client: c, reason: `Просрочена оплата тарифа — ${c.name}` };
+      if (last && daysSince(last.date) > 18 && c.status === 'active') return { client: c, reason: `Давно нет замера — ${c.name}` };
+      return null;
+    })
+    .filter((x): x is { client: (typeof clients)[number]; reason: string } => x !== null);
 
   const recent = [...clients].sort((a, b) => +new Date(b.startedAt) - +new Date(a.startedAt)).slice(0, 5);
 
@@ -53,10 +57,10 @@ export function Dashboard() {
                 Все клиенты в порядке — задач нет
               </div>
             )}
-            {attention.map((c) => (
+            {attention.map(({ client: c, reason }) => (
               <Link key={c.id} to={`/app/clients/${c.id}`} className={styles.attentionItem}>
                 <span className={styles.attentionDot} />
-                {c.status === 'new' ? `Провести первую консультацию — ${c.name}` : `Давно нет замера — ${c.name}`}
+                {reason}
               </Link>
             ))}
           </div>
@@ -74,9 +78,13 @@ export function Dashboard() {
         >
           {recent.map((c) => (
             <Link key={c.id} to={`/app/clients/${c.id}`} className={styles.clientRow} style={{ textDecoration: 'none', color: 'inherit' }}>
-              <div className={styles.avatar} style={{ background: c.color }}>
-                {c.name[0]}
-              </div>
+              {c.photo ? (
+                <img src={c.photo} alt="" className={styles.avatarPhoto} />
+              ) : (
+                <div className={styles.avatar} style={{ background: c.color }}>
+                  {c.name[0]}
+                </div>
+              )}
               <div className={styles.clientMeta}>
                 <div className="name">{c.name}</div>
                 <div className="sub">{formatRub(c.monthlyFee)} / мес</div>

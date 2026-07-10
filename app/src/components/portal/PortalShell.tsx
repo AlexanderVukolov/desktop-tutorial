@@ -1,8 +1,9 @@
+import { useRef } from 'react';
 import { NavLink, Outlet, useParams } from 'react-router-dom';
 import { useAppData } from '../../lib/store';
 import { useTheme } from '../../lib/useTheme';
 import { formatNumber } from '../../lib/format';
-import { IconChat, IconClipboard, IconMoon, IconSun, IconTrendUp } from '../ui/icons';
+import { IconCamera, IconChat, IconClipboard, IconMoon, IconSun, IconTrendUp } from '../ui/icons';
 import styles from './PortalShell.module.css';
 
 export interface PortalContext {
@@ -11,10 +12,19 @@ export interface PortalContext {
 
 export function PortalShell() {
   const { clientId = '' } = useParams();
-  const { clients, specialist, calculations } = useAppData();
+  const { clients, specialist, calculations, setClientPhoto } = useAppData();
   const { theme, toggle } = useTheme();
+  const photoInput = useRef<HTMLInputElement>(null);
 
   const client = clients.find((c) => c.id === clientId);
+
+  function handlePhoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !client) return;
+    const reader = new FileReader();
+    reader.onload = () => setClientPhoto(client.id, reader.result as string);
+    reader.readAsDataURL(file);
+  }
 
   if (!client) {
     return (
@@ -54,8 +64,25 @@ export function PortalShell() {
         </header>
 
         <div className={styles.hero}>
-          <h1>Привет, {client.name.split(' ')[0]}!</h1>
-          <div className={styles.heroSub}>Ваш дневник питания и связь со специалистом — в одном месте</div>
+          <div className={styles.heroRow}>
+            <label className={styles.myAvatarUpload} title="Загрузить своё фото">
+              {client.photo ? (
+                <img src={client.photo} alt="" className={styles.myAvatarPhoto} />
+              ) : (
+                <div className={styles.myAvatarPlaceholder} style={{ background: client.color }}>
+                  {client.name[0]}
+                </div>
+              )}
+              <span className={styles.myAvatarHint}>
+                <IconCamera width={12} height={12} />
+              </span>
+              <input ref={photoInput} type="file" accept="image/*" onChange={handlePhoto} style={{ display: 'none' }} />
+            </label>
+            <div>
+              <h1>Привет, {client.name.split(' ')[0]}!</h1>
+              <div className={styles.heroSub}>Ваш дневник питания и связь со специалистом — в одном месте</div>
+            </div>
+          </div>
         </div>
 
         {lastCalc && (

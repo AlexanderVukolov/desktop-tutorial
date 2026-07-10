@@ -43,6 +43,14 @@
   flex: none;
 }
 
+.avatarPhoto {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+}
+
 .clientMeta {
   min-width: 0;
   flex: 1;

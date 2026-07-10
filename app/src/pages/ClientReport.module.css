@@ -1,0 +1,120 @@
+.actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.4rem;
+}
+
+.paper {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 2rem clamp(1.2rem, 4vw, 2.6rem);
+  max-width: 780px;
+}
+
+.paperHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 1rem;
+  margin-bottom: 1.4rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.paperHead h1 {
+  font-size: 1.3rem;
+}
+
+.paperMeta {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: right;
+}
+
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.section h2 {
+  font-size: 0.95rem;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.metricRow {
+  display: flex;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.metric {
+  flex: 1;
+  background: var(--surface);
+  padding: 0.7rem 0.8rem;
+  text-align: center;
+}
+
+.metric .v {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+}
+
+.metric .l {
+  font-size: 0.66rem;
+  color: var(--muted);
+  margin-top: 0.1rem;
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 0.4rem 0.8rem;
+  font-size: 0.86rem;
+}
+
+.kv dt {
+  color: var(--muted);
+}
+
+.kv dd {
+  margin: 0;
+}
+
+.recList,
+.rationList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.86rem;
+}
+
+.rationRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.disclaimer {
+  font-size: 0.76rem;
+  color: var(--muted);
+  border-top: 1px dashed var(--border-strong);
+  padding-top: 0.8rem;
+  margin-top: 1rem;
+}
+
+@media print {
+  .actions {
+    display: none;
+  }
+  .paper {
+    border: none;
+    padding: 0;
+    max-width: none;
+  }
+}
