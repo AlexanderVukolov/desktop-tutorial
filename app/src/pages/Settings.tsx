@@ -14,6 +14,9 @@ export function Settings() {
 
   const [name, setName] = useState(specialist.name);
   const [role, setRole] = useState(specialist.role);
+  const [birthDate, setBirthDate] = useState(specialist.birthDate ?? '');
+  const [country, setCountry] = useState(specialist.country ?? '');
+  const [city, setCity] = useState(specialist.city ?? '');
   const [saved, setSaved] = useState(false);
 
   const [selectedPlan, setSelectedPlan] = useState<Exclude<SubscriptionPlan, 'none'>>(
@@ -31,7 +34,7 @@ export function Settings() {
 
   function handleSaveProfile(e: React.FormEvent) {
     e.preventDefault();
-    updateSpecialist({ name, role });
+    updateSpecialist({ name, role, birthDate, country, city });
     setSaved(true);
     window.setTimeout(() => setSaved(false), 2200);
   }
@@ -71,6 +74,20 @@ export function Settings() {
           <div className={uiStyles.field}>
             <label htmlFor="role">Специализация / роль</label>
             <input id="role" value={role} onChange={(e) => setRole(e.target.value)} />
+          </div>
+          <div className={uiStyles.field}>
+            <label htmlFor="birthDate">Дата рождения</label>
+            <input id="birthDate" type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
+          </div>
+          <div className={styles.fieldRow}>
+            <div className={uiStyles.field}>
+              <label htmlFor="country">Страна</label>
+              <input id="country" value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Например, Россия" />
+            </div>
+            <div className={uiStyles.field}>
+              <label htmlFor="city">Город</label>
+              <input id="city" value={city} onChange={(e) => setCity(e.target.value)} placeholder="Например, Москва" />
+            </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
             <button type="submit" className={`${uiStyles.btn} ${uiStyles.btnPrimary}`} style={{ alignSelf: 'flex-start' }}>

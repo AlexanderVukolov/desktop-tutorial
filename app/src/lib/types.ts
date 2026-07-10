@@ -161,6 +161,9 @@ export interface Specialist {
   plan: SubscriptionPlan;
   paymentMethod: PaymentMethod | null;
   nextChargeDate: string | null;
+  birthDate?: string;
+  country?: string;
+  city?: string;
 }
 
 export interface CareerLead {

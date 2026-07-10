@@ -45,6 +45,9 @@ export const SPECIALIST_SEED: Specialist = {
   plan: 'pro',
   paymentMethod: 'card',
   nextChargeDate: daysAgo(-12),
+  birthDate: '1990-04-12',
+  country: 'Россия',
+  city: 'Москва',
 };
 
 export const CLIENTS_SEED: Client[] = [

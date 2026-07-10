@@ -172,7 +172,7 @@ interface AppDataContextValue extends AppData {
   toggleWebinarWatched: (webinarId: string) => void;
   addCommunityPost: (text: string) => void;
   toggleLikePost: (postId: string) => void;
-  updateSpecialist: (patch: Partial<Pick<Specialist, 'name' | 'role' | 'photo'>>) => void;
+  updateSpecialist: (patch: Partial<Pick<Specialist, 'name' | 'role' | 'photo' | 'birthDate' | 'country' | 'city'>>) => void;
   subscribeToPlan: (plan: SubscriptionPlan, method: PaymentMethod) => void;
   cancelSubscription: () => void;
 }

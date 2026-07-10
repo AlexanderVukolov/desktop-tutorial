@@ -61,6 +61,18 @@
   margin-top: 1.2rem;
 }
 
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
+@media (max-width: 480px) {
+  .fieldRow {
+    grid-template-columns: 1fr;
+  }
+}
+
 .planGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
