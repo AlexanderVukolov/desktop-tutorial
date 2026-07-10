@@ -17,6 +17,38 @@
   }
 }
 
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+}
+
+@media (max-width: 920px) {
+  .grid3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.metricList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.metricRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.8rem;
+  font-size: 0.84rem;
+  color: var(--ink-2);
+}
+
+.metricRow span:last-child {
+  color: var(--ink);
+  font-weight: 600;
+}
+
 .clientRow {
   display: flex;
   align-items: center;
