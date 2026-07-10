@@ -54,6 +54,14 @@ export interface WeightPoint {
   weightKg: number;
 }
 
+export interface ProgressPhoto {
+  id: string;
+  clientId: string;
+  photo: string;
+  takenAt: string;
+  note?: string;
+}
+
 export interface BodyComposition {
   fatPercent: number;
   muscleMassKg: number;

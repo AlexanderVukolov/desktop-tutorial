@@ -6,6 +6,7 @@ import { ClientStatusBadge } from '../components/ui/Badge';
 import { WeightChart } from '../components/charts/WeightChart';
 import { HealthTab } from '../components/client/HealthTab';
 import { NutritionSection } from '../components/client/NutritionSection';
+import { ProgressPhotos } from '../components/client/ProgressPhotos';
 import { IconCalculator, IconCalendar, IconCamera, IconExternalLink, IconFile } from '../components/ui/icons';
 import { formatDate, formatRub, daysSince } from '../lib/format';
 import { GOAL_OPTIONS } from '../lib/kbju';
@@ -203,6 +204,10 @@ export function ClientDetail() {
                 Добавить замер
               </button>
             </form>
+          </Card>
+
+          <Card title="Фото до/после" hint="Визуальное сравнение прогресса">
+            <ProgressPhotos clientId={clientId} />
           </Card>
 
           <Card title="История КБЖУ-расчётов">

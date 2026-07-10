@@ -3,6 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import type { PortalContext } from '../../components/portal/PortalShell';
 import { useAppData } from '../../lib/store';
 import { WeightChart } from '../../components/charts/WeightChart';
+import { ProgressPhotos } from '../../components/client/ProgressPhotos';
 import uiStyles from '../../components/ui/ui.module.css';
 import styles from './Progress.module.css';
 
@@ -50,6 +51,11 @@ export function Progress() {
           Записать
         </button>
       </form>
+
+      <div className={styles.head} style={{ marginTop: '1.4rem' }}>
+        <h3>Фото до/после</h3>
+      </div>
+      <ProgressPhotos clientId={clientId} />
     </div>
   );
 }

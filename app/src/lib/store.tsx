@@ -29,6 +29,7 @@ import type {
   PartnerStatus,
   PaymentMethod,
   PlannerTask,
+  ProgressPhoto,
   ReferralEntry,
   RevenuePoint,
   Specialist,
@@ -81,6 +82,7 @@ interface AppData {
   habitLog: HabitCompletion[];
   customDishes: DishOption[];
   customTemplates: CustomRationTemplate[];
+  progressPhotos: ProgressPhoto[];
 }
 
 function defaultData(): AppData {
@@ -107,6 +109,7 @@ function defaultData(): AppData {
     habitLog: [],
     customDishes: [],
     customTemplates: [],
+    progressPhotos: [],
   };
 }
 
@@ -155,6 +158,7 @@ function migrate(data: AppData): AppData {
     habitLog: data.habitLog ?? [],
     customDishes: data.customDishes ?? [],
     customTemplates: data.customTemplates ?? [],
+    progressPhotos: data.progressPhotos ?? [],
   };
 }
 
@@ -234,6 +238,8 @@ interface AppDataContextValue extends AppData {
   removeCustomDish: (id: string) => void;
   saveCustomTemplate: (name: string, calorieTarget: number, slots: CustomRationTemplate['slots']) => void;
   removeCustomTemplate: (id: string) => void;
+  addProgressPhoto: (clientId: string, photo: string, note?: string) => ProgressPhoto;
+  removeProgressPhoto: (id: string) => void;
 }
 
 const AppDataContext = createContext<AppDataContextValue | null>(null);
@@ -554,6 +560,14 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       },
       removeCustomTemplate: (id) => {
         setData((prev) => ({ ...prev, customTemplates: prev.customTemplates.filter((t) => t.id !== id) }));
+      },
+      addProgressPhoto: (clientId, photo, note) => {
+        const entry: ProgressPhoto = { id: makeId('pp'), clientId, photo, takenAt: new Date().toISOString(), note };
+        setData((prev) => ({ ...prev, progressPhotos: [...prev.progressPhotos, entry] }));
+        return entry;
+      },
+      removeProgressPhoto: (id) => {
+        setData((prev) => ({ ...prev, progressPhotos: prev.progressPhotos.filter((p) => p.id !== id) }));
       },
     }),
     [data],
