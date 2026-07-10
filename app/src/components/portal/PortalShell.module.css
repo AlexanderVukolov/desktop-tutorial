@@ -186,6 +186,16 @@
   color: var(--muted);
   text-decoration: none;
   font-size: 0.68rem;
+  transition: color 0.15s ease, transform 0.15s cubic-bezier(0.25, 0.8, 0.5, 1);
+}
+
+.tab svg {
+  transition: transform 0.15s cubic-bezier(0.25, 0.8, 0.5, 1);
+}
+
+.tab:active {
+  transform: scale(0.92);
+  transition-duration: 0.08s;
 }
 
 .tabActive {
@@ -194,6 +204,7 @@
 
 .tabActive svg {
   color: var(--accent-text);
+  transform: translateY(-1px);
 }
 
 .notFound {

@@ -39,6 +39,11 @@
   padding: 0;
 }
 
+.card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-2);
+}
+
 .cardBody {
   padding: 0.7rem 1rem 0.7rem 0;
   display: flex;

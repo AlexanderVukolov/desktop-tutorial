@@ -99,11 +99,22 @@
   font-size: 0.88rem;
   text-decoration: none;
   position: relative;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s cubic-bezier(0.25, 0.8, 0.5, 1);
 }
 
 .navLink:hover {
   background: var(--surface-2);
   color: var(--ink);
+  transform: translateX(2px);
+}
+
+.navLink:active {
+  transform: translateX(2px) scale(0.98);
+  transition-duration: 0.08s;
+}
+
+.navLink:hover .navIcon {
+  transform: scale(1.1);
 }
 
 .navLinkActive {
@@ -127,6 +138,7 @@
   flex: none;
   display: flex;
   opacity: 0.85;
+  transition: transform 0.15s cubic-bezier(0.25, 0.8, 0.5, 1);
 }
 
 .soon {
@@ -149,6 +161,7 @@
   text-decoration: none;
   color: inherit;
   border-radius: 8px;
+  transition: background 0.15s ease;
 }
 
 .sidebarFooter:hover {
@@ -247,6 +260,7 @@
 .iconBtn:hover {
   color: var(--ink);
   background: var(--surface-2);
+  border-color: var(--muted);
 }
 
 .content {
@@ -282,6 +296,12 @@
     text-decoration: none;
     padding: 0.3rem 0.5rem;
     border-radius: 8px;
+    transition: color 0.15s ease, background 0.15s ease, transform 0.15s cubic-bezier(0.25, 0.8, 0.5, 1);
+  }
+
+  .mobileNavLink:active {
+    transform: scale(0.92);
+    transition-duration: 0.08s;
   }
 
   .mobileNavLinkActive {

@@ -18,6 +18,7 @@ body {
   font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -45,12 +46,33 @@ textarea {
 
 button {
   cursor: pointer;
+  transition:
+    transform 0.15s cubic-bezier(0.25, 0.8, 0.5, 1),
+    box-shadow 0.15s ease,
+    filter 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0) scale(0.96);
+  transition-duration: 0.08s;
+}
+
+button:disabled {
+  transform: none;
 }
 
 :focus-visible {
   outline: 2px solid var(--c-saas);
   outline-offset: 2px;
   border-radius: 4px;
+  transition: outline-offset 0.1s ease;
 }
 
 h1,

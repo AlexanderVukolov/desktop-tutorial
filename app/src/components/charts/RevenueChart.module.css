@@ -113,7 +113,7 @@
   border-radius: 999px;
   padding: 0.2rem 0.6rem;
   cursor: pointer;
-  transition: opacity 0.15s ease, background 0.15s ease;
+  transition: opacity 0.15s ease, background 0.15s ease, transform 0.15s cubic-bezier(0.25, 0.8, 0.5, 1);
 }
 
 .legendBtn:hover {
