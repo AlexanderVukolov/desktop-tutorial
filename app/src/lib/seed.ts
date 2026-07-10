@@ -1,4 +1,17 @@
-import type { CareerLead, ChatMessage, Client, DiaryEntry, PartnerOrg, ReferralEntry, RevenuePoint, Specialist } from './types';
+import type {
+  CareerLead,
+  ChatMessage,
+  Client,
+  CommunityPost,
+  DiaryEntry,
+  KnowledgeArticle,
+  LeaderboardPeer,
+  PartnerOrg,
+  ReferralEntry,
+  RevenuePoint,
+  Specialist,
+  Webinar,
+} from './types';
 
 function daysAgo(n: number): string {
   const d = new Date();
@@ -27,6 +40,7 @@ export const SPECIALIST_SEED: Specialist = {
   referralCode: 'MARIA200',
   balance: 8400,
   payoutThreshold: 3000,
+  cmeHoursTarget: 20,
 };
 
 export const CLIENTS_SEED: Client[] = [
@@ -286,6 +300,171 @@ export const CAREER_LEADS_SEED: CareerLead[] = [
     status: 'new',
     postedAt: daysAgo(1),
   },
+];
+
+export const KNOWLEDGE_ARTICLES_SEED: KnowledgeArticle[] = [
+  {
+    id: 'a1',
+    title: 'Анатомия и физиология ЖКТ: что важно знать консультанту',
+    category: 'ЖКТ и пищеварение',
+    author: 'Яна Венерина',
+    readMinutes: 14,
+    cmeHours: 1,
+    read: true,
+  },
+  {
+    id: 'a2',
+    title: 'Эндокринная система: как гормоны влияют на вес и аппетит',
+    category: 'Эндокринная система',
+    author: 'Анна Камитова',
+    readMinutes: 18,
+    cmeHours: 1.5,
+    read: false,
+  },
+  {
+    id: 'a3',
+    title: 'Латентный дефицит железа: почему его пропускают и как с ним работать',
+    category: 'БАДы и дефициты',
+    author: 'Екатерина Слободянюк',
+    readMinutes: 12,
+    cmeHours: 1,
+    read: true,
+  },
+  {
+    id: 'a4',
+    title: 'Циркадные ритмы и гигиена сна: протокол для клиента',
+    category: 'Сон и хронотипы',
+    author: 'София Черкасова',
+    readMinutes: 16,
+    cmeHours: 1.5,
+    read: false,
+  },
+  {
+    id: 'a5',
+    title: 'Работа с мотивацией: что делать, если клиент срывается',
+    category: 'Психология питания',
+    author: 'Ольга Миронюк',
+    readMinutes: 11,
+    cmeHours: 1,
+    read: false,
+  },
+  {
+    id: 'a6',
+    title: 'Что можно и нельзя говорить о БАДах: правовые границы консультации',
+    category: 'Правовые основы',
+    author: 'Анастасия Оптинская',
+    readMinutes: 9,
+    cmeHours: 1,
+    read: false,
+  },
+  {
+    id: 'a7',
+    title: 'Расчёт суточной калорийности для тренирующихся клиентов',
+    category: 'Спортивное питание',
+    author: 'Полина Доступова',
+    readMinutes: 13,
+    cmeHours: 1,
+    read: true,
+  },
+  {
+    id: 'a8',
+    title: 'Личный бренд нутрициолога: как вести соцсети без выгорания',
+    category: 'Продвижение и SMM',
+    author: 'Юлия Магась',
+    readMinutes: 15,
+    cmeHours: 1,
+    read: false,
+  },
+];
+
+export const WEBINARS_SEED: Webinar[] = [
+  {
+    id: 'w1',
+    title: 'Разбор сложных кейсов: пищевое поведение и эмоциональное переедание',
+    speaker: 'Анна Камитова',
+    date: daysAgo(-6),
+    durationMinutes: 60,
+    cmeHours: 2,
+    watched: false,
+  },
+  {
+    id: 'w2',
+    title: 'Сон, стресс и метаболизм: что показывает практика 2026 года',
+    speaker: 'София Черкасова',
+    date: daysAgo(9),
+    durationMinutes: 50,
+    cmeHours: 1.5,
+    watched: true,
+  },
+  {
+    id: 'w3',
+    title: 'Правовые риски консультирования: разбор реальных обращений',
+    speaker: 'Анастасия Оптинская',
+    date: daysAgo(-20),
+    durationMinutes: 45,
+    cmeHours: 1.5,
+    watched: false,
+  },
+];
+
+export const COMMUNITY_POSTS_SEED: CommunityPost[] = [
+  {
+    id: 'p1',
+    authorName: 'Виктория Земцова',
+    authorLevel: 'senior',
+    text: 'Коллеги, кто-нибудь работал с клиентом на инсулинорезистентности без назначений врача? Ищу протокол по клетчатке и таймингу приёмов пищи.',
+    createdAt: hoursAgo(10),
+    likes: 6,
+    likedByMe: false,
+    replies: 3,
+  },
+  {
+    id: 'p2',
+    authorName: 'Дмитрий Орлов',
+    authorLevel: 'expert',
+    text: 'Провёл 100-го клиента за 2 года практики. Главный вывод: держите протокол простым — сложные схемы никто не выполняет дольше недели.',
+    createdAt: hoursAgo(30),
+    likes: 24,
+    likedByMe: true,
+    replies: 8,
+  },
+  {
+    id: 'p3',
+    authorName: 'Алина Григорьева',
+    authorLevel: 'junior',
+    text: 'Первая неделя практики — взяла двух клиентов через карьерный маркетплейс школы. Волнуюсь перед первой консультацией, есть советы?',
+    createdAt: hoursAgo(50),
+    likes: 15,
+    likedByMe: false,
+    replies: 11,
+  },
+  {
+    id: 'p4',
+    authorName: 'Максим Ковалёв',
+    authorLevel: 'senior',
+    text: 'Вебинар Софии Черкасовой про сон — must watch. Сразу дал клиентке протокол по хронотипу, за неделю сон стал стабильнее.',
+    createdAt: hoursAgo(70),
+    likes: 9,
+    likedByMe: false,
+    replies: 2,
+  },
+  {
+    id: 'p5',
+    authorName: 'Виктория Земцова',
+    authorLevel: 'senior',
+    text: 'Ищу ментора по спортивному питанию — веду клиента-триатлета, хочу свериться со специалистом с опытом.',
+    createdAt: hoursAgo(96),
+    likes: 4,
+    likedByMe: false,
+    replies: 5,
+  },
+];
+
+export const LEADERBOARD_SEED: LeaderboardPeer[] = [
+  { id: 'lb1', name: 'Дмитрий Орлов', rating: 5.0, clients: 34 },
+  { id: 'lb2', name: 'Виктория Земцова', rating: 4.95, clients: 28 },
+  { id: 'lb3', name: 'Максим Ковалёв', rating: 4.85, clients: 21 },
+  { id: 'lb4', name: 'Алина Григорьева', rating: 4.2, clients: 3 },
 ];
 
 export const PARTNER_ORGS_SEED: PartnerOrg[] = [

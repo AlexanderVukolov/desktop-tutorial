@@ -3,28 +3,37 @@ import type {
   CareerLead,
   ChatMessage,
   Client,
+  CommunityPost,
   DiaryEntry,
   Goal,
   KbjuCalculation,
   KbjuInput,
   KbjuResult,
+  KnowledgeArticle,
   LeadStatus,
+  LeaderboardPeer,
   MessageSender,
   PartnerOrg,
   PartnerStatus,
   ReferralEntry,
   RevenuePoint,
   Specialist,
+  Webinar,
 } from './types';
+import { getLevel } from './career';
 import {
   CAREER_LEADS_SEED,
   CLIENTS_SEED,
+  COMMUNITY_POSTS_SEED,
   DIARY_SEED,
+  KNOWLEDGE_ARTICLES_SEED,
+  LEADERBOARD_SEED,
   MESSAGES_SEED,
   PARTNER_ORGS_SEED,
   REFERRALS_SEED,
   REVENUE_SEED,
   SPECIALIST_SEED,
+  WEBINARS_SEED,
 } from './seed';
 
 const STORAGE_KEY = 'nutrios:v1';
@@ -39,6 +48,10 @@ interface AppData {
   messages: ChatMessage[];
   careerLeads: CareerLead[];
   partners: PartnerOrg[];
+  articles: KnowledgeArticle[];
+  webinars: Webinar[];
+  communityPosts: CommunityPost[];
+  leaderboard: LeaderboardPeer[];
 }
 
 function defaultData(): AppData {
@@ -52,6 +65,10 @@ function defaultData(): AppData {
     messages: MESSAGES_SEED,
     careerLeads: CAREER_LEADS_SEED,
     partners: PARTNER_ORGS_SEED,
+    articles: KNOWLEDGE_ARTICLES_SEED,
+    webinars: WEBINARS_SEED,
+    communityPosts: COMMUNITY_POSTS_SEED,
+    leaderboard: LEADERBOARD_SEED,
   };
 }
 
@@ -81,6 +98,10 @@ interface AppDataContextValue extends AppData {
   addMessage: (clientId: string, from: MessageSender, text: string) => void;
   setLeadStatus: (leadId: string, status: LeadStatus) => void;
   setPartnerStatus: (partnerId: string, status: PartnerStatus) => void;
+  toggleArticleRead: (articleId: string) => void;
+  toggleWebinarWatched: (webinarId: string) => void;
+  addCommunityPost: (text: string) => void;
+  toggleLikePost: (postId: string) => void;
 }
 
 const AppDataContext = createContext<AppDataContextValue | null>(null);
@@ -191,6 +212,39 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
         setData((prev) => ({
           ...prev,
           partners: prev.partners.map((p) => (p.id === partnerId ? { ...p, status } : p)),
+        }));
+      },
+      toggleArticleRead: (articleId) => {
+        setData((prev) => ({
+          ...prev,
+          articles: prev.articles.map((a) => (a.id === articleId ? { ...a, read: !a.read } : a)),
+        }));
+      },
+      toggleWebinarWatched: (webinarId) => {
+        setData((prev) => ({
+          ...prev,
+          webinars: prev.webinars.map((w) => (w.id === webinarId ? { ...w, watched: !w.watched } : w)),
+        }));
+      },
+      addCommunityPost: (text) => {
+        const post: CommunityPost = {
+          id: makeId('p'),
+          authorName: data.specialist.name,
+          authorLevel: getLevel(data.specialist.rating),
+          text,
+          createdAt: new Date().toISOString(),
+          likes: 0,
+          likedByMe: false,
+          replies: 0,
+        };
+        setData((prev) => ({ ...prev, communityPosts: [post, ...prev.communityPosts] }));
+      },
+      toggleLikePost: (postId) => {
+        setData((prev) => ({
+          ...prev,
+          communityPosts: prev.communityPosts.map((p) =>
+            p.id === postId ? { ...p, likedByMe: !p.likedByMe, likes: p.likes + (p.likedByMe ? -1 : 1) } : p,
+          ),
         }));
       },
     }),

@@ -23,8 +23,8 @@ const NAV_MAIN = [
 
 const NAV_ECOSYSTEM = [
   { to: '/app/career', label: 'Карьерный центр', icon: IconBriefcase, soon: false },
-  { to: '/app/knowledge', label: 'База знаний', icon: IconBook, soon: true },
-  { to: '/app/community', label: 'Комьюнити', icon: IconCommunity, soon: true },
+  { to: '/app/knowledge', label: 'База знаний', icon: IconBook, soon: false },
+  { to: '/app/community', label: 'Комьюнити', icon: IconCommunity, soon: false },
 ];
 
 const PAGE_META: { match: string; crumb: string; title: string }[] = [

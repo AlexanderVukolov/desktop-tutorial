@@ -1,6 +1,6 @@
-import type { LeadFormat, PartnerKind } from './types';
+import type { LeadFormat, PartnerKind, SpecialistLevel } from './types';
 
-export type SpecialistLevel = 'junior' | 'senior' | 'expert';
+export type { SpecialistLevel };
 
 const LEVEL_THRESHOLDS: { level: SpecialistLevel; minRating: number }[] = [
   { level: 'expert', minRating: 4.8 },

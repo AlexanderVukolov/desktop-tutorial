@@ -10,6 +10,7 @@ export type LeadFormat = 'online' | 'offline';
 export type LeadStatus = 'new' | 'responded' | 'declined';
 export type PartnerKind = 'fitness' | 'wellness' | 'clinic' | 'corporate';
 export type PartnerStatus = 'available' | 'pending' | 'partnered';
+export type SpecialistLevel = 'junior' | 'senior' | 'expert';
 
 export interface KbjuInput {
   gender: Gender;
@@ -100,6 +101,7 @@ export interface Specialist {
   referralCode: string;
   balance: number;
   payoutThreshold: number;
+  cmeHoursTarget: number;
 }
 
 export interface CareerLead {
@@ -123,4 +125,42 @@ export interface PartnerOrg {
   format: string;
   leadsPerMonth: number;
   status: PartnerStatus;
+}
+
+export interface KnowledgeArticle {
+  id: string;
+  title: string;
+  category: string;
+  author: string;
+  readMinutes: number;
+  cmeHours: number;
+  read: boolean;
+}
+
+export interface Webinar {
+  id: string;
+  title: string;
+  speaker: string;
+  date: string;
+  durationMinutes: number;
+  cmeHours: number;
+  watched: boolean;
+}
+
+export interface CommunityPost {
+  id: string;
+  authorName: string;
+  authorLevel: SpecialistLevel;
+  text: string;
+  createdAt: string;
+  likes: number;
+  likedByMe: boolean;
+  replies: number;
+}
+
+export interface LeaderboardPeer {
+  id: string;
+  name: string;
+  rating: number;
+  clients: number;
 }
