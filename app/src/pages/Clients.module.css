@@ -7,9 +7,38 @@
   flex-wrap: wrap;
 }
 
+.headLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
 .filters {
   display: flex;
   gap: 0.5rem;
+}
+
+.searchBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.6rem;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 220px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem 0.4rem 1.9rem;
+  font-size: 0.82rem;
 }
 
 .filterBtn {

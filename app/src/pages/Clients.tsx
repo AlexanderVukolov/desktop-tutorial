@@ -6,7 +6,7 @@ import { Card } from '../components/ui/Card';
 import { ClientStatusBadge } from '../components/ui/Badge';
 import { Sparkline } from '../components/charts/Sparkline';
 import { Modal } from '../components/ui/Modal';
-import { IconPlus } from '../components/ui/icons';
+import { IconPlus, IconSearch } from '../components/ui/icons';
 import { formatRub, formatDate, daysSince } from '../lib/format';
 import { GOAL_OPTIONS } from '../lib/kbju';
 import uiStyles from '../components/ui/ui.module.css';
@@ -24,10 +24,15 @@ const GOAL_LABEL = Object.fromEntries(GOAL_OPTIONS.map((g) => [g.value, g.label]
 export function Clients() {
   const { clients, addClient } = useAppData();
   const [filter, setFilter] = useState<ClientStatus | 'all'>('all');
+  const [query, setQuery] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
 
-  const visible = filter === 'all' ? clients : clients.filter((c) => c.status === filter);
+  const byStatus = filter === 'all' ? clients : clients.filter((c) => c.status === filter);
+  const q = query.trim().toLowerCase();
+  const visible = q
+    ? byStatus.filter((c) => c.name.toLowerCase().includes(q) || GOAL_LABEL[c.goal].toLowerCase().includes(q))
+    : byStatus;
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -45,16 +50,27 @@ export function Clients() {
   return (
     <div>
       <div className={styles.head}>
-        <div className={styles.filters}>
-          {FILTERS.map((f) => (
-            <button
-              key={f.key}
-              className={`${styles.filterBtn} ${filter === f.key ? styles.filterBtnActive : ''}`}
-              onClick={() => setFilter(f.key)}
-            >
-              {f.label}
-            </button>
-          ))}
+        <div className={styles.headLeft}>
+          <div className={styles.filters}>
+            {FILTERS.map((f) => (
+              <button
+                key={f.key}
+                className={`${styles.filterBtn} ${filter === f.key ? styles.filterBtnActive : ''}`}
+                onClick={() => setFilter(f.key)}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+          <div className={styles.searchBox}>
+            <IconSearch width={15} height={15} className={styles.searchIcon} />
+            <input
+              className={styles.searchInput}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Поиск по имени клиента…"
+            />
+          </div>
         </div>
         <button className={`${uiStyles.btn} ${uiStyles.btnPrimary}`} onClick={() => setModalOpen(true)}>
           <IconPlus width={16} height={16} /> Добавить клиента
@@ -122,7 +138,7 @@ export function Clients() {
               {visible.length === 0 && (
                 <tr>
                   <td colSpan={7} style={{ textAlign: 'center', color: 'var(--muted)', padding: '2rem' }}>
-                    Клиентов с этим статусом пока нет
+                    {q ? `Ничего не найдено по запросу «${query.trim()}»` : 'Клиентов с этим статусом пока нет'}
                   </td>
                 </tr>
               )}
