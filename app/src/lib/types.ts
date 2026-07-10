@@ -17,18 +17,24 @@ export type SubscriptionPlan = 'none' | 'lite' | 'pro';
 export type PaymentMethod = 'card' | 'sbp';
 export type FrequencyLevel = 'daily' | 'few_week' | 'weekly' | 'rarely' | 'never';
 export type PortionSize = 'small' | 'medium' | 'large';
+export type EatIntensity = 'light' | 'moderate' | 'vigorous';
 
 export interface KbjuInput {
   gender: Gender;
   age: number;
   heightCm: number;
   weightKg: number;
-  activity: ActivityFactor;
+  steps: number;
+  eatSessionsPerWeek: number;
+  eatSessionMinutes: number;
+  eatIntensity: EatIntensity;
   goal: Goal;
 }
 
 export interface KbjuResult {
   bmr: number;
+  neatKcal: number;
+  eatKcal: number;
   tdee: number;
   targetCalories: number;
   proteinG: number;

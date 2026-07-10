@@ -36,6 +36,7 @@ import type {
   TaskPriority,
   Webinar,
 } from './types';
+import type { CustomRationTemplate, DishOption } from './rationTemplates';
 import { getLevel } from './career';
 import {
   APPOINTMENTS_SEED,
@@ -78,6 +79,8 @@ interface AppData {
   journalEntries: JournalEntry[];
   dayFocus: DayFocus[];
   habitLog: HabitCompletion[];
+  customDishes: DishOption[];
+  customTemplates: CustomRationTemplate[];
 }
 
 function defaultData(): AppData {
@@ -102,6 +105,8 @@ function defaultData(): AppData {
     journalEntries: [],
     dayFocus: [],
     habitLog: [],
+    customDishes: [],
+    customTemplates: [],
   };
 }
 
@@ -148,6 +153,8 @@ function migrate(data: AppData): AppData {
     journalEntries: data.journalEntries ?? [],
     dayFocus: data.dayFocus ?? [],
     habitLog: data.habitLog ?? [],
+    customDishes: data.customDishes ?? [],
+    customTemplates: data.customTemplates ?? [],
   };
 }
 
@@ -223,6 +230,10 @@ interface AppDataContextValue extends AppData {
   upsertJournalEntry: (date: string, patch: Partial<Pick<JournalEntry, 'mood' | 'text'>>) => void;
   setDayFocus: (date: string, items: string[]) => void;
   toggleHabit: (habitId: string, date: string) => void;
+  addCustomDish: (dish: Omit<DishOption, 'id'>) => DishOption;
+  removeCustomDish: (id: string) => void;
+  saveCustomTemplate: (name: string, calorieTarget: number, slots: CustomRationTemplate['slots']) => void;
+  removeCustomTemplate: (id: string) => void;
 }
 
 const AppDataContext = createContext<AppDataContextValue | null>(null);
@@ -528,6 +539,21 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
               : [...prev.habitLog, { habitId, date }],
           };
         });
+      },
+      addCustomDish: (dish) => {
+        const newDish: DishOption = { id: makeId('cd'), ...dish };
+        setData((prev) => ({ ...prev, customDishes: [...prev.customDishes, newDish] }));
+        return newDish;
+      },
+      removeCustomDish: (id) => {
+        setData((prev) => ({ ...prev, customDishes: prev.customDishes.filter((d) => d.id !== id) }));
+      },
+      saveCustomTemplate: (name, calorieTarget, slots) => {
+        const template: CustomRationTemplate = { id: makeId('ct'), name, calorieTarget, slots, createdAt: new Date().toISOString() };
+        setData((prev) => ({ ...prev, customTemplates: [...prev.customTemplates, template] }));
+      },
+      removeCustomTemplate: (id) => {
+        setData((prev) => ({ ...prev, customTemplates: prev.customTemplates.filter((t) => t.id !== id) }));
       },
     }),
     [data],

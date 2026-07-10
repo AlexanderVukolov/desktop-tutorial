@@ -90,6 +90,14 @@ export interface RationPlan {
   slots: RationSlot[];
 }
 
+export interface CustomRationTemplate {
+  id: string;
+  name: string;
+  calorieTarget: number;
+  slots: RationSlot[];
+  createdAt: string;
+}
+
 function scaleDish(dish: DishOption, targetKcal: number): RationSlot {
   const factor = Math.min(1.8, Math.max(0.55, targetKcal / dish.kcal));
   const grams = Math.round((dish.baseGrams * factor) / 5) * 5;
@@ -107,15 +115,15 @@ function scaleDish(dish: DishOption, targetKcal: number): RationSlot {
   };
 }
 
-export function dishOptionsFor(mealType: MealType, excludeTags: string[]): DishOption[] {
-  return DISH_LIBRARY.filter((d) => d.mealType === mealType && !d.tags.some((t) => excludeTags.includes(t)));
+export function dishOptionsFor(mealType: MealType, excludeTags: string[], extraDishes: DishOption[] = []): DishOption[] {
+  return [...DISH_LIBRARY, ...extraDishes].filter((d) => d.mealType === mealType && !d.tags.some((t) => excludeTags.includes(t)));
 }
 
 /** Builds a ready-made plan for a calorie target, picking a different dish
  * combination per `variantIndex` so the 5 calorie tiers don't all look alike. */
-export function buildRationPlan(calorieTarget: number, excludeTags: string[] = [], variantIndex = 0): RationPlan {
+export function buildRationPlan(calorieTarget: number, excludeTags: string[] = [], variantIndex = 0, extraDishes: DishOption[] = []): RationPlan {
   const slots = MEAL_ORDER.map((mealType) => {
-    const options = dishOptionsFor(mealType, excludeTags);
+    const options = dishOptionsFor(mealType, excludeTags, extraDishes);
     const pool = options.length > 0 ? options : DISH_LIBRARY.filter((d) => d.mealType === mealType);
     const dish = pool[variantIndex % pool.length];
     return scaleDish(dish, calorieTarget * MEAL_SHARE[mealType]);
@@ -123,8 +131,8 @@ export function buildRationPlan(calorieTarget: number, excludeTags: string[] = [
   return { calorieTarget, slots };
 }
 
-export function swapSlotDish(plan: RationPlan, mealType: MealType, dishId: string): RationPlan {
-  const dish = DISH_LIBRARY.find((d) => d.id === dishId);
+export function swapSlotDish(plan: RationPlan, mealType: MealType, dishId: string, extraDishes: DishOption[] = []): RationPlan {
+  const dish = [...DISH_LIBRARY, ...extraDishes].find((d) => d.id === dishId);
   if (!dish) return plan;
   const targetKcal = plan.calorieTarget * MEAL_SHARE[mealType];
   return {
@@ -135,9 +143,9 @@ export function swapSlotDish(plan: RationPlan, mealType: MealType, dishId: strin
 
 /** Rule-based reshuffle (not a live AI call) — picks a random allowed dish per
  * meal slot, weighted only by exclusion tags. */
-export function shuffleRationPlan(calorieTarget: number, excludeTags: string[] = []): RationPlan {
+export function shuffleRationPlan(calorieTarget: number, excludeTags: string[] = [], extraDishes: DishOption[] = []): RationPlan {
   const slots = MEAL_ORDER.map((mealType) => {
-    const options = dishOptionsFor(mealType, excludeTags);
+    const options = dishOptionsFor(mealType, excludeTags, extraDishes);
     const pool = options.length > 0 ? options : DISH_LIBRARY.filter((d) => d.mealType === mealType);
     const dish = pool[Math.floor(Math.random() * pool.length)];
     return scaleDish(dish, calorieTarget * MEAL_SHARE[mealType]);

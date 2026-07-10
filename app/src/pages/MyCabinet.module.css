@@ -194,3 +194,71 @@
   font-size: 0.82rem;
   font-weight: 600;
 }
+
+.headActions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
+.formRow3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.8rem;
+}
+
+.tagCheckRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+}
+
+.tagCheck {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--ink-2);
+}
+
+.templateList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.templateRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.8rem;
+}
+
+.templateName {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.templateMeta {
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.templateActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.removeBtn {
+  color: var(--muted);
+  font-size: 0.8rem;
+}

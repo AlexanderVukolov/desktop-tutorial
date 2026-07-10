@@ -11,6 +11,12 @@
   }
 }
 
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -29,8 +35,55 @@
   gap: 1.2rem;
 }
 
-.metricRow {
+.bmrDisplay {
   display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.bmrDisplay span:first-child {
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.bmrUnit {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.presetRow {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.6rem;
+}
+
+.presetBtn {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.76rem;
+}
+
+.presetBtnActive {
+  background: var(--ink);
+  color: var(--page);
+  border-color: var(--ink);
+}
+
+.subResult {
+  margin-top: 0.8rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--c-edu);
+}
+
+.metricRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
