@@ -18,12 +18,13 @@ import {
   IconTelegram,
   IconUtensils,
   IconVk,
+  IconYoutube,
 } from '../ui/icons';
 import { SOCIAL_LINKS } from '../../lib/social';
 import { ReminderEngine } from './ReminderEngine';
 import styles from './AppShell.module.css';
 
-const SOCIAL_ICONS = { telegram: IconTelegram, vk: IconVk } as const;
+const SOCIAL_ICONS = { telegram: IconTelegram, vk: IconVk, youtube: IconYoutube } as const;
 
 const NAV_MAIN = [
   { to: '/app/my-cabinet', label: 'Мой кабинет', icon: IconTarget },

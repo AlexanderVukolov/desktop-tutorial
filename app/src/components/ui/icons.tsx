@@ -395,3 +395,12 @@ export function IconVk(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function IconYoutube(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="1.5" y="5" width="21" height="14" rx="4.5" fill="#FF0000" />
+      <path d="M10 9.4 15.5 12 10 14.6Z" fill="#fff" />
+    </svg>
+  );
+}

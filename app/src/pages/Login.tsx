@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { useSession } from '../lib/useSession';
-import { IconLock, IconTelegram, IconVk } from '../components/ui/icons';
+import { IconLock, IconTelegram, IconVk, IconYoutube } from '../components/ui/icons';
 import { OrganicBanner } from '../components/ui/OrganicBanner';
 import { NSL_LOGO_FULL, NSL_LOGO_ICON } from '../assets/nslLogo';
 import { SOCIAL_LINKS } from '../lib/social';
 import uiStyles from '../components/ui/ui.module.css';
 import styles from './Login.module.css';
 
-const SOCIAL_ICONS = { telegram: IconTelegram, vk: IconVk } as const;
+const SOCIAL_ICONS = { telegram: IconTelegram, vk: IconVk, youtube: IconYoutube } as const;
 
 const MODULES = [
   { color: 'var(--c-edu)', label: 'Учебное ядро — диплом и специализации' },
