@@ -117,6 +117,17 @@ export function AppShell() {
               {soon && <span className={styles.soon}>скоро</span>}
             </NavLink>
           ))}
+
+          <div className={styles.socialRow}>
+            {SOCIAL_LINKS.map(({ key, label, href }) => {
+              const Icon = SOCIAL_ICONS[key];
+              return (
+                <a key={key} href={href} target="_blank" rel="noreferrer" className={styles.socialLink} aria-label={label} title={label}>
+                  <Icon width={17} height={17} />
+                </a>
+              );
+            })}
+          </div>
         </nav>
 
         <Link to="/app/settings" className={styles.sidebarFooter}>
@@ -135,17 +146,6 @@ export function AppShell() {
           </div>
           <IconSettings width={16} height={16} style={{ color: 'var(--muted)', flex: 'none' }} />
         </Link>
-
-        <div className={styles.socialRow}>
-          {SOCIAL_LINKS.map(({ key, label, href }) => {
-            const Icon = SOCIAL_ICONS[key];
-            return (
-              <a key={key} href={href} target="_blank" rel="noreferrer" className={styles.socialLink} aria-label={label} title={label}>
-                <Icon width={17} height={17} />
-              </a>
-            );
-          })}
-        </div>
       </aside>
 
       <div>
