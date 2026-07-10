@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useSession } from '../lib/useSession';
 import { IconLock } from '../components/ui/icons';
+import { OrganicBanner } from '../components/ui/OrganicBanner';
 import uiStyles from '../components/ui/ui.module.css';
 import styles from './Login.module.css';
 
@@ -29,10 +30,11 @@ export function Login() {
           <span className={styles.dot}>.OS</span>
         </div>
 
-        <div className={styles.pitch}>
-          <h2>Личный кабинет специалиста, который растёт вместе с вами</h2>
-          <p>Один вход — обучение, практика, клиенты и доход собраны в одном месте.</p>
-        </div>
+        <OrganicBanner
+          badge="NSL · Лига Нутрициологии"
+          title="Личный кабинет специалиста, который растёт вместе с вами"
+          subtitle="Один вход — обучение, практика, клиенты и доход собраны в одном месте."
+        />
 
         <div className={styles.moduleStrip}>
           {MODULES.map((m) => (

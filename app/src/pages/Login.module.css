@@ -35,21 +35,6 @@
   color: var(--accent-text);
 }
 
-.pitch {
-  max-width: 30ch;
-}
-
-.pitch h2 {
-  font-size: clamp(1.6rem, 3vw, 2.1rem);
-  line-height: 1.15;
-  margin-bottom: 0.9rem;
-}
-
-.pitch p {
-  color: var(--ink-2);
-  font-size: 0.95rem;
-}
-
 .moduleStrip {
   display: flex;
   flex-direction: column;

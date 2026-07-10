@@ -58,26 +58,67 @@
   border-color: var(--ink);
 }
 
-.articleList {
+.blockGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.blockCard {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
 }
 
-.article {
+.blockSwatch {
+  position: relative;
+  height: 84px;
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  padding: 0.9rem 1.1rem;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  padding: 0.7rem;
+  overflow: hidden;
 }
 
-.articleMain {
+.blockPill {
+  position: relative;
+  z-index: 1;
+  background: rgba(20, 22, 18, 0.72);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.22rem 0.65rem;
+  border-radius: 999px;
+}
+
+.swatchSage {
+  background: linear-gradient(135deg, var(--nsl-sage-soft), var(--nsl-sage));
+}
+
+.swatchDust {
+  background: linear-gradient(135deg, var(--nsl-dust-soft), var(--nsl-dust));
+}
+
+.swatchBlush {
+  background: linear-gradient(135deg, var(--nsl-blush-soft), var(--nsl-blush));
+}
+
+.swatchSand {
+  background: linear-gradient(135deg, var(--nsl-sand), var(--nsl-dust-soft));
+}
+
+.blockBody {
+  padding: 0.9rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   flex: 1;
-  min-width: 220px;
+}
+
+.blockBody .readBtn {
+  margin-top: auto;
 }
 
 .categoryBadge {

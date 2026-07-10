@@ -64,9 +64,12 @@ export function AppShell() {
   return (
     <div className={styles.shell}>
       <aside className={`${styles.sidebar} noPrint`}>
-        <div className={styles.brand}>
-          <span>Nutri</span>
-          <span className={styles.dot}>.OS</span>
+        <div className={styles.brandWrap}>
+          <div className={styles.brand}>
+            <span>Nutri</span>
+            <span className={styles.dot}>.OS</span>
+          </div>
+          <div className={styles.brandCaption}>Лига Нутрициологии · NSL</div>
         </div>
 
         <nav className={styles.navGroup}>

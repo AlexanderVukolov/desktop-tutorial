@@ -1,10 +1,13 @@
 import { useMemo, useState } from 'react';
 import { useAppData } from '../lib/store';
 import { Card } from '../components/ui/Card';
+import { OrganicBanner } from '../components/ui/OrganicBanner';
 import { StatGrid, StatTile } from '../components/ui/StatTile';
 import { NUTRIENTS } from '../lib/nutrients';
 import uiStyles from '../components/ui/ui.module.css';
 import styles from './Knowledge.module.css';
+
+const SWATCHES = [styles.swatchSage, styles.swatchDust, styles.swatchBlush, styles.swatchSand];
 
 export function Knowledge() {
   const { specialist, articles, webinars, toggleArticleRead, toggleWebinarWatched } = useAppData();
@@ -33,6 +36,13 @@ export function Knowledge() {
 
   return (
     <div className={styles.stack}>
+      <OrganicBanner
+        size="md"
+        badge="NSL · Лига Нутрициологии"
+        title="Доказательная база знаний нутрициолога"
+        subtitle="Протоколы, вебинары и справочник по нутриентам от преподавателей школы — в одном месте с вашей практикой."
+      />
+
       <StatGrid>
         <StatTile label="CME-часы" value={`${cmeDone} / ${specialist.cmeHoursTarget}`} />
         <StatTile label="Статей изучено" value={`${readCount} / ${articles.length}`} />
@@ -60,7 +70,7 @@ export function Knowledge() {
         </div>
       </Card>
 
-      <Card title="Библиотека знаний" hint="Протоколы и статьи от преподавателей школы">
+      <Card title="Библиотека знаний" hint="Протоколы и статьи по программе «Лига Нутрициологии» (NSL)">
         <div className={styles.filters}>
           {categories.map((c) => (
             <button
@@ -73,34 +83,34 @@ export function Knowledge() {
           ))}
         </div>
 
-        <div className={styles.articleList}>
-          {visibleArticles.map((a) => (
-            <div key={a.id} className={styles.article}>
-              <div className={styles.articleMain}>
-                <div>
-                  <span className={styles.categoryBadge}>{a.category}</span>
-                  <span className={styles.articleTitle}>{a.title}</span>
-                </div>
+        <div className={styles.blockGrid}>
+          {visibleArticles.map((a, i) => (
+            <div key={a.id} className={styles.blockCard}>
+              <div className={`${styles.blockSwatch} ${SWATCHES[i % SWATCHES.length]}`}>
+                <span className={styles.blockPill}>{a.category}</span>
+              </div>
+              <div className={styles.blockBody}>
+                <div className={styles.articleTitle}>{a.title}</div>
                 <div className={styles.articleMeta}>
                   {a.author} · {a.readMinutes} мин чтения · {a.cmeHours} CME-ч
                 </div>
-              </div>
-              <div className={styles.readBtn}>
-                {a.read ? (
-                  <button
-                    className={`${uiStyles.btn} ${uiStyles.btnGhost} ${uiStyles.btnSm}`}
-                    onClick={() => toggleArticleRead(a.id)}
-                  >
-                    <span className={styles.readDone}>Изучено ✓</span>
-                  </button>
-                ) : (
-                  <button
-                    className={`${uiStyles.btn} ${uiStyles.btnPrimary} ${uiStyles.btnSm}`}
-                    onClick={() => toggleArticleRead(a.id)}
-                  >
-                    Отметить как изученное
-                  </button>
-                )}
+                <div className={styles.readBtn}>
+                  {a.read ? (
+                    <button
+                      className={`${uiStyles.btn} ${uiStyles.btnGhost} ${uiStyles.btnSm}`}
+                      onClick={() => toggleArticleRead(a.id)}
+                    >
+                      <span className={styles.readDone}>Изучено ✓</span>
+                    </button>
+                  ) : (
+                    <button
+                      className={`${uiStyles.btn} ${uiStyles.btnPrimary} ${uiStyles.btnSm}`}
+                      onClick={() => toggleArticleRead(a.id)}
+                    >
+                      Отметить как изученное
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           ))}

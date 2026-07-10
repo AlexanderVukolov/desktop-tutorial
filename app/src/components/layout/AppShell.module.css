@@ -34,6 +34,10 @@
   }
 }
 
+.brandWrap {
+  padding: 0 0.4rem;
+}
+
 .brand {
   display: flex;
   align-items: baseline;
@@ -41,11 +45,19 @@
   font-family: var(--serif);
   font-weight: 700;
   font-size: 1.15rem;
-  padding: 0 0.4rem;
 }
 
 .brand .dot {
   color: var(--accent-text);
+}
+
+.brandCaption {
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.62rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
 }
 
 .navGroup {
