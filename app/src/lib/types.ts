@@ -69,6 +69,7 @@ export interface Biometrics {
   diastolic: number;
   pulse: number;
   measuredAt: string;
+  note?: string;
 }
 
 export interface LabResult {

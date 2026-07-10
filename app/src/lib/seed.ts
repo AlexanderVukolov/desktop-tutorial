@@ -64,7 +64,16 @@ export const CLIENTS_SEED: Client[] = [
     activityLevel: 1.375,
     bodyComposition: { fatPercent: 29.5, muscleMassKg: 48.2, visceralFat: 7, measuredAt: daysAgo(12) },
     energyExpenditure: { restingKcal: 1490, totalKcal: 2050, measuredAt: daysAgo(12) },
-    biometrics: { heightCm: 166, waistCm: 84, hipCm: 104, systolic: 118, diastolic: 76, pulse: 72, measuredAt: daysAgo(12) },
+    biometrics: {
+      heightCm: 166,
+      waistCm: 84,
+      hipCm: 104,
+      systolic: 118,
+      diastolic: 76,
+      pulse: 72,
+      measuredAt: daysAgo(12),
+      note: 'Замер утром натощак, самочувствие в норме, жалоб нет',
+    },
     foodFrequency: {
       dairy: { frequency: 'rarely', portion: 'small' },
       fish: { frequency: 'weekly', portion: 'medium' },

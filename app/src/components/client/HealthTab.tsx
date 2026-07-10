@@ -22,6 +22,7 @@ export function HealthTab({ clientId }: { clientId: string }) {
   const [systolic, setSystolic] = useState(client?.biometrics?.systolic ?? 0);
   const [diastolic, setDiastolic] = useState(client?.biometrics?.diastolic ?? 0);
   const [pulse, setPulse] = useState(client?.biometrics?.pulse ?? 0);
+  const [bioNote, setBioNote] = useState(client?.biometrics?.note ?? '');
 
   const [fatPercent, setFatPercent] = useState(client?.bodyComposition?.fatPercent ?? 0);
   const [muscleMassKg, setMuscleMassKg] = useState(client?.bodyComposition?.muscleMassKg ?? 0);
@@ -41,7 +42,16 @@ export function HealthTab({ clientId }: { clientId: string }) {
 
   function saveBiometrics() {
     updateHealthProfile(clientId, {
-      biometrics: { heightCm, waistCm, hipCm, systolic, diastolic, pulse, measuredAt: new Date().toISOString() },
+      biometrics: {
+        heightCm,
+        waistCm,
+        hipCm,
+        systolic,
+        diastolic,
+        pulse,
+        measuredAt: new Date().toISOString(),
+        note: bioNote.trim() || undefined,
+      },
     });
   }
 
@@ -194,10 +204,24 @@ export function HealthTab({ clientId }: { clientId: string }) {
               <input type="number" value={pulse || ''} onChange={(e) => setPulse(Number(e.target.value))} />
             </div>
           </div>
+          <div className={uiStyles.field} style={{ marginTop: '0.8rem' }}>
+            <label>Заметка к замеру</label>
+            <textarea
+              style={{ minHeight: 50, width: '100%', background: 'var(--page)', border: '1px solid var(--border-strong)', borderRadius: 8, padding: '0.55rem 0.7rem', fontSize: '0.86rem' }}
+              value={bioNote}
+              onChange={(e) => setBioNote(e.target.value)}
+              placeholder="Самочувствие, контекст замера, отклонения…"
+            />
+          </div>
           <button className={`${uiStyles.btn} ${uiStyles.btnGhost} ${uiStyles.btnSm}`} style={{ marginTop: '0.9rem' }} onClick={saveBiometrics}>
             Сохранить замер
           </button>
-          {client.biometrics && <div className={styles.measuredNote}>Последний замер: {formatDate(client.biometrics.measuredAt)}</div>}
+          {client.biometrics && (
+            <div className={styles.measuredNote}>
+              Последний замер: {formatDate(client.biometrics.measuredAt)}
+              {client.biometrics.note && <> · {client.biometrics.note}</>}
+            </div>
+          )}
         </Card>
 
         <Card title="Состав тела" hint="По данным биоимпедансометрии">
