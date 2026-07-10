@@ -9,6 +9,7 @@ import { NutritionSection } from '../components/client/NutritionSection';
 import { ProgressPhotos } from '../components/client/ProgressPhotos';
 import { LifestyleSection } from '../components/client/LifestyleSection';
 import { CalorieTracker } from '../components/client/CalorieTracker';
+import { NutritionAssessment } from '../components/client/NutritionAssessment';
 import { IconCalculator, IconCalendar, IconCamera, IconExternalLink, IconFile } from '../components/ui/icons';
 import { formatDate, formatRub, daysSince } from '../lib/format';
 import { GOAL_OPTIONS } from '../lib/kbju';
@@ -21,6 +22,7 @@ const TABS = [
   { key: 'health', label: 'Здоровье и питание' },
   { key: 'lifestyle', label: 'Образ жизни' },
   { key: 'tracker', label: 'Трекер КБЖУ' },
+  { key: 'assessment', label: 'Оценка питания' },
 ] as const;
 
 export function ClientDetail() {
@@ -170,6 +172,8 @@ export function ClientDetail() {
       {tab === 'lifestyle' && <LifestyleSection clientId={clientId} />}
 
       {tab === 'tracker' && <CalorieTracker clientId={clientId} />}
+
+      {tab === 'assessment' && <NutritionAssessment clientId={clientId} />}
 
       {tab === 'overview' && (
       <div className={styles.grid2}>

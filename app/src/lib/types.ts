@@ -69,6 +69,12 @@ export interface WaterLog {
   createdAt: string;
 }
 
+export interface NutritionQuestionnaire {
+  clientId: string;
+  answers: Record<string, string>;
+  completedAt: string;
+}
+
 export type SleepQuality = 'poor' | 'fair' | 'good';
 
 export interface SleepLog {
