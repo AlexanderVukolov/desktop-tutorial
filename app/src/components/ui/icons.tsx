@@ -355,3 +355,19 @@ export function IconPill(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function IconChefHat(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path
+        d="M7.5 10.8a3.3 3.3 0 0 1 .8-6.5A3.8 3.8 0 0 1 12 2.2a3.8 3.8 0 0 1 3.7 2.1 3.3 3.3 0 0 1 .8 6.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M7.2 10.5h9.6v6.3a1 1 0 0 1-1 1H8.2a1 1 0 0 1-1-1v-6.3Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+      <line x1="6" y1="20.3" x2="18" y2="20.3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}

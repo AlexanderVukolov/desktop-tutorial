@@ -12,6 +12,7 @@ import { Planner } from './pages/Planner';
 import { Kbju } from './pages/Kbju';
 import { FoodCalculator } from './pages/FoodCalculator';
 import { MyCabinet } from './pages/MyCabinet';
+import { Recipes } from './pages/Recipes';
 import { Partner } from './pages/Partner';
 import { Career } from './pages/Career';
 import { Knowledge } from './pages/Knowledge';
@@ -21,6 +22,7 @@ import { Settings } from './pages/Settings';
 import { Diary } from './pages/portal/Diary';
 import { Progress } from './pages/portal/Progress';
 import { Lifestyle as PortalLifestyle } from './pages/portal/Lifestyle';
+import { Recipes as PortalRecipes } from './pages/portal/Recipes';
 import { Chat } from './pages/portal/Chat';
 
 export default function App() {
@@ -41,6 +43,7 @@ export default function App() {
           <Route path="kbju" element={<Kbju />} />
           <Route path="food-calculator" element={<FoodCalculator />} />
           <Route path="my-cabinet" element={<MyCabinet />} />
+          <Route path="recipes" element={<Recipes />} />
           <Route path="partner" element={<Partner />} />
           <Route path="career" element={<Career />} />
           <Route path="knowledge" element={<Knowledge />} />
@@ -54,6 +57,7 @@ export default function App() {
         <Route index element={<Diary />} />
         <Route path="progress" element={<Progress />} />
         <Route path="lifestyle" element={<PortalLifestyle />} />
+        <Route path="recipes" element={<PortalRecipes />} />
         <Route path="chat" element={<Chat />} />
       </Route>
 

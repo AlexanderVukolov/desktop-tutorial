@@ -1,0 +1,179 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.categoryRow {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.categoryBtn {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  font-size: 0.84rem;
+}
+
+.categoryBtnActive {
+  background: var(--ink);
+  color: var(--page);
+  border-color: var(--ink);
+}
+
+.filterRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filterLabel {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.filterChip {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 0.32rem 0.75rem;
+  font-size: 0.78rem;
+}
+
+.filterChipActive {
+  border-color: var(--critical);
+  background: color-mix(in srgb, var(--critical) 12%, var(--surface));
+  color: var(--critical);
+}
+
+.disclaimer {
+  font-size: 0.76rem;
+  color: var(--muted);
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+  line-height: 1.45;
+  margin-top: 1rem;
+}
+
+.emptyHint {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+  padding: 0;
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+}
+
+.cardBody {
+  padding: 0.9rem 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.cardMeal {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.cardTitle {
+  font-size: 0.96rem;
+  line-height: 1.3;
+}
+
+.cardDesc {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.cardMacros {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  font-size: 0.78rem;
+  color: var(--ink-2);
+  margin-top: 0.2rem;
+}
+
+.cardMeta {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.modalMacros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin: 1rem 0;
+  font-size: 0.86rem;
+  color: var(--ink-2);
+}
+
+.modalHeading {
+  font-size: 0.88rem;
+  margin: 1.1rem 0 0.5rem;
+}
+
+.ingredientList,
+.stepList {
+  padding-left: 1.2rem;
+  font-size: 0.86rem;
+  color: var(--ink-2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.saveRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 1.2rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--border);
+}
+
+.saveRow select {
+  background: var(--page);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.84rem;
+}
+
+.savedNote {
+  margin-top: 0.7rem;
+  color: var(--good);
+  font-size: 0.82rem;
+}
