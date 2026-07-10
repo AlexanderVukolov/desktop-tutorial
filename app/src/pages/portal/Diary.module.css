@@ -1,0 +1,124 @@
+.form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.1rem;
+  box-shadow: var(--shadow-1);
+  margin-bottom: 1.3rem;
+}
+
+.formRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+
+.formRow label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.formRow select,
+.formRow textarea {
+  background: var(--page);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.86rem;
+}
+
+.formRow textarea {
+  min-height: 64px;
+  resize: vertical;
+}
+
+.photoRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.photoBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px dashed var(--border-strong);
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.8rem;
+  color: var(--ink-2);
+  background: var(--page);
+  cursor: pointer;
+}
+
+.photoPreview {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+}
+
+.entries {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.entry {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1rem;
+  display: flex;
+  gap: 0.8rem;
+}
+
+.entryPhoto {
+  width: 56px;
+  height: 56px;
+  border-radius: 9px;
+  object-fit: cover;
+  flex: none;
+}
+
+.entryBody {
+  min-width: 0;
+  flex: 1;
+}
+
+.entryHead {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.mealBadge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.entryTime {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+
+.entryText {
+  font-size: 0.86rem;
+  color: var(--ink-2);
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.86rem;
+  padding: 1.5rem 0;
+}

@@ -126,3 +126,94 @@
   padding: 0.45rem 0.6rem;
   font-size: 0.82rem;
 }
+
+.diaryRow {
+  display: flex;
+  gap: 0.7rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.diaryRow:last-child {
+  border-bottom: none;
+}
+
+.diaryPhoto {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex: none;
+}
+
+.diaryMealBadge {
+  font-size: 0.66rem;
+  font-weight: 600;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  margin-right: 0.4rem;
+}
+
+.diaryMeta {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+
+.diaryText {
+  font-size: 0.84rem;
+  color: var(--ink-2);
+  margin-top: 0.15rem;
+}
+
+.chatThread {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 280px;
+  overflow-y: auto;
+  margin-bottom: 0.9rem;
+}
+
+.chatRow {
+  display: flex;
+}
+
+.chatRowSelf {
+  justify-content: flex-end;
+}
+
+.chatBubble {
+  max-width: 82%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  background: var(--surface-2);
+}
+
+.chatBubbleSelf {
+  background: var(--c-edu);
+  color: #fff;
+}
+
+.chatForm {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chatForm input {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.84rem;
+}
+
+.emptyHint {
+  color: var(--muted);
+  font-size: 0.86rem;
+}

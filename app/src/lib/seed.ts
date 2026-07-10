@@ -1,8 +1,14 @@
-import type { Client, ReferralEntry, RevenuePoint, Specialist } from './types';
+import type { ChatMessage, Client, DiaryEntry, ReferralEntry, RevenuePoint, Specialist } from './types';
 
 function daysAgo(n: number): string {
   const d = new Date();
   d.setDate(d.getDate() - n);
+  return d.toISOString();
+}
+
+function hoursAgo(n: number): string {
+  const d = new Date();
+  d.setHours(d.getHours() - n);
   return d.toISOString();
 }
 
@@ -119,6 +125,68 @@ export const CLIENTS_SEED: Client[] = [
       { date: daysAgo(20), weightKg: 67.5 },
       { date: daysAgo(6), weightKg: 68.1 },
     ],
+  },
+];
+
+export const DIARY_SEED: DiaryEntry[] = [
+  {
+    id: 'd1',
+    clientId: 'c1',
+    createdAt: hoursAgo(38),
+    mealType: 'breakfast',
+    description: 'Овсянка на воде с ягодами и ложкой арахисовой пасты, кофе без сахара',
+  },
+  {
+    id: 'd2',
+    clientId: 'c1',
+    createdAt: hoursAgo(32),
+    mealType: 'lunch',
+    description: 'Гречка, куриная грудка, овощной салат с оливковым маслом',
+  },
+  {
+    id: 'd3',
+    clientId: 'c1',
+    createdAt: hoursAgo(14),
+    mealType: 'dinner',
+    description: 'Творог 5%, огурец, немного орехов — вечером опять тянуло на сладкое, удержалась',
+  },
+  {
+    id: 'd4',
+    clientId: 'c2',
+    createdAt: hoursAgo(20),
+    mealType: 'lunch',
+    description: 'Рис, лосось, авокадо — после силовой, аппетит хороший',
+  },
+];
+
+export const MESSAGES_SEED: ChatMessage[] = [
+  {
+    id: 'm1',
+    clientId: 'c1',
+    from: 'client',
+    text: 'Мария, добрый день! Вечером опять тянуло на сладкое, но продержалась на твороге с орехами 🙂',
+    createdAt: hoursAgo(14),
+  },
+  {
+    id: 'm2',
+    clientId: 'c1',
+    from: 'specialist',
+    text: 'Ольга, отлично держитесь! Тяга вечером — это норма на дефиците, в четверг добавим больше клетчатки в ужин, станет легче.',
+    createdAt: hoursAgo(12),
+  },
+  {
+    id: 'm3',
+    clientId: 'c2',
+    from: 'client',
+    text: 'После сегодняшней тренировки чувствую себя супер, аппетит вырос сильно',
+    createdAt: hoursAgo(19),
+  },
+  {
+    id: 'm4',
+    clientId: 'c2',
+    from: 'specialist',
+    text: 'Это ожидаемо в силовые дни — держитесь целевых цифр из расчёта, дефицита по калориям не будет.',
+    createdAt: hoursAgo(18),
   },
 ];
 

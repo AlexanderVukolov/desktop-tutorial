@@ -3,6 +3,8 @@ export type Gender = 'female' | 'male';
 export type ActivityFactor = 1.2 | 1.375 | 1.55 | 1.725 | 1.9;
 export type ClientStatus = 'active' | 'paused' | 'new';
 export type ReferralStatus = 'invited' | 'trial' | 'paid';
+export type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack';
+export type MessageSender = 'client' | 'specialist';
 
 export interface KbjuInput {
   gender: Gender;
@@ -43,6 +45,23 @@ export interface Client {
   monthlyFee: number;
   weightHistory: WeightPoint[];
   notes: string;
+}
+
+export interface DiaryEntry {
+  id: string;
+  clientId: string;
+  createdAt: string;
+  mealType: MealType;
+  description: string;
+  photo?: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  clientId: string;
+  from: MessageSender;
+  text: string;
+  createdAt: string;
 }
 
 export interface ReferralEntry {

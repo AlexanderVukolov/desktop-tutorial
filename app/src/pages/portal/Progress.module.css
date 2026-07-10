@@ -1,0 +1,46 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.2rem;
+  box-shadow: var(--shadow-1);
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1rem;
+}
+
+.head h3 {
+  font-size: 0.98rem;
+}
+
+.delta {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.form {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.form input {
+  flex: 1;
+  background: var(--page);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.86rem;
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.86rem;
+  padding: 1.5rem 0;
+}

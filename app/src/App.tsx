@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { RequireAuth } from './components/RequireAuth';
 import { AppShell } from './components/layout/AppShell';
+import { PortalShell } from './components/portal/PortalShell';
 import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { Clients } from './pages/Clients';
@@ -10,6 +11,9 @@ import { Partner } from './pages/Partner';
 import { Career } from './pages/Career';
 import { Knowledge } from './pages/Knowledge';
 import { Community } from './pages/Community';
+import { Diary } from './pages/portal/Diary';
+import { Progress } from './pages/portal/Progress';
+import { Chat } from './pages/portal/Chat';
 
 export default function App() {
   return (
@@ -29,6 +33,12 @@ export default function App() {
           <Route path="knowledge" element={<Knowledge />} />
           <Route path="community" element={<Community />} />
         </Route>
+      </Route>
+
+      <Route path="/client/:clientId" element={<PortalShell />}>
+        <Route index element={<Diary />} />
+        <Route path="progress" element={<Progress />} />
+        <Route path="chat" element={<Chat />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

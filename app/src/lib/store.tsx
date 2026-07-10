@@ -1,6 +1,19 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import type { Client, Goal, KbjuCalculation, KbjuInput, KbjuResult, ReferralEntry, RevenuePoint, Specialist } from './types';
-import { CLIENTS_SEED, REFERRALS_SEED, REVENUE_SEED, SPECIALIST_SEED } from './seed';
+import type {
+  ChatMessage,
+  Client,
+  DiaryEntry,
+  Goal,
+  KbjuCalculation,
+  KbjuInput,
+  KbjuResult,
+  MealType,
+  MessageSender,
+  ReferralEntry,
+  RevenuePoint,
+  Specialist,
+} from './types';
+import { CLIENTS_SEED, DIARY_SEED, MESSAGES_SEED, REFERRALS_SEED, REVENUE_SEED, SPECIALIST_SEED } from './seed';
 
 const STORAGE_KEY = 'nutrios:v1';
 
@@ -10,6 +23,20 @@ interface AppData {
   referrals: ReferralEntry[];
   revenue: RevenuePoint[];
   calculations: KbjuCalculation[];
+  diary: DiaryEntry[];
+  messages: ChatMessage[];
+}
+
+function defaultData(): AppData {
+  return {
+    specialist: SPECIALIST_SEED,
+    clients: CLIENTS_SEED,
+    referrals: REFERRALS_SEED,
+    revenue: REVENUE_SEED,
+    calculations: [],
+    diary: DIARY_SEED,
+    messages: MESSAGES_SEED,
+  };
 }
 
 function loadInitial(): AppData {
@@ -17,19 +44,13 @@ function loadInitial(): AppData {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (raw) {
       try {
-        return JSON.parse(raw) as AppData;
+        return { ...defaultData(), ...(JSON.parse(raw) as Partial<AppData>) };
       } catch {
         /* fall through to seed */
       }
     }
   }
-  return {
-    specialist: SPECIALIST_SEED,
-    clients: CLIENTS_SEED,
-    referrals: REFERRALS_SEED,
-    revenue: REVENUE_SEED,
-    calculations: [],
-  };
+  return defaultData();
 }
 
 interface AppDataContextValue extends AppData {
@@ -40,6 +61,8 @@ interface AppDataContextValue extends AppData {
   addKbjuCalculation: (input: KbjuInput, result: KbjuResult, clientId: string | null) => KbjuCalculation;
   inviteReferral: (name: string) => void;
   withdraw: () => void;
+  addDiaryEntry: (clientId: string, entry: { mealType: MealType; description: string; photo?: string }) => void;
+  addMessage: (clientId: string, from: MessageSender, text: string) => void;
 }
 
 const AppDataContext = createContext<AppDataContextValue | null>(null);
@@ -120,6 +143,25 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       },
       withdraw: () => {
         setData((prev) => ({ ...prev, specialist: { ...prev.specialist, balance: 0 } }));
+      },
+      addDiaryEntry: (clientId, entry) => {
+        const item: DiaryEntry = {
+          id: makeId('d'),
+          clientId,
+          createdAt: new Date().toISOString(),
+          ...entry,
+        };
+        setData((prev) => ({ ...prev, diary: [item, ...prev.diary] }));
+      },
+      addMessage: (clientId, from, text) => {
+        const message: ChatMessage = {
+          id: makeId('m'),
+          clientId,
+          from,
+          text,
+          createdAt: new Date().toISOString(),
+        };
+        setData((prev) => ({ ...prev, messages: [...prev.messages, message] }));
       },
     }),
     [data],
