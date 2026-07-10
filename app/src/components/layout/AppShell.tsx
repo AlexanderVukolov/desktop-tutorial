@@ -11,7 +11,6 @@ import {
   IconCommunity,
   IconMoon,
   IconNewspaper,
-  IconNotebook,
   IconSettings,
   IconSun,
   IconTarget,
@@ -29,7 +28,6 @@ const SOCIAL_ICONS = { telegram: IconTelegram, vk: IconVk, youtube: IconYoutube 
 const NAV_MAIN = [
   { to: '/app/my-cabinet', label: 'Мой кабинет', icon: IconTarget },
   { to: '/app/calendar', label: 'Календарь', icon: IconCalendar },
-  { to: '/app/planner', label: 'Планнер', icon: IconNotebook },
   { to: '/app/kbju', label: 'КБЖУ-калькулятор', icon: IconCalculator },
   { to: '/app/food-calculator', label: 'Калькулятор еды', icon: IconUtensils },
   { to: '/app/recipes', label: 'Рецепты', icon: IconChefHat },
@@ -46,7 +44,6 @@ const PAGE_META: { match: string; crumb: string; title: string }[] = [
   { match: '/app/my-cabinet', crumb: 'Nutri.OS', title: 'Мой кабинет' },
   { match: '/app/clients', crumb: 'Nutri.OS', title: 'Клиенты' },
   { match: '/app/calendar', crumb: 'Nutri.OS', title: 'Календарь' },
-  { match: '/app/planner', crumb: 'Nutri.OS', title: 'Планнер' },
   { match: '/app/kbju', crumb: 'Nutri.OS', title: 'КБЖУ-калькулятор' },
   { match: '/app/food-calculator', crumb: 'Nutri.OS', title: 'Калькулятор еды' },
   { match: '/app/recipes', crumb: 'Nutri.OS', title: 'Рецепты' },

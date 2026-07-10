@@ -8,7 +8,6 @@ import type {
   KnowledgeArticle,
   LeaderboardPeer,
   PartnerOrg,
-  PlannerTask,
   ReferralEntry,
   RevenuePoint,
   SocialMention,
@@ -44,12 +43,6 @@ function atDaysHour(dayOffset: number, hour: number, minute = 0): string {
 
 function inMinutesFromNow(n: number): string {
   return new Date(Date.now() + n * 60_000).toISOString();
-}
-
-function dayKeyOffset(n: number): string {
-  const d = new Date();
-  d.setDate(d.getDate() + n);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 export const SPECIALIST_SEED: Specialist = {
@@ -777,58 +770,5 @@ export const APPOINTMENTS_SEED: Appointment[] = [
     reminderMinutesBefore: 60,
     reminderSent: true,
     notes: 'Прошлая консультация — обсудили замену молочных продуктов',
-  },
-];
-
-export const PLANNER_TASKS_SEED: PlannerTask[] = [
-  {
-    id: 'pt1',
-    text: 'Подготовить рацион к консультации',
-    done: false,
-    clientId: 'c1',
-    dueDate: dayKeyOffset(0),
-    priority: 'high',
-    createdAt: dayKeyOffset(-1),
-  },
-  {
-    id: 'pt2',
-    text: 'Ответить на вопрос в чате про перекусы',
-    done: false,
-    clientId: 'c3',
-    dueDate: dayKeyOffset(0),
-    priority: 'medium',
-    createdAt: dayKeyOffset(-1),
-  },
-  {
-    id: 'pt3',
-    text: 'Обновить шаблон анкеты для новых клиентов',
-    done: false,
-    dueDate: dayKeyOffset(1),
-    priority: 'low',
-    createdAt: dayKeyOffset(-2),
-  },
-  {
-    id: 'pt4',
-    text: 'Досдать CME-часы за квартал',
-    done: false,
-    dueDate: dayKeyOffset(3),
-    priority: 'medium',
-    createdAt: dayKeyOffset(-5),
-  },
-  {
-    id: 'pt5',
-    text: 'Проверить оплату у просроченных клиентов',
-    done: false,
-    dueDate: dayKeyOffset(-1),
-    priority: 'high',
-    createdAt: dayKeyOffset(-3),
-  },
-  {
-    id: 'pt6',
-    text: 'Сверстать презентацию для вебинара',
-    done: true,
-    dueDate: dayKeyOffset(-2),
-    priority: 'medium',
-    createdAt: dayKeyOffset(-6),
   },
 ];

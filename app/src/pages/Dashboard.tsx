@@ -5,7 +5,7 @@ import { StatGrid, StatTile } from '../components/ui/StatTile';
 import { RevenueChart } from '../components/charts/RevenueChart';
 import { Sparkline } from '../components/charts/Sparkline';
 import { ClientStatusBadge } from '../components/ui/Badge';
-import { IconArrowRight, IconCalculator, IconCalendar, IconNotebook, IconUsers } from '../components/ui/icons';
+import { IconArrowRight, IconCalculator, IconCalendar, IconUsers } from '../components/ui/icons';
 import { formatRub, formatNumber, daysSince } from '../lib/format';
 import uiStyles from '../components/ui/ui.module.css';
 import styles from './Dashboard.module.css';
@@ -213,13 +213,6 @@ export function Dashboard() {
                   <div className="desc">Запланировать встречу в календаре</div>
                 </div>
                 <IconCalendar width={18} height={18} />
-              </Link>
-              <Link to="/app/planner" className={styles.actionRow}>
-                <div>
-                  <div className="title">Открыть планнер</div>
-                  <div className="desc">Фокус дня, задачи и привычки</div>
-                </div>
-                <IconNotebook width={18} height={18} />
               </Link>
               <Link to="/app/kbju" className={styles.actionRow}>
                 <div>

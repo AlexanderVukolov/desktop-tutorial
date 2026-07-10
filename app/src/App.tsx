@@ -6,7 +6,6 @@ import { Login } from './pages/Login';
 import { ClientDetail } from './pages/ClientDetail';
 import { ClientReport } from './pages/ClientReport';
 import { Calendar } from './pages/Calendar';
-import { Planner } from './pages/Planner';
 import { Kbju } from './pages/Kbju';
 import { FoodCalculator } from './pages/FoodCalculator';
 import { MyCabinet } from './pages/MyCabinet';
@@ -34,7 +33,6 @@ export default function App() {
           <Route path="clients/:id" element={<ClientDetail />} />
           <Route path="clients/:id/report" element={<ClientReport />} />
           <Route path="calendar" element={<Calendar />} />
-          <Route path="planner" element={<Planner />} />
           <Route path="kbju" element={<Kbju />} />
           <Route path="food-calculator" element={<FoodCalculator />} />
           <Route path="my-cabinet" element={<MyCabinet />} />
