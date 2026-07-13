@@ -9,6 +9,8 @@ import Dashboard from './components/Dashboard.jsx'
 import TaskModal from './components/TaskModal.jsx'
 import AuthScreen from './components/AuthScreen.jsx'
 import OverdueAlert from './components/OverdueAlert.jsx'
+import NotificationBell from './components/NotificationBell.jsx'
+import { loadNotifications, pushNotification, markAllRead, clearForUser } from './notifications.js'
 import { avatarColor, initials } from './components/TaskCard.jsx'
 
 const DEFAULT_FILTERS = {
@@ -27,6 +29,7 @@ export default function App() {
   const [filters, setFilters] = useState(DEFAULT_FILTERS)
   const [modal, setModal] = useState(null) // null | 'new' | task object
   const [menuOpen, setMenuOpen] = useState(false)
+  const [notifications, setNotifications] = useState(loadNotifications)
 
   const filtered = useFilteredTasks(store.tasks, filters)
   const setFilter = (k, v) => setFilters((f) => ({ ...f, [k]: v }))
@@ -51,10 +54,37 @@ export default function App() {
   const openTask = (task) => setModal(task)
   const closeModal = () => setModal(null)
 
-  const handleSave = (data) => {
-    if (modal && modal !== 'new' && modal.id) store.updateTask(modal.id, data)
-    else store.addTask(data)
+  // Уведомить ответственного, что его задача переведена в «Готово»
+  const notifyDone = (task) => {
+    if (!task?.assignee) return
+    setNotifications((list) =>
+      pushNotification(list, {
+        userId: task.assignee,
+        taskId: task.id,
+        taskTitle: task.title,
+        byName: user.name,
+      }),
+    )
   }
+
+  const handleSave = (data) => {
+    if (modal && modal !== 'new' && modal.id) {
+      store.updateTask(modal.id, data)
+      if (data.status === 'done' && modal.status !== 'done') {
+        notifyDone({ ...modal, ...data })
+      }
+    } else {
+      store.addTask(data)
+    }
+  }
+
+  const handleMove = (id, status) => {
+    const task = store.tasks.find((t) => t.id === id)
+    store.moveTask(id, status)
+    if (task && status === 'done' && task.status !== 'done') notifyDone(task)
+  }
+
+  const tasksById = Object.fromEntries(store.tasks.map((t) => [t.id, t]))
 
   const activeDept = filters.dept !== 'all' ? byId(DEPARTMENTS, filters.dept) : null
   const isDashboard = view === 'dashboard'
@@ -113,6 +143,15 @@ export default function App() {
 
           <div style={{ marginLeft: 'auto', display: 'flex', gap: 10, alignItems: 'center' }}>
             <button className="btn btn-primary" onClick={openNew}>+ Новая задача</button>
+
+            <NotificationBell
+              notifications={notifications}
+              userId={user.id}
+              tasksById={tasksById}
+              onOpenTask={openTask}
+              onMarkAllRead={() => setNotifications((list) => markAllRead(list, user.id))}
+              onClear={() => setNotifications((list) => clearForUser(list, user.id))}
+            />
 
             <div className="user-menu">
               <button
@@ -203,7 +242,7 @@ export default function App() {
               <button className="btn btn-primary" onClick={openNew}>+ Новая задача</button>
             </div>
           ) : view === 'board' ? (
-            <Board tasks={filtered} onOpenTask={openTask} onMove={store.moveTask} />
+            <Board tasks={filtered} onOpenTask={openTask} onMove={handleMove} />
           ) : (
             <TaskList tasks={filtered} onOpenTask={openTask} />
           )}
