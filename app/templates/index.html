@@ -3,105 +3,85 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>План-Факт · amoCRM</title>
+  <title>Сводный дашборд · amoCRM</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-  <header class="topbar">
-    <div class="topbar__title">
-      <span class="logo">₽</span>
-      <div>
-        <h1>Финансовая аналитика · План-Факт</h1>
-        <p class="subtitle">Данные напрямую из amoCRM — без Google Таблиц</p>
+<body class="viz-root">
+  <div class="wrap">
+
+    <header class="head">
+      <div class="head__title">
+        <h1>Сводный дашборд</h1>
+        <p class="sub">План и факт по проектам · данные из amoCRM</p>
       </div>
-    </div>
-    <div class="topbar__status">
-      <span id="status-badge" class="badge badge--muted">проверка связи…</span>
-    </div>
-  </header>
+      <div class="head__controls">
+        <span id="status-badge" class="badge">…</span>
+        <label class="field">
+          <span>Месяц</span>
+          <select id="month"></select>
+        </label>
+        <button id="refresh" class="icon-btn" title="Обновить">⟳</button>
+      </div>
+    </header>
 
-  <section class="controls">
-    <div class="control">
-      <label for="month">Месяц (сравнение с планом)</label>
-      <select id="month"></select>
-    </div>
-    <button id="refresh" class="btn btn--ghost" title="Обновить данные">⟳ Обновить</button>
-  </section>
-
-  <main id="content">
-    <!-- Итоги -->
-    <section class="cards" id="cards"></section>
-
-    <!-- Сводная по двум проектам: план / факт итого -->
-    <section class="panel panel--accent">
-      <h2>Сводная по двум проектам · план и факт (итого)</h2>
-      <div id="summary" class="project project--wide"></div>
+    <!-- Герой: деньги в кассу факт vs план -->
+    <section class="hero">
+      <div class="hero__main">
+        <div class="hero__label">Деньги в кассу · факт <span id="hero-month" class="muted"></span></div>
+        <div class="hero__value" id="hero-cash">—</div>
+        <div class="hero__meter">
+          <div class="meter"><div class="meter__fill" id="hero-fill"></div></div>
+          <div class="hero__meta">
+            <span id="hero-pct" class="pct">—</span>
+            <span class="muted">от плана <b id="hero-plan">—</b></span>
+          </div>
+        </div>
+      </div>
+      <div class="hero__side" id="hero-side"></div>
     </section>
 
-    <!-- Проекты: план / факт -->
-    <section class="panel">
-      <h2>Проекты · план и факт</h2>
-      <div id="projects" class="projects"></div>
+    <!-- Стат-плитки -->
+    <section class="tiles" id="tiles"></section>
+
+    <!-- План / Факт сводно -->
+    <section class="card">
+      <div class="card__head"><h2>План / факт · сводно по проектам</h2></div>
+      <div id="planfact" class="meters"></div>
     </section>
-
-    <div class="grid-2">
-      <!-- По менеджерам -->
-      <section class="panel">
-        <h2>По менеджерам</h2>
-        <div class="table-wrap">
-          <table id="managers">
-            <thead>
-              <tr><th>Менеджер</th><th>Лиды</th><th>Квал</th><th>Продажи</th><th class="right">Деньги в кассу</th></tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Источники -->
-      <section class="panel">
-        <h2>Источники заявок</h2>
-        <div class="table-wrap">
-          <table id="sources">
-            <thead>
-              <tr><th>Источник</th><th>Лиды</th><th>Продажи</th><th class="right">Деньги в кассу</th></tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </section>
-    </div>
 
     <!-- Динамика -->
-    <section class="panel">
-      <h2>Динамика по месяцам · деньги в кассу</h2>
-      <div id="months" class="months"></div>
+    <section class="card">
+      <div class="card__head"><h2>Динамика · деньги в кассу по месяцам</h2></div>
+      <div id="chart" class="chart"></div>
     </section>
 
-    <!-- Сделки -->
-    <section class="panel">
-      <h2>Сделки <span id="deals-count" class="muted"></span></h2>
+    <!-- Редактирование планов -->
+    <section class="card">
+      <div class="card__head">
+        <h2>Планы на месяц</h2>
+        <span class="muted" id="plans-month"></span>
+      </div>
       <div class="table-wrap">
-        <table id="deals">
+        <table class="plans">
           <thead>
-            <tr>
-              <th>Название</th><th>Проект</th><th>Этап</th>
-              <th>Менеджер</th><th>Создана</th><th class="right">Сумма</th>
-            </tr>
+            <tr><th>Проект</th><th>Лиды</th><th>Продажи, шт</th><th>Выручка, ₽</th></tr>
           </thead>
-          <tbody></tbody>
+          <tbody id="plans-body"></tbody>
+          <tfoot id="plans-foot"></tfoot>
         </table>
       </div>
+      <div class="plans__actions">
+        <button id="plans-save" class="btn">Сохранить планы</button>
+        <span id="plans-msg" class="muted"></span>
+      </div>
     </section>
-  </main>
 
-  <div id="error" class="error hidden"></div>
-  <div id="loader" class="loader hidden">Загрузка данных…</div>
+    <div id="error" class="error hidden"></div>
 
-  <footer class="footer">
-    Программа читает данные из amoCRM. Настройка показателей — в файле app/mapping.py
-  </footer>
+    <footer class="foot">Показатели считаются из amoCRM · настройка полей — в app/mapping.py</footer>
+  </div>
 
+  <div id="tooltip" class="tooltip hidden"></div>
   <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>

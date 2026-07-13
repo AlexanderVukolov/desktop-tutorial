@@ -13,6 +13,7 @@ from typing import Any
 
 from .amocrm_client import Deal, Pipeline
 from . import mapping as M
+from . import plans_store
 
 
 # --------------------------------------------------------------------------- #
@@ -51,12 +52,33 @@ def _manager(d: Deal, users: dict[int, str]) -> str:
     return "—"
 
 
-def _is_qualified(d: Deal) -> bool:
-    """Является ли лид квалифицированным."""
+def _stage_name(d: Deal, pipelines: dict[int, Pipeline]) -> str:
+    """Название текущего этапа сделки."""
+    p = pipelines.get(d.pipeline_id) if d.pipeline_id is not None else None
+    if p and d.status_id is not None:
+        return p.statuses.get(d.status_id, "")
+    return ""
+
+
+def _is_qualified(d: Deal, pipelines: dict[int, Pipeline]) -> bool:
+    """Является ли лид квалифицированным (по полю или по этапу воронки)."""
     val = d.custom.get(M.FIELD_QUALIFIED)
     if val is not None and str(val).strip().lower() in M.QUALIFIED_TRUE_VALUES:
         return True
     if d.status_id in M.STATUS_QUALIFIED_IDS:
+        return True
+    stage = _stage_name(d, pipelines).strip().lower()
+    if stage and stage in {s.strip().lower() for s in M.QUALIFIED_STAGE_NAMES}:
+        return True
+    return False
+
+
+def _is_sale(d: Deal, pipelines: dict[int, Pipeline]) -> bool:
+    """Считается ли сделка продажей/оплатой."""
+    if d.is_won:
+        return True
+    stage = _stage_name(d, pipelines).strip().lower()
+    if stage and stage in {s.strip().lower() for s in M.WON_STAGE_NAMES}:
         return True
     return False
 
@@ -78,42 +100,32 @@ def plan_fact_report(
     """
     projects_out: list[dict[str, Any]] = []
     grand = _empty_bucket()
+    total_plan_leads = total_plan_sales = total_plan_revenue = 0.0
 
     for proj in M.PROJECTS:
         proj_deals = [d for d in deals if d.pipeline_id == proj.pipeline_id]
-        bucket = _fill_bucket(proj_deals, users)
+        bucket = _fill_bucket(proj_deals, users, pipelines)
 
-        plan = proj.plans.get(period_month or "", M.MonthlyPlan())
+        # План берётся из хранилища (редактируется в интерфейсе).
+        plan = plans_store.get_plan(proj.name, period_month or "")
         projects_out.append(
             {
                 "name": proj.name,
                 "pipeline_id": proj.pipeline_id,
                 "fact": _bucket_to_dict(bucket),
-                "plan": {
-                    "leads": plan.leads,
-                    "sales": plan.sales,
-                    "revenue": plan.revenue,
-                },
+                "plan": plan,
                 "completion": {
-                    "leads": _pct(bucket["leads"], plan.leads),
-                    "sales": _pct(bucket["sales"], plan.sales),
-                    "revenue": _pct(bucket["cash"], plan.revenue),
+                    "leads": _pct(bucket["leads"], plan["leads"]),
+                    "sales": _pct(bucket["sales"], plan["sales"]),
+                    "revenue": _pct(bucket["cash"], plan["revenue"]),
                 },
-                "by_manager": _by_manager(proj_deals, users),
+                "by_manager": _by_manager(proj_deals, users, pipelines),
             }
         )
         _merge(grand, bucket)
-
-    # Сводный план по двум проектам = сумма планов проектов за месяц.
-    total_plan_leads = sum(
-        p.plans.get(period_month or "", M.MonthlyPlan()).leads for p in M.PROJECTS
-    )
-    total_plan_sales = sum(
-        p.plans.get(period_month or "", M.MonthlyPlan()).sales for p in M.PROJECTS
-    )
-    total_plan_revenue = sum(
-        p.plans.get(period_month or "", M.MonthlyPlan()).revenue for p in M.PROJECTS
-    )
+        total_plan_leads += plan["leads"]
+        total_plan_sales += plan["sales"]
+        total_plan_revenue += plan["revenue"]
 
     total_dict = _bucket_to_dict(grand)
     return {
@@ -142,13 +154,14 @@ def _empty_bucket() -> dict[str, float]:
     }
 
 
-def _fill_bucket(deals: list[Deal], users: dict[int, str]) -> dict[str, float]:
+def _fill_bucket(deals: list[Deal], users: dict[int, str],
+                 pipelines: dict[int, Pipeline]) -> dict[str, float]:
     b = _empty_bucket()
     for d in deals:
         b["leads"] += 1
-        if _is_qualified(d):
+        if _is_qualified(d, pipelines):
             b["qualified"] += 1
-        if d.is_won:
+        if _is_sale(d, pipelines):
             b["sales"] += 1
             b["revenue"] += d.price
         b["cash"] += _cash(d)
@@ -182,15 +195,16 @@ def _pct(fact: float, plan: float) -> float:
     return round((fact / plan * 100), 1) if plan else 0.0
 
 
-def _by_manager(deals: list[Deal], users: dict[int, str]) -> list[dict[str, Any]]:
+def _by_manager(deals: list[Deal], users: dict[int, str],
+                pipelines: dict[int, Pipeline]) -> list[dict[str, Any]]:
     buckets: dict[str, dict[str, float]] = defaultdict(_empty_bucket)
     for d in deals:
         name = _manager(d, users)
         b = buckets[name]
         b["leads"] += 1
-        if _is_qualified(d):
+        if _is_qualified(d, pipelines):
             b["qualified"] += 1
-        if d.is_won:
+        if _is_sale(d, pipelines):
             b["sales"] += 1
             b["revenue"] += d.price
         b["cash"] += _cash(d)

@@ -21,6 +21,8 @@ from flask import Flask, jsonify, render_template, request
 from .amocrm_client import AmoCRMClient, AmoCRMConfig, AmoCRMError, Deal, Pipeline
 from .analytics import plan_fact_report, available_months
 from . import demo_data
+from . import mapping as M
+from . import plans_store
 
 load_dotenv()
 
@@ -117,6 +119,43 @@ def create_app() -> Flask:
         report["by_month"] = _by_month(deals)
         report["available_months"] = all_months
         return jsonify(report)
+
+    @app.route("/api/plans", methods=["GET"])
+    def api_plans_get():
+        """Планы всех проектов на выбранный месяц (для формы редактирования)."""
+        month = request.args.get("month") or ""
+        rows = []
+        for proj in M.PROJECTS:
+            plan = plans_store.get_plan(proj.name, month)
+            rows.append(
+                {
+                    "project": proj.name,
+                    "leads": plan["leads"],
+                    "sales": plan["sales"],
+                    "revenue": plan["revenue"],
+                }
+            )
+        return jsonify({"month": month, "plans": rows})
+
+    @app.route("/api/plans", methods=["POST"])
+    def api_plans_save():
+        """Сохранить план проекта на месяц (из формы редактирования)."""
+        data = request.get_json(silent=True) or {}
+        project = str(data.get("project", "")).strip()
+        month = str(data.get("month", "")).strip()
+        if not project or not month:
+            return jsonify({"error": "Не указан проект или месяц"}), 400
+        known = {p.name for p in M.PROJECTS}
+        if project not in known:
+            return jsonify({"error": f"Неизвестный проект: {project}"}), 400
+        try:
+            leads = float(data.get("leads") or 0)
+            sales = float(data.get("sales") or 0)
+            revenue = float(data.get("revenue") or 0)
+        except (TypeError, ValueError):
+            return jsonify({"error": "Планы должны быть числами"}), 400
+        plans_store.save_plan(project, month, leads, sales, revenue)
+        return jsonify({"ok": True})
 
     @app.route("/api/deals")
     def api_deals():

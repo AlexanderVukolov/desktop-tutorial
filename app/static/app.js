@@ -1,254 +1,210 @@
 "use strict";
 
-// ---- Форматирование ----
+// ---------- Форматирование ----------
 const fmtMoney = (v) =>
   (Number(v) || 0).toLocaleString("ru-RU", { maximumFractionDigits: 0 }) + " ₽";
 const fmtNum = (v) => (Number(v) || 0).toLocaleString("ru-RU");
 const fmtPct = (v) => (Number(v) || 0).toLocaleString("ru-RU") + " %";
+const shortMoney = (v) => {
+  v = Number(v) || 0;
+  if (v >= 1e6) return (v / 1e6).toFixed(v >= 1e7 ? 0 : 1) + " млн";
+  if (v >= 1e3) return Math.round(v / 1e3) + "к";
+  return String(v);
+};
 const monthName = (ym) => {
   if (!ym) return "";
   const [y, m] = ym.split("-");
-  const names = ["", "янв", "фев", "мар", "апр", "май", "июн",
-                 "июл", "авг", "сен", "окт", "ноя", "дек"];
-  return `${names[Number(m)]} ${y}`;
+  const n = ["", "янв", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"];
+  return `${n[Number(m)]} ${y}`;
 };
 
 const $ = (id) => document.getElementById(id);
-const showError = (msg) => {
-  const el = $("error");
-  el.textContent = "⚠ " + msg;
-  el.classList.remove("hidden");
-};
+const showError = (m) => { const e = $("error"); e.textContent = "⚠ " + m; e.classList.remove("hidden"); };
 const clearError = () => $("error").classList.add("hidden");
-const setLoading = (on) => $("loader").classList.toggle("hidden", !on);
 
-// ---- Статус подключения ----
+let PROJECTS = []; // текущие проекты (для формы планов)
+
+// ---------- Статус подключения ----------
 async function loadStatus() {
   try {
-    const r = await fetch("/api/status");
-    const d = await r.json();
-    const badge = $("status-badge");
-    if (d.mode === "demo") {
-      badge.textContent = "Демо-режим (тестовые данные)";
-      badge.className = "badge badge--demo";
-    } else if (d.connected) {
-      badge.textContent = "amoCRM подключён · " + (d.account || "");
-      badge.className = "badge badge--ok";
-    } else {
-      badge.textContent = "amoCRM: нет связи";
-      badge.className = "badge badge--err";
-      showError(d.error || "Не удалось подключиться к amoCRM");
-    }
-  } catch (e) {
-    $("status-badge").textContent = "ошибка";
-  }
+    const d = await (await fetch("/api/status")).json();
+    const b = $("status-badge");
+    if (d.mode === "demo") { b.textContent = "Демо-режим"; b.className = "badge badge--demo"; }
+    else if (d.connected) { b.textContent = "amoCRM · " + (d.account || "подключён"); b.className = "badge badge--ok"; }
+    else { b.textContent = "нет связи с amoCRM"; b.className = "badge badge--err"; showError(d.error || ""); }
+  } catch (e) { $("status-badge").textContent = "—"; }
 }
 
-// ---- Карточки итогов ----
-function renderCards(total) {
-  const cards = [
-    { label: "Лиды", value: fmtNum(total.leads), sub: `квал: ${fmtNum(total.qualified)}` , cls: "card--brand"},
-    { label: "Продажи, шт", value: fmtNum(total.sales), sub: `конверсия ${fmtPct(total.conversion)}` },
-    { label: "Деньги в кассу", value: fmtMoney(total.cash), sub: "фактически получено", cls: "card--green" },
-    { label: "Выручка в воронке", value: fmtMoney(total.revenue), sub: "по выигранным сделкам" },
+// ---------- Герой ----------
+function renderHero(total, plan, completion, period) {
+  $("hero-month").textContent = "· " + monthName(period);
+  $("hero-cash").textContent = fmtMoney(total.cash);
+  const pct = completion.revenue;
+  const fill = $("hero-fill");
+  fill.style.width = Math.min(pct, 100) + "%";
+  fill.classList.toggle("ok", pct >= 100);
+  const pctEl = $("hero-pct");
+  pctEl.textContent = fmtPct(pct);
+  pctEl.classList.toggle("ok", pct >= 100);
+  $("hero-plan").textContent = fmtMoney(plan.revenue);
+
+  $("hero-side").innerHTML = `
+    <div class="row"><span>Выручка в воронке</span><b>${fmtMoney(total.revenue)}</b></div>
+    <div class="row"><span>Рассрочка</span><b>${fmtMoney(total.installment)}</b></div>
+    <div class="row"><span>Предоплата</span><b>${fmtMoney(total.prepayment)}</b></div>
+    <div class="row"><span>Средний чек</span><b>${fmtMoney(total.avg_check)}</b></div>`;
+}
+
+// ---------- Стат-плитки ----------
+function renderTiles(total, plan) {
+  const tiles = [
+    { label: "Лиды", value: fmtNum(total.leads), sub: `план ${fmtNum(plan.leads)}` },
+    { label: "Квал-лиды", value: fmtNum(total.qualified), sub: total.leads ? Math.round(total.qualified / total.leads * 100) + " % от лидов" : "" },
+    { label: "Продажи, шт", value: fmtNum(total.sales), sub: `план ${fmtNum(plan.sales)}` },
+    { label: "Конверсия в продажу", value: fmtPct(total.conversion), sub: "лид → продажа" },
     { label: "Средний чек", value: fmtMoney(total.avg_check), sub: "" },
-    { label: "Рассрочка", value: fmtMoney(total.installment), sub: "" },
-    { label: "Предоплата", value: fmtMoney(total.prepayment), sub: "" },
   ];
-  $("cards").innerHTML = cards
-    .map(
-      (c) => `
-      <div class="card ${c.cls || ""}">
-        <div class="card__label">${c.label}</div>
-        <div class="card__value">${c.value}</div>
-        <div class="card__sub">${c.sub}</div>
-      </div>`
-    )
-    .join("");
+  $("tiles").innerHTML = tiles.map((t) => `
+    <div class="tile">
+      <div class="tile__label">${t.label}</div>
+      <div class="tile__value">${t.value}</div>
+      <div class="tile__sub">${t.sub}</div>
+    </div>`).join("");
 }
 
-// ---- Сводная по двум проектам ----
-function renderSummary(total, plan, completion) {
-  $("summary").innerHTML = `
-    <div class="project__head">
-      <h3>Итого по проектам</h3>
-      <span class="muted">чек ${fmtMoney(total.avg_check)} · конверсия ${fmtPct(total.conversion)}</span>
-    </div>
-    ${planRow("Лиды", total.leads, plan.leads, completion.leads, false)}
-    ${planRow("Продажи, шт", total.sales, plan.sales, completion.sales, false)}
-    ${planRow("Выручка (деньги в кассу)", total.cash, plan.revenue, completion.revenue, true)}
-    <div class="project__extra">
-      <span>Квал-лиды: <b>${fmtNum(total.qualified)}</b></span>
-      <span>Выручка в воронке: <b>${fmtMoney(total.revenue)}</b></span>
-      <span>Рассрочка: <b>${fmtMoney(total.installment)}</b></span>
-      <span>Предоплата: <b>${fmtMoney(total.prepayment)}</b></span>
-    </div>`;
-}
-
-// ---- Проекты: план/факт ----
-function planRow(label, fact, plan, pct, isMoney) {
-  const f = isMoney ? fmtMoney(fact) : fmtNum(fact);
-  const p = isMoney ? fmtMoney(plan) : fmtNum(plan);
-  const width = Math.min(Number(pct) || 0, 100);
-  const done = (Number(pct) || 0) >= 100;
+// ---------- План/факт метрики ----------
+function meterRow(label, fact, plan, pct, money) {
+  const f = money ? fmtMoney(fact) : fmtNum(fact);
+  const p = money ? fmtMoney(plan) : fmtNum(plan);
+  const done = pct >= 100;
   return `
-    <div class="pf-row">
-      <div class="pf-row__label">${label}</div>
-      <div class="pf-row__nums"><b>${f}</b> <span class="muted">/ план ${p}</span></div>
-      <div class="pf-bar"><div class="pf-bar__fill ${done ? "pf-bar__fill--done" : ""}" style="width:${width}%"></div></div>
-      <div class="pf-row__pct ${done ? "ok" : ""}">${fmtPct(pct)}</div>
+    <div class="mrow">
+      <div class="mrow__label">${label}</div>
+      <div class="mrow__bar">
+        <div class="nums"><b>${f}</b><span class="muted">план ${p}</span></div>
+        <div class="meter"><div class="meter__fill ${done ? "ok" : ""}" style="width:${Math.min(pct, 100)}%"></div></div>
+      </div>
+      <div class="mrow__pct ${done ? "ok" : ""}">${fmtPct(pct)}</div>
     </div>`;
 }
-
-function renderProjects(projects) {
-  if (!projects.length) {
-    $("projects").innerHTML = '<p class="muted">Нет проектов в настройке (app/mapping.py)</p>';
-    return;
-  }
-  $("projects").innerHTML = projects
-    .map((p) => {
-      const f = p.fact;
-      return `
-      <div class="project">
-        <div class="project__head">
-          <h3>${p.name}</h3>
-          <span class="muted">чек ${fmtMoney(f.avg_check)} · конверсия ${fmtPct(f.conversion)}</span>
-        </div>
-        ${planRow("Лиды", f.leads, p.plan.leads, p.completion.leads, false)}
-        ${planRow("Продажи, шт", f.sales, p.plan.sales, p.completion.sales, false)}
-        ${planRow("Деньги в кассу", f.cash, p.plan.revenue, p.completion.revenue, true)}
-        <div class="project__extra">
-          <span>Квал-лиды: <b>${fmtNum(f.qualified)}</b></span>
-          <span>Рассрочка: <b>${fmtMoney(f.installment)}</b></span>
-          <span>Предоплата: <b>${fmtMoney(f.prepayment)}</b></span>
-        </div>
-      </div>`;
-    })
-    .join("");
+function renderPlanFact(total, plan, completion) {
+  $("planfact").innerHTML =
+    meterRow("Лиды", total.leads, plan.leads, completion.leads, false) +
+    meterRow("Продажи, шт", total.sales, plan.sales, completion.sales, false) +
+    meterRow("Выручка (в кассу)", total.cash, plan.revenue, completion.revenue, true);
 }
 
-// ---- Менеджеры (сводно по всем проектам) ----
-function renderManagers(projects) {
-  const map = new Map();
-  projects.forEach((p) =>
-    (p.by_manager || []).forEach((m) => {
-      const cur = map.get(m.manager) || { leads: 0, qualified: 0, sales: 0, cash: 0 };
-      cur.leads += m.leads; cur.qualified += m.qualified;
-      cur.sales += m.sales; cur.cash += m.cash;
-      map.set(m.manager, cur);
-    })
-  );
-  const rows = [...map.entries()].sort((a, b) => b[1].cash - a[1].cash);
-  $("managers").querySelector("tbody").innerHTML =
-    rows
-      .map(
-        ([name, m]) => `
-      <tr><td>${name}</td><td>${fmtNum(m.leads)}</td><td>${fmtNum(m.qualified)}</td>
-      <td>${fmtNum(m.sales)}</td><td class="right">${fmtMoney(m.cash)}</td></tr>`
-      )
-      .join("") || `<tr><td colspan="5" class="muted">нет данных</td></tr>`;
-}
-
-// ---- Источники ----
-function renderSources(sources) {
-  $("sources").querySelector("tbody").innerHTML =
-    (sources || [])
-      .map(
-        (s) => `
-      <tr><td>${s.source}</td><td>${fmtNum(s.leads)}</td>
-      <td>${fmtNum(s.sales)}</td><td class="right">${fmtMoney(s.cash)}</td></tr>`
-      )
-      .join("") || `<tr><td colspan="4" class="muted">нет данных</td></tr>`;
-}
-
-// ---- Динамика по месяцам ----
-function renderMonths(months) {
+// ---------- График по месяцам ----------
+function renderChart(months) {
   const max = Math.max(1, ...months.map((m) => m.cash));
-  $("months").innerHTML =
-    months
-      .map((m) => {
-        const h = Math.round((m.cash / max) * 160);
-        return `
-        <div class="month-col">
-          <div class="month-val">${(m.cash / 1000).toFixed(0)}к</div>
-          <div class="month-bar" style="height:${h}px"></div>
-          <div class="month-label">${monthName(m.month)}</div>
-        </div>`;
-      })
-      .join("") || '<p class="muted">нет данных</p>';
+  const el = $("chart");
+  el.innerHTML = months.map((m) => {
+    const h = Math.max(4, Math.round((m.cash / max) * 150));
+    return `
+    <div class="cbar">
+      <div class="cbar__val">${shortMoney(m.cash)}</div>
+      <div class="cbar__mark" style="height:${h}px"
+           data-month="${monthName(m.month)}" data-cash="${fmtMoney(m.cash)}"
+           data-leads="${fmtNum(m.leads)}" data-sales="${fmtNum(m.sales)}"></div>
+      <div class="cbar__label">${monthName(m.month)}</div>
+    </div>`;
+  }).join("") || '<p class="muted">нет данных</p>';
+
+  // Подсказки при наведении.
+  const tip = $("tooltip");
+  el.querySelectorAll(".cbar__mark").forEach((mark) => {
+    mark.addEventListener("mousemove", (e) => {
+      tip.innerHTML = `<b>${mark.dataset.month}</b><br>Деньги в кассу: <b>${mark.dataset.cash}</b><br>Лиды: <b>${mark.dataset.leads}</b> · Продажи: <b>${mark.dataset.sales}</b>`;
+      tip.classList.remove("hidden");
+      tip.style.left = Math.min(e.clientX + 14, window.innerWidth - tip.offsetWidth - 10) + "px";
+      tip.style.top = e.clientY + 14 + "px";
+    });
+    mark.addEventListener("mouseleave", () => tip.classList.add("hidden"));
+  });
 }
 
-// ---- Сделки ----
-async function loadDeals() {
+// ---------- Форма планов ----------
+async function loadPlans(month) {
   try {
-    const r = await fetch("/api/deals");
-    const d = await r.json();
-    if (d.error) return;
-    $("deals-count").textContent = `(${d.count})`;
-    const tag = (row) =>
-      row.is_won
-        ? '<span class="tag tag--won">оплачено</span>'
-        : row.is_lost
-        ? '<span class="tag tag--lost">отказ</span>'
-        : '<span class="tag tag--progress">в работе</span>';
-    $("deals").querySelector("tbody").innerHTML = d.deals
-      .map(
-        (row) => `
-      <tr>
-        <td>${row.name}</td><td>${row.pipeline}</td>
-        <td>${row.status} ${tag(row)}</td>
-        <td>${row.manager || "—"}</td><td>${row.created_at}</td>
-        <td class="right">${fmtMoney(row.price)}</td>
-      </tr>`
-      )
-      .join("");
+    const d = await (await fetch("/api/plans?month=" + encodeURIComponent(month))).json();
+    PROJECTS = d.plans;
+    $("plans-month").textContent = monthName(month);
+    $("plans-body").innerHTML = d.plans.map((p, i) => `
+      <tr data-project="${p.project}">
+        <td>${p.project}</td>
+        <td><input type="number" min="0" step="1" class="p-leads" value="${p.leads || 0}"></td>
+        <td><input type="number" min="0" step="1" class="p-sales" value="${p.sales || 0}"></td>
+        <td><input type="number" min="0" step="1000" class="p-rev" value="${p.revenue || 0}"></td>
+      </tr>`).join("");
+    updatePlansFoot();
+    $("plans-body").querySelectorAll("input").forEach((inp) =>
+      inp.addEventListener("input", updatePlansFoot));
+  } catch (e) { /* тихо */ }
+}
+function updatePlansFoot() {
+  let l = 0, s = 0, r = 0;
+  $("plans-body").querySelectorAll("tr").forEach((tr) => {
+    l += Number(tr.querySelector(".p-leads").value) || 0;
+    s += Number(tr.querySelector(".p-sales").value) || 0;
+    r += Number(tr.querySelector(".p-rev").value) || 0;
+  });
+  $("plans-foot").innerHTML = `<tr><td>Итого</td><td>${fmtNum(l)}</td><td>${fmtNum(s)}</td><td>${fmtMoney(r)}</td></tr>`;
+}
+async function savePlans() {
+  const month = $("month").value;
+  const rows = [...$("plans-body").querySelectorAll("tr")];
+  $("plans-msg").textContent = "Сохранение…";
+  try {
+    for (const tr of rows) {
+      await fetch("/api/plans", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          project: tr.dataset.project,
+          month,
+          leads: Number(tr.querySelector(".p-leads").value) || 0,
+          sales: Number(tr.querySelector(".p-sales").value) || 0,
+          revenue: Number(tr.querySelector(".p-rev").value) || 0,
+        }),
+      });
+    }
+    $("plans-msg").textContent = "✓ Планы сохранены";
+    loadReport(); // пересчитать план/факт с новыми планами
+    setTimeout(() => ($("plans-msg").textContent = ""), 2500);
   } catch (e) {
-    /* тихо */
+    $("plans-msg").textContent = "Ошибка сохранения";
   }
 }
 
-// ---- Загрузка отчёта ----
+// ---------- Загрузка отчёта ----------
 async function loadReport() {
   clearError();
-  setLoading(true);
   try {
     const month = $("month").value;
-    const q = month ? `?month=${encodeURIComponent(month)}` : "";
-    const r = await fetch("/api/summary" + q);
-    const d = await r.json();
-    if (d.error) {
-      showError(d.error);
-      return;
-    }
-    // Заполнить список месяцев один раз.
+    const q = month ? "?month=" + encodeURIComponent(month) : "";
+    const d = await (await fetch("/api/summary" + q)).json();
+    if (d.error) { showError(d.error); return; }
+
     const sel = $("month");
     if (!sel.dataset.filled && d.available_months) {
-      sel.innerHTML = d.available_months
-        .map((m) => `<option value="${m}">${monthName(m)}</option>`)
-        .join("");
+      sel.innerHTML = d.available_months.map((m) => `<option value="${m}">${monthName(m)}</option>`).join("");
       if (d.period) sel.value = d.period;
       sel.dataset.filled = "1";
+      loadPlans(sel.value);
     }
-    renderCards(d.total);
-    renderSummary(d.total, d.total_plan, d.total_completion);
-    renderProjects(d.projects);
-    renderManagers(d.projects);
-    renderSources(d.by_source);
-    renderMonths(d.by_month);
+    renderHero(d.total, d.total_plan, d.total_completion, d.period);
+    renderTiles(d.total, d.total_plan);
+    renderPlanFact(d.total, d.total_plan, d.total_completion);
+    renderChart(d.by_month);
   } catch (e) {
     showError("Не удалось загрузить данные: " + e.message);
-  } finally {
-    setLoading(false);
   }
 }
 
-// ---- Старт ----
-$("refresh").addEventListener("click", () => {
-  loadReport();
-  loadDeals();
-});
-$("month").addEventListener("change", loadReport);
+// ---------- Старт ----------
+$("refresh").addEventListener("click", loadReport);
+$("month").addEventListener("change", () => { loadReport(); loadPlans($("month").value); });
+$("plans-save").addEventListener("click", savePlans);
 
 loadStatus();
 loadReport();
-loadDeals();
