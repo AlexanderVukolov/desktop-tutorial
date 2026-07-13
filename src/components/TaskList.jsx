@@ -25,6 +25,9 @@ export default function TaskList({ tasks, onOpenTask }) {
             <div className="list-title">
               <span className="priority-flag" style={{ background: prio?.color, marginRight: 7 }} />
               {t.title}
+              {t.attachments?.length > 0 && (
+                <span className="attach-count" style={{ marginLeft: 6 }}>📎 {t.attachments.length}</span>
+              )}
               {t.description && <small>{t.description}</small>}
             </div>
             <span className="hide-sm">

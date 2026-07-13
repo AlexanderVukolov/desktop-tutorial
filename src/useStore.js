@@ -40,6 +40,10 @@ export function useStore() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))
     } catch (e) {
       console.warn('Не удалось сохранить задачи:', e)
+      alert(
+        'Хранилище браузера переполнено — изменения не сохранились. ' +
+          'Удалите крупные файлы из задач или прикрепляйте их ссылками.',
+      )
     }
   }, [tasks])
 
@@ -48,6 +52,8 @@ export function useStore() {
       id: nextId(),
       title: data.title?.trim() || 'Без названия',
       description: data.description?.trim() || '',
+      measure: data.measure?.trim() || '',
+      relevance: data.relevance?.trim() || '',
       dept: data.dept,
       assignee: data.assignee || null,
       status: data.status || 'todo',
@@ -55,6 +61,7 @@ export function useStore() {
       due: data.due || '',
       createdAt: new Date().toISOString().slice(0, 10),
       tags: data.tags || [],
+      attachments: data.attachments || [],
     }
     setTasks((prev) => [task, ...prev])
     return task

@@ -13,6 +13,19 @@ const blank = {
   priority: 'medium',
   due: '',
   tags: [],
+  attachments: [],
+}
+
+// Лимит на файл: localStorage вмещает ~5 МБ на весь задачник
+const MAX_FILE_SIZE = 1.5 * 1024 * 1024
+
+const attachId = () => `a${Date.now().toString(36)}${Math.floor(Math.random() * 1e4).toString(36)}`
+
+export function formatSize(bytes) {
+  if (bytes == null) return ''
+  if (bytes < 1024) return `${bytes} Б`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} КБ`
+  return `${(bytes / (1024 * 1024)).toFixed(1)} МБ`
 }
 
 // Проверка задачи по критериям SMART
@@ -39,6 +52,8 @@ export default function TaskModal({ task, onClose, onSave, onDelete }) {
   const isEdit = Boolean(task?.id)
   const [form, setForm] = useState(blank)
   const [tagInput, setTagInput] = useState('')
+  const [linkInput, setLinkInput] = useState('')
+  const [attachError, setAttachError] = useState('')
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -63,6 +78,57 @@ export default function TaskModal({ task, onClose, onSave, onDelete }) {
     const v = tagInput.trim().replace(/^#/, '')
     if (v && !form.tags.includes(v)) set('tags', [...form.tags, v])
     setTagInput('')
+  }
+
+  // Прикрепить ссылку
+  const addLink = () => {
+    let url = linkInput.trim()
+    if (!url) return
+    if (!/^https?:\/\//i.test(url)) url = 'https://' + url
+    try {
+      const parsed = new URL(url)
+      const name = parsed.hostname.replace(/^www\./, '') + (parsed.pathname !== '/' ? parsed.pathname : '')
+      set('attachments', [
+        ...form.attachments,
+        { id: attachId(), type: 'link', name: name.length > 60 ? name.slice(0, 57) + '…' : name, url },
+      ])
+      setLinkInput('')
+      setAttachError('')
+    } catch {
+      setAttachError('Некорректная ссылка — проверьте адрес')
+    }
+  }
+
+  // Прикрепить файлы (хранятся в браузере, поэтому ограничиваем размер)
+  const addFiles = async (fileList) => {
+    const files = Array.from(fileList || [])
+    if (files.length === 0) return
+    setAttachError('')
+    const added = []
+    for (const file of files) {
+      if (file.size > MAX_FILE_SIZE) {
+        setAttachError(
+          `«${file.name}» больше ${formatSize(MAX_FILE_SIZE)} — прикрепите его ссылкой (диск, облако)`,
+        )
+        continue
+      }
+      const dataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => resolve(reader.result)
+        reader.onerror = reject
+        reader.readAsDataURL(file)
+      }).catch(() => null)
+      if (dataUrl) {
+        added.push({ id: attachId(), type: 'file', name: file.name, size: file.size, url: dataUrl })
+      }
+    }
+    if (added.length > 0) {
+      setForm((f) => ({ ...f, attachments: [...f.attachments, ...added] }))
+    }
+  }
+
+  const removeAttachment = (id) => {
+    setForm((f) => ({ ...f, attachments: f.attachments.filter((a) => a.id !== id) }))
   }
 
   const submit = (e) => {
@@ -183,6 +249,67 @@ export default function TaskModal({ task, onClose, onSave, onDelete }) {
               value={form.description}
               onChange={(e) => set('description', e.target.value)}
             />
+          </div>
+
+          <div className="field">
+            <label>Вложения 📎</label>
+            <div className="attach-controls">
+              <input
+                placeholder="Вставьте ссылку (диск, документ, чат…) и нажмите Enter"
+                value={linkInput}
+                onChange={(e) => setLinkInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    addLink()
+                  }
+                }}
+              />
+              <button type="button" className="btn btn-sm" onClick={addLink}>
+                + Ссылка
+              </button>
+              <label className="btn btn-sm file-btn">
+                + Файл
+                <input
+                  type="file"
+                  multiple
+                  hidden
+                  onChange={(e) => {
+                    addFiles(e.target.files)
+                    e.target.value = ''
+                  }}
+                />
+              </label>
+            </div>
+            {attachError && <div className="attach-error">{attachError}</div>}
+            {form.attachments.length > 0 && (
+              <ul className="attach-list">
+                {form.attachments.map((a) => (
+                  <li key={a.id} className="attach-item">
+                    <span className="attach-icon">{a.type === 'link' ? '🔗' : '📄'}</span>
+                    <a
+                      href={a.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download={a.type === 'file' ? a.name : undefined}
+                      className="attach-name"
+                      title={a.type === 'link' ? a.url : `${a.name} (${formatSize(a.size)})`}
+                    >
+                      {a.name}
+                    </a>
+                    {a.type === 'file' && <span className="attach-size">{formatSize(a.size)}</span>}
+                    <button
+                      type="button"
+                      className="icon-btn"
+                      onClick={() => removeAttachment(a.id)}
+                      aria-label="Удалить вложение"
+                    >
+                      ×
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <div className="field-row">

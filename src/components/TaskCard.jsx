@@ -75,6 +75,11 @@ export default function TaskCard({ task, onClick, onDragStart, onDragEnd, draggi
 
       <div className="card-foot">
         <Avatar userId={task.assignee} />
+        {task.attachments?.length > 0 && (
+          <span className="attach-count" title={`Вложений: ${task.attachments.length}`}>
+            📎 {task.attachments.length}
+          </span>
+        )}
         {task.due && (
           <span className={`due ${dl}`}>
             {dl === 'overdue' ? '⚠' : '📅'} {formatDate(task.due)}
