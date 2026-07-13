@@ -1,0 +1,18 @@
+# Секреты — токены amoCRM НЕ должны попадать в git
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# Кэш выгруженных данных
+.cache/
+*.log
+
+# Системное
+.DS_Store
+.idea/
+.vscode/

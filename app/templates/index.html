@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>План-Факт · amoCRM</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__title">
+      <span class="logo">₽</span>
+      <div>
+        <h1>Финансовая аналитика · План-Факт</h1>
+        <p class="subtitle">Данные напрямую из amoCRM — без Google Таблиц</p>
+      </div>
+    </div>
+    <div class="topbar__status">
+      <span id="status-badge" class="badge badge--muted">проверка связи…</span>
+    </div>
+  </header>
+
+  <section class="controls">
+    <div class="control">
+      <label for="month">Месяц (сравнение с планом)</label>
+      <select id="month"></select>
+    </div>
+    <button id="refresh" class="btn btn--ghost" title="Обновить данные">⟳ Обновить</button>
+  </section>
+
+  <main id="content">
+    <!-- Итоги -->
+    <section class="cards" id="cards"></section>
+
+    <!-- Проекты: план / факт -->
+    <section class="panel">
+      <h2>Проекты · план и факт</h2>
+      <div id="projects" class="projects"></div>
+    </section>
+
+    <div class="grid-2">
+      <!-- По менеджерам -->
+      <section class="panel">
+        <h2>По менеджерам</h2>
+        <div class="table-wrap">
+          <table id="managers">
+            <thead>
+              <tr><th>Менеджер</th><th>Лиды</th><th>Квал</th><th>Продажи</th><th class="right">Деньги в кассу</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Источники -->
+      <section class="panel">
+        <h2>Источники заявок</h2>
+        <div class="table-wrap">
+          <table id="sources">
+            <thead>
+              <tr><th>Источник</th><th>Лиды</th><th>Продажи</th><th class="right">Деньги в кассу</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- Динамика -->
+    <section class="panel">
+      <h2>Динамика по месяцам · деньги в кассу</h2>
+      <div id="months" class="months"></div>
+    </section>
+
+    <!-- Сделки -->
+    <section class="panel">
+      <h2>Сделки <span id="deals-count" class="muted"></span></h2>
+      <div class="table-wrap">
+        <table id="deals">
+          <thead>
+            <tr>
+              <th>Название</th><th>Проект</th><th>Этап</th>
+              <th>Менеджер</th><th>Создана</th><th class="right">Сумма</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="error" class="error hidden"></div>
+  <div id="loader" class="loader hidden">Загрузка данных…</div>
+
+  <footer class="footer">
+    Программа читает данные из amoCRM. Настройка показателей — в файле app/mapping.py
+  </footer>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
