@@ -106,6 +106,12 @@ main { padding: 20px 28px 40px; max-width: 1200px; margin: 0 auto; }
 .bar-row__value small { color: var(--muted); display: block; font-size: 11px; }
 @media (max-width: 640px) { .bar-row { grid-template-columns: 110px 1fr 90px; } }
 
+/* ---------- Сводная (акцентная панель) ---------- */
+.panel--accent { border-color: #c7d2fe; background: linear-gradient(180deg, #f7f9ff, #ffffff); }
+.project--wide { border: none; padding: 0; }
+.project--wide .pf-row { grid-template-columns: 200px 1fr 120px 70px; }
+@media (max-width: 640px) { .project--wide .pf-row { grid-template-columns: 120px 1fr 80px 52px; } }
+
 /* ---------- Проекты: план/факт ---------- */
 .projects { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 @media (max-width: 860px) { .projects { grid-template-columns: 1fr; } }

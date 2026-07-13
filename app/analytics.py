@@ -104,9 +104,31 @@ def plan_fact_report(
         )
         _merge(grand, bucket)
 
+    # Сводный план по двум проектам = сумма планов проектов за месяц.
+    total_plan_leads = sum(
+        p.plans.get(period_month or "", M.MonthlyPlan()).leads for p in M.PROJECTS
+    )
+    total_plan_sales = sum(
+        p.plans.get(period_month or "", M.MonthlyPlan()).sales for p in M.PROJECTS
+    )
+    total_plan_revenue = sum(
+        p.plans.get(period_month or "", M.MonthlyPlan()).revenue for p in M.PROJECTS
+    )
+
+    total_dict = _bucket_to_dict(grand)
     return {
         "period": period_month,
-        "total": _bucket_to_dict(grand),
+        "total": total_dict,
+        "total_plan": {
+            "leads": total_plan_leads,
+            "sales": total_plan_sales,
+            "revenue": total_plan_revenue,
+        },
+        "total_completion": {
+            "leads": _pct(grand["leads"], total_plan_leads),
+            "sales": _pct(grand["sales"], total_plan_sales),
+            "revenue": _pct(grand["cash"], total_plan_revenue),
+        },
         "projects": projects_out,
         "by_source": _by_source(deals),
         "by_month": _by_month(deals),

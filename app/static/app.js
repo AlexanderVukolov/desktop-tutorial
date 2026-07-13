@@ -67,6 +67,24 @@ function renderCards(total) {
     .join("");
 }
 
+// ---- Сводная по двум проектам ----
+function renderSummary(total, plan, completion) {
+  $("summary").innerHTML = `
+    <div class="project__head">
+      <h3>Итого по проектам</h3>
+      <span class="muted">чек ${fmtMoney(total.avg_check)} · конверсия ${fmtPct(total.conversion)}</span>
+    </div>
+    ${planRow("Лиды", total.leads, plan.leads, completion.leads, false)}
+    ${planRow("Продажи, шт", total.sales, plan.sales, completion.sales, false)}
+    ${planRow("Выручка (деньги в кассу)", total.cash, plan.revenue, completion.revenue, true)}
+    <div class="project__extra">
+      <span>Квал-лиды: <b>${fmtNum(total.qualified)}</b></span>
+      <span>Выручка в воронке: <b>${fmtMoney(total.revenue)}</b></span>
+      <span>Рассрочка: <b>${fmtMoney(total.installment)}</b></span>
+      <span>Предоплата: <b>${fmtMoney(total.prepayment)}</b></span>
+    </div>`;
+}
+
 // ---- Проекты: план/факт ----
 function planRow(label, fact, plan, pct, isMoney) {
   const f = isMoney ? fmtMoney(fact) : fmtNum(fact);
@@ -212,6 +230,7 @@ async function loadReport() {
       sel.dataset.filled = "1";
     }
     renderCards(d.total);
+    renderSummary(d.total, d.total_plan, d.total_completion);
     renderProjects(d.projects);
     renderManagers(d.projects);
     renderSources(d.by_source);
