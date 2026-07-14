@@ -59,6 +59,7 @@ export default function TaskCard({ task, onClick, onDragStart, onDragEnd, draggi
   const prio = byId(PRIORITIES, task.priority)
   const dl = deadlineState(task.due, task.dueTime)
   const isBurning = dl === 'overdue' && task.status !== 'done'
+  const author = task.createdBy ? personById(task.createdBy) : null
 
   return (
     <div
@@ -95,6 +96,11 @@ export default function TaskCard({ task, onClick, onDragStart, onDragEnd, draggi
 
       <div className="card-foot">
         <AvatarStack userIds={task.assignees} />
+        {author && (
+          <span className="task-author" title={`Поставил(а) задачу: ${author.name}`}>
+            ✍ {author.name.split(' ')[0]}
+          </span>
+        )}
         {task.attachments?.length > 0 && (
           <span className="attach-count" title={`Вложений: ${task.attachments.length}`}>
             📎 {task.attachments.length}

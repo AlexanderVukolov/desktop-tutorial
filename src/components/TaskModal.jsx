@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { DEPARTMENTS, STATUSES, PRIORITIES } from '../data.js'
-import { getAllPeople } from '../auth.js'
+import { getAllPeople, personById } from '../auth.js'
 import { isRemoteMode } from '../config.js'
 import { uploadAttachment } from '../remote.js'
 
@@ -168,6 +168,13 @@ export default function TaskModal({ task, onClose, onSave, onDelete }) {
         </div>
 
         <div className="modal-body">
+          {isEdit && task?.createdBy && personById(task.createdBy) && (
+            <p className="task-author-line">
+              ✍ Поставил(а): <b>{personById(task.createdBy).name}</b>
+              {task.createdAt ? ` · ${task.createdAt}` : ''}
+            </p>
+          )}
+
           {/* SMART-индикатор */}
           <div className="smart-meter">
             {SMART_META.map((m) => (

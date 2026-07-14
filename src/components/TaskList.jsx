@@ -1,6 +1,7 @@
 import { DEPARTMENTS, STATUSES, PRIORITIES, byId } from '../data.js'
 import { deadlineState, formatDate } from '../useStore.js'
 import { AvatarStack } from './TaskCard.jsx'
+import { personById } from '../auth.js'
 
 // Табличное представление задач
 export default function TaskList({ tasks, onOpenTask }) {
@@ -27,6 +28,11 @@ export default function TaskList({ tasks, onOpenTask }) {
               {t.title}
               {t.attachments?.length > 0 && (
                 <span className="attach-count" style={{ marginLeft: 6 }}>📎 {t.attachments.length}</span>
+              )}
+              {t.createdBy && personById(t.createdBy) && (
+                <span className="task-author" style={{ marginLeft: 6 }}>
+                  ✍ {personById(t.createdBy).name.split(' ')[0]}
+                </span>
               )}
               {t.description && <small>{t.description}</small>}
             </div>

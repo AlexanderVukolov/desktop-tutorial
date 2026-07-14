@@ -1,6 +1,6 @@
 import { DEPARTMENTS, byId } from '../data.js'
 import { deadlineState, formatDate } from '../useStore.js'
-import { getAllPeople } from '../auth.js'
+import { getAllPeople, personById } from '../auth.js'
 import { timeAgo } from '../notifications.js'
 import { AvatarStack, avatarColor, initials } from './TaskCard.jsx'
 
@@ -97,6 +97,9 @@ export default function AdminDashboard({ tasks, onOpenTask }) {
                       <span className="dash-task-title">{t.title}</span>
                       <span className="dash-task-meta">
                         {dept?.icon} {dept?.name} · до {formatDate(t.due, t.dueTime)}
+                        {t.createdBy && personById(t.createdBy)
+                          ? ` · от ${personById(t.createdBy).name.split(' ')[0]}`
+                          : ''}
                       </span>
                     </div>
                     <AvatarStack userIds={t.assignees} />
@@ -124,6 +127,9 @@ export default function AdminDashboard({ tasks, onOpenTask }) {
                     <span className="dash-task-meta">
                       {dept?.icon} {dept?.name}
                       {t.updatedAt ? ` · ${timeAgo(t.updatedAt)}` : ''}
+                      {t.createdBy && personById(t.createdBy)
+                        ? ` · от ${personById(t.createdBy).name.split(' ')[0]}`
+                        : ''}
                     </span>
                   </div>
                   <AvatarStack userIds={t.assignees} />

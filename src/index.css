@@ -968,6 +968,20 @@ textarea {
   height: 22px;
   font-size: 14px;
 }
+.task-author {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.task-author-line {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 11px;
+}
 .attach-count {
   font-size: 12px;
   color: var(--muted);
