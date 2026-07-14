@@ -24,6 +24,7 @@ import AuthScreen from './components/AuthScreen.jsx'
 import OverdueAlert from './components/OverdueAlert.jsx'
 import NotificationBell from './components/NotificationBell.jsx'
 import SettingsModal from './components/SettingsModal.jsx'
+import { pushSupported, enablePush } from './push.js'
 import { loadNotifications, pushNotification, markAllRead, clearForUser } from './notifications.js'
 import { avatarColor, initials } from './components/TaskCard.jsx'
 
@@ -50,6 +51,35 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [navOpen, setNavOpen] = useState(false) // мобильное меню-шторка
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [pushPrompt, setPushPrompt] = useState(false)
+
+  // Push по умолчанию: если разрешение уже дано — тихо восстанавливаем
+  // подписку; если ещё не спрашивали — предлагаем включить баннером
+  useEffect(() => {
+    if (!REMOTE || !user || !pushSupported()) return
+    if (Notification.permission === 'granted') {
+      enablePush(user.id).catch((e) => console.warn('Автоподписка push:', e))
+    } else if (
+      Notification.permission === 'default' &&
+      !sessionStorage.getItem('nsl-push-prompt-dismissed')
+    ) {
+      setPushPrompt(true)
+    }
+  }, [user?.id]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const enablePushNow = () => {
+    enablePush(user.id)
+      .then(() => setPushPrompt(false))
+      .catch((e) => {
+        console.warn('Не удалось включить push:', e)
+        setPushPrompt(false)
+      })
+  }
+
+  const dismissPushPrompt = () => {
+    sessionStorage.setItem('nsl-push-prompt-dismissed', '1')
+    setPushPrompt(false)
+  }
   const [notifications, setNotifications] = useState(REMOTE ? [] : loadNotifications)
   const [, setPeopleVersion] = useState(0) // тик после загрузки profiles, чтобы обновить аватары
 
@@ -355,6 +385,16 @@ export default function App() {
                 Список
               </button>
             </div>
+          </div>
+        )}
+
+        {pushPrompt && (
+          <div className="push-banner">
+            <span>🔔 Включите уведомления — узнавайте сразу, когда вам ставят задачу или её выполняют</span>
+            <span className="push-banner-actions">
+              <button className="btn btn-sm btn-primary" onClick={enablePushNow}>Включить</button>
+              <button className="btn btn-sm" onClick={dismissPushPrompt}>Позже</button>
+            </span>
           </div>
         )}
 
