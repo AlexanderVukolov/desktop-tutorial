@@ -124,6 +124,11 @@ export function updateLocalProfile(userId, patch) {
   return publicUser(users[idx])
 }
 
+// Зарегистрированные локальные аккаунты (для панели управления в демо)
+export function loadLocalAccounts() {
+  return loadUsers().map(publicUser)
+}
+
 // В удалённом режиме список людей приходит из базы (profiles) —
 // компоненты берут его из этого кэша через те же getAllPeople/personById.
 let peopleCache = null

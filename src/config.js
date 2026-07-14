@@ -6,6 +6,12 @@
 export const SUPABASE_URL = 'https://wmnymdmjiczbmjyztcze.supabase.co'
 export const SUPABASE_ANON_KEY = 'sb_publishable_Uqq-PpfJkZVkPYbd6CsYlQ_zKlTJPG4'
 
+// Администраторы задачника: полное управление сотрудниками и отделами
+export const ADMIN_EMAILS = ['liga.nutriciologi@yandex.ru']
+
+export const isAdminUser = (user) =>
+  Boolean(user && (user.is_admin || ADMIN_EMAILS.includes((user.email || '').toLowerCase())))
+
 // Публичный VAPID-ключ для Web Push уведомлений (парный приватный —
 // в секретах Supabase Edge Functions)
 export const VAPID_PUBLIC_KEY =

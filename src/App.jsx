@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { DEPARTMENTS, PRIORITIES, byId } from './data.js'
 import { useStore, useFilteredTasks, deadlineState } from './useStore.js'
 import { getCurrentUser, getAllPeople, clearSession, setPeopleCache, updateLocalProfile } from './auth.js'
-import { isRemoteMode } from './config.js'
+import { isRemoteMode, isAdminUser } from './config.js'
 import { useRemoteStore } from './useRemoteStore.js'
 import {
   remoteGetUser,
@@ -25,6 +25,7 @@ import OverdueAlert from './components/OverdueAlert.jsx'
 import NotificationBell from './components/NotificationBell.jsx'
 import SettingsModal from './components/SettingsModal.jsx'
 import { pushSupported, enablePush } from './push.js'
+import AdminPanel from './components/AdminPanel.jsx'
 import { loadNotifications, pushNotification, markAllRead, clearForUser } from './notifications.js'
 import { avatarColor, initials } from './components/TaskCard.jsx'
 
@@ -51,6 +52,7 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [navOpen, setNavOpen] = useState(false) // мобильное меню-шторка
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [adminOpen, setAdminOpen] = useState(false)
   const [pushPrompt, setPushPrompt] = useState(false)
 
   // Push по умолчанию: если разрешение уже дано — тихо восстанавливаем
@@ -123,6 +125,21 @@ export default function App() {
 
   const people = getAllPeople()
   const userDept = user.dept ? byId(DEPARTMENTS, user.dept) : null
+  const admin = isAdminUser(user)
+
+  // Обновить кэш людей после правок в панели управления
+  const refreshPeople = () => {
+    if (REMOTE) {
+      fetchProfiles()
+        .then((list) => {
+          setPeopleCache(list)
+          setPeopleVersion((v) => v + 1)
+        })
+        .catch(() => {})
+    } else {
+      setPeopleVersion((v) => v + 1)
+    }
+  }
 
   const logout = () => {
     if (REMOTE) remoteSignOut()
@@ -335,6 +352,11 @@ export default function App() {
                     <button className="dropdown-item" onClick={() => { setSettingsOpen(true); setMenuOpen(false) }}>
                       ⚙️ Настройки
                     </button>
+                    {admin && (
+                      <button className="dropdown-item" onClick={() => { setAdminOpen(true); setMenuOpen(false) }}>
+                        🛡️ Управление командой
+                      </button>
+                    )}
                     <button className="dropdown-item danger" onClick={logout}>
                       ↩ Выйти из кабинета
                     </button>
@@ -427,6 +449,8 @@ export default function App() {
       {settingsOpen && (
         <SettingsModal user={user} onClose={() => setSettingsOpen(false)} onSave={handleSaveSettings} />
       )}
+
+      {adminOpen && admin && <AdminPanel onClose={() => setAdminOpen(false)} onChanged={refreshPeople} />}
 
       {modal && (
         <TaskModal
