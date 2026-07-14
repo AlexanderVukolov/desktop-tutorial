@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { DEPARTMENTS, PRIORITIES, byId } from './data.js'
 import { useStore, useFilteredTasks, deadlineState } from './useStore.js'
-import { getCurrentUser, getAllPeople, clearSession, setPeopleCache } from './auth.js'
+import { getCurrentUser, getAllPeople, clearSession, setPeopleCache, updateLocalProfile } from './auth.js'
 import { isRemoteMode } from './config.js'
 import { useRemoteStore } from './useRemoteStore.js'
 import {
   remoteGetUser,
   remoteSignOut,
+  updateProfileRemote,
   fetchProfiles,
   fetchNotifications,
   insertNotification,
@@ -22,6 +23,7 @@ import TaskModal from './components/TaskModal.jsx'
 import AuthScreen from './components/AuthScreen.jsx'
 import OverdueAlert from './components/OverdueAlert.jsx'
 import NotificationBell from './components/NotificationBell.jsx'
+import SettingsModal from './components/SettingsModal.jsx'
 import { loadNotifications, pushNotification, markAllRead, clearForUser } from './notifications.js'
 import { avatarColor, initials } from './components/TaskCard.jsx'
 
@@ -46,6 +48,8 @@ export default function App() {
   const [filters, setFilters] = useState(DEFAULT_FILTERS)
   const [modal, setModal] = useState(null) // null | 'new' | task object
   const [menuOpen, setMenuOpen] = useState(false)
+  const [navOpen, setNavOpen] = useState(false) // мобильное меню-шторка
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const [notifications, setNotifications] = useState(REMOTE ? [] : loadNotifications)
   const [, setPeopleVersion] = useState(0) // тик после загрузки profiles, чтобы обновить аватары
 
@@ -137,6 +141,21 @@ export default function App() {
     if (REMOTE) markAllReadRemote(user.id)
   }
 
+  // Сохранение настроек кабинета (имя, отдел, должность)
+  const handleSaveSettings = async (patch) => {
+    if (REMOTE) {
+      const updated = await updateProfileRemote(user.id, patch)
+      setUser(updated)
+      const list = await fetchProfiles().catch(() => null)
+      if (list) {
+        setPeopleCache(list)
+        setPeopleVersion((v) => v + 1)
+      }
+    } else {
+      setUser(updateLocalProfile(user.id, patch))
+    }
+  }
+
   const handleClearNotifs = () => {
     setNotifications((list) => (REMOTE ? list.filter((n) => n.userId !== user.id) : clearForUser(list, user.id)))
     if (REMOTE) clearNotifsRemote(user.id)
@@ -177,18 +196,30 @@ export default function App() {
 
   return (
     <div className="app">
+      {navOpen && <div className="nav-backdrop" onClick={() => setNavOpen(false)} />}
       <Sidebar
         tasks={store.tasks}
         view={view}
         filters={filters}
         user={user}
-        onView={setView}
-        onSelectDept={(d) => setFilter('dept', d)}
-        onMyTasks={showMyTasks}
+        open={navOpen}
+        onView={(v) => {
+          setView(v)
+          setNavOpen(false)
+        }}
+        onSelectDept={(d) => {
+          setFilter('dept', d)
+          setNavOpen(false)
+        }}
+        onMyTasks={() => {
+          showMyTasks()
+          setNavOpen(false)
+        }}
       />
 
       <div className="main">
         <header className="topbar">
+          <button className="burger" onClick={() => setNavOpen(true)} aria-label="Меню">☰</button>
           <div>
             <h1 className="page-title">
               {isDashboard
@@ -253,6 +284,9 @@ export default function App() {
                     </div>
                     <button className="dropdown-item" onClick={() => { showMyTasks(); setMenuOpen(false) }}>
                       ⭐ Мои задачи
+                    </button>
+                    <button className="dropdown-item" onClick={() => { setSettingsOpen(true); setMenuOpen(false) }}>
+                      ⚙️ Настройки
                     </button>
                     <button className="dropdown-item danger" onClick={logout}>
                       ↩ Выйти из кабинета
@@ -332,6 +366,10 @@ export default function App() {
       </div>
 
       <OverdueAlert overdueTasks={overdueTasks} onShow={showOverdue} onOpenTask={openTask} />
+
+      {settingsOpen && (
+        <SettingsModal user={user} onClose={() => setSettingsOpen(false)} onSave={handleSaveSettings} />
+      )}
 
       {modal && (
         <TaskModal

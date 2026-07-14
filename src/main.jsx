@@ -8,3 +8,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </React.StrictMode>,
 )
+
+// Регистрация service worker — для установки задачника на телефон.
+// Пропускаем в автономном демо (там нет сети и своего домена).
+if ('serviceWorker' in navigator && !globalThis.NSL_LOCAL_DEMO && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {})
+  })
+}

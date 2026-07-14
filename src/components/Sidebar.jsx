@@ -2,14 +2,14 @@ import { DEPARTMENTS, byId } from '../data.js'
 import { isRemoteMode } from '../config.js'
 
 // Навигация: обзор, мои задачи, все задачи и фильтр по отделам
-export default function Sidebar({ tasks, view, filters, user, onView, onSelectDept, onMyTasks }) {
+export default function Sidebar({ tasks, view, filters, user, open, onView, onSelectDept, onMyTasks }) {
   const countByDept = (id) => tasks.filter((t) => t.dept === id).length
   const activeDepts = DEPARTMENTS.filter((d) => countByDept(d.id) > 0)
   const myCount = user ? tasks.filter((t) => (t.assignees || []).includes(user.id)).length : 0
   const isMyTasks = view !== 'dashboard' && filters.assignee === user?.id
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${open ? 'open' : ''}`}>
       <div className="brand">
         <div className="brand-logo">🌿</div>
         <div>

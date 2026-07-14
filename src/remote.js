@@ -60,6 +60,18 @@ async function fetchMyProfile(authUser) {
   }
 }
 
+// Обновить свой профиль (имя, отдел, должность)
+export async function updateProfileRemote(userId, patch) {
+  const { data, error } = await supabase
+    .from('profiles')
+    .update({ name: patch.name?.trim(), dept: patch.dept, role: patch.role?.trim() })
+    .eq('id', userId)
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
 export async function fetchProfiles() {
   const { data, error } = await supabase.from('profiles').select('*').order('name')
   if (error) throw error

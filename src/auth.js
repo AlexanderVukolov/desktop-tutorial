@@ -109,6 +109,21 @@ export function getCurrentUser() {
   }
 }
 
+// Обновить профиль локального аккаунта (имя, отдел, должность)
+export function updateLocalProfile(userId, patch) {
+  const users = loadUsers()
+  const idx = users.findIndex((u) => u.id === userId)
+  if (idx === -1) throw new Error('Аккаунт не найден')
+  users[idx] = {
+    ...users[idx],
+    name: patch.name?.trim() || users[idx].name,
+    dept: patch.dept ?? users[idx].dept,
+    role: patch.role?.trim() || users[idx].role,
+  }
+  saveUsers(users)
+  return publicUser(users[idx])
+}
+
 // В удалённом режиме список людей приходит из базы (profiles) —
 // компоненты берут его из этого кэша через те же getAllPeople/personById.
 let peopleCache = null
