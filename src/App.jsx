@@ -40,6 +40,17 @@ const DEFAULT_FILTERS = {
 
 const REMOTE = isRemoteMode()
 
+// Настройки интерфейса пользователя (вид, сортировка) — свои у каждого
+const uiKey = (userId) => `nsl-ui-v1:${userId}`
+
+function loadUiPrefs(userId) {
+  try {
+    return JSON.parse(localStorage.getItem(uiKey(userId)) || '{}')
+  } catch {
+    return {}
+  }
+}
+
 export default function App() {
   const localStore = useStore()
   const [user, setUser] = useState(REMOTE ? null : getCurrentUser)
@@ -83,6 +94,26 @@ export default function App() {
     setPushPrompt(false)
   }
   const [notifications, setNotifications] = useState(REMOTE ? [] : loadNotifications)
+
+  // Восстановление сохранённых настроек интерфейса при входе
+  useEffect(() => {
+    if (!user) return
+    const p = loadUiPrefs(user.id)
+    if (['board', 'list', 'dashboard'].includes(p.view)) setView(p.view)
+    if (['default', 'priority', 'due'].includes(p.sort)) {
+      setFilters((f) => ({ ...f, sort: p.sort }))
+    }
+  }, [user?.id]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Сохранение настроек при изменении
+  useEffect(() => {
+    if (!user) return
+    try {
+      localStorage.setItem(uiKey(user.id), JSON.stringify({ view, sort: filters.sort }))
+    } catch (e) {
+      console.warn('Не удалось сохранить настройки интерфейса:', e)
+    }
+  }, [view, filters.sort, user?.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Значок-цифра на иконке приложения = число непрочитанных уведомлений
   useEffect(() => {
