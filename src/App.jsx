@@ -250,7 +250,7 @@ export default function App() {
 
   // Просроченные незакрытые задачи — для напоминания
   const overdueTasks = store.tasks.filter(
-    (t) => t.status !== 'done' && deadlineState(t.due) === 'overdue',
+    (t) => t.status !== 'done' && deadlineState(t.due, t.dueTime) === 'overdue',
   )
 
   const showOverdue = () => {

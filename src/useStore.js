@@ -67,6 +67,7 @@ export function useStore() {
       status: data.status || 'todo',
       priority: data.priority || 'medium',
       due: data.due || '',
+      dueTime: data.dueTime || '',
       createdAt: new Date().toISOString().slice(0, 10),
       createdBy: data.createdBy || null,
       tags: data.tags || [],
@@ -99,23 +100,27 @@ export function useStore() {
   return { tasks, addTask, updateTask, removeTask, moveTask, resetDemo, clearAll }
 }
 
-// Дедлайн-статус задачи: overdue / soon / ok / none
-export function deadlineState(due) {
+// Дедлайн-статус задачи: overdue / soon / ok / none.
+// Если указано время — просрочка считается с точностью до минуты,
+// без времени задача «горит» только со следующего дня.
+export function deadlineState(due, dueTime) {
   if (!due) return 'none'
+  const now = new Date()
+  const deadline = new Date(`${due}T${dueTime || '23:59'}`)
+  if (deadline < now) return 'overdue'
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   const d = new Date(due)
   d.setHours(0, 0, 0, 0)
-  const diffDays = Math.round((d - today) / 86400000)
-  if (diffDays < 0) return 'overdue'
-  if (diffDays <= 2) return 'soon'
+  if (Math.round((d - today) / 86400000) <= 2) return 'soon'
   return 'ok'
 }
 
-export function formatDate(iso) {
+export function formatDate(iso, time) {
   if (!iso) return '—'
   const d = new Date(iso)
-  return d.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' })
+  const date = d.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' })
+  return time ? `${date} ${time}` : date
 }
 
 // Фильтрация + сортировка списка задач
@@ -126,7 +131,7 @@ export function useFilteredTasks(tasks, filters) {
       if (filters.dept !== 'all' && t.dept !== filters.dept) return false
       if (filters.assignee !== 'all' && !(t.assignees || []).includes(filters.assignee)) return false
       if (filters.priority !== 'all' && t.priority !== filters.priority) return false
-      if (filters.onlyOverdue && deadlineState(t.due) !== 'overdue') return false
+      if (filters.onlyOverdue && deadlineState(t.due, t.dueTime) !== 'overdue') return false
       if (q) {
         const hay = `${t.title} ${t.description} ${(t.tags || []).join(' ')}`.toLowerCase()
         if (!hay.includes(q)) return false
@@ -142,7 +147,9 @@ export function useFilteredTasks(tasks, filters) {
       list = [...list].sort((a, b) => {
         if (!a.due) return 1
         if (!b.due) return -1
-        return new Date(a.due) - new Date(b.due)
+        return (
+          new Date(`${a.due}T${a.dueTime || '23:59'}`) - new Date(`${b.due}T${b.dueTime || '23:59'}`)
+        )
       })
     }
     return list

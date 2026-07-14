@@ -104,6 +104,7 @@ const taskToApp = (r) => ({
   status: r.status,
   priority: r.priority,
   due: r.due || '',
+  dueTime: r.due_time || '',
   createdAt: (r.created_at || '').slice(0, 10),
   createdBy: r.created_by || null,
   tags: r.tags || [],
@@ -120,6 +121,7 @@ const taskToRow = (t) => ({
   status: t.status || 'todo',
   priority: t.priority || 'medium',
   due: t.due || null,
+  due_time: t.dueTime || null,
   tags: t.tags || [],
   attachments: t.attachments || [],
 })

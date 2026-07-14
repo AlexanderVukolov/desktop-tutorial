@@ -57,7 +57,7 @@ export function Avatar({ userId }) {
 export default function TaskCard({ task, onClick, onDragStart, onDragEnd, dragging }) {
   const dept = byId(DEPARTMENTS, task.dept)
   const prio = byId(PRIORITIES, task.priority)
-  const dl = deadlineState(task.due)
+  const dl = deadlineState(task.due, task.dueTime)
   const isBurning = dl === 'overdue' && task.status !== 'done'
 
   return (
@@ -102,7 +102,7 @@ export default function TaskCard({ task, onClick, onDragStart, onDragEnd, draggi
         )}
         {task.due && (
           <span className={`due ${dl}`}>
-            {dl === 'overdue' ? '⚠' : '📅'} {formatDate(task.due)}
+            {dl === 'overdue' ? '⚠' : '📅'} {formatDate(task.due, task.dueTime)}
           </span>
         )}
       </div>

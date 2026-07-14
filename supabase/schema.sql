@@ -27,6 +27,7 @@ create table if not exists public.tasks (
   status      text not null default 'todo',
   priority    text not null default 'medium',
   due         date,
+  due_time    text,                     -- время дедлайна «ЧЧ:ММ» (опционально)
   tags        text[] default '{}',
   attachments jsonb default '[]',       -- [{type:'link'|'file', name, url, size}]
   created_by  uuid references auth.users (id),

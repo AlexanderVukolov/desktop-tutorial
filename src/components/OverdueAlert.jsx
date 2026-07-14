@@ -34,7 +34,7 @@ export default function OverdueAlert({ overdueTasks, onShow, onOpenTask }) {
             <li key={t.id} onClick={() => onOpenTask(t)}>
               <span className="toast-task-title">{t.title}</span>
               <span className="toast-task-meta">
-                до {formatDate(t.due)}
+                до {formatDate(t.due, t.dueTime)}
                 {person ? ` · ${person.name.split(' ')[0]}${extra > 0 ? ` +${extra}` : ''}` : ''}
               </span>
             </li>

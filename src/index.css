@@ -1353,6 +1353,18 @@ textarea {
   font-weight: 700;
   color: var(--muted);
 }
+.due-row {
+  display: flex;
+  gap: 8px;
+}
+.due-row input[type='date'] {
+  flex: 1.4;
+  min-width: 0;
+}
+.due-row input[type='time'] {
+  flex: 1;
+  min-width: 0;
+}
 .smart-mark {
   font-weight: 500;
   font-size: 11.5px;

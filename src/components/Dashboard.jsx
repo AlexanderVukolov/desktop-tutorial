@@ -6,8 +6,8 @@ export default function Dashboard({ tasks }) {
   const total = tasks.length
   const done = tasks.filter((t) => t.status === 'done').length
   const inProgress = tasks.filter((t) => t.status === 'in_progress').length
-  const overdue = tasks.filter((t) => t.status !== 'done' && deadlineState(t.due) === 'overdue').length
-  const soon = tasks.filter((t) => t.status !== 'done' && deadlineState(t.due) === 'soon').length
+  const overdue = tasks.filter((t) => t.status !== 'done' && deadlineState(t.due, t.dueTime) === 'overdue').length
+  const soon = tasks.filter((t) => t.status !== 'done' && deadlineState(t.due, t.dueTime) === 'soon').length
   const completion = total ? Math.round((done / total) * 100) : 0
 
   // По отделам

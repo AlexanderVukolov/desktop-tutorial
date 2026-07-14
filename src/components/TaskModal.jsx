@@ -14,6 +14,7 @@ const blank = {
   status: 'todo',
   priority: 'medium',
   due: '',
+  dueTime: '',
   tags: [],
   attachments: [],
 }
@@ -270,7 +271,15 @@ export default function TaskModal({ task, onClose, onSave, onDelete }) {
               <label>
                 Срок выполнения <span className="smart-mark">T — время</span>
               </label>
-              <input type="date" value={form.due || ''} onChange={(e) => set('due', e.target.value)} />
+              <div className="due-row">
+                <input type="date" value={form.due || ''} onChange={(e) => set('due', e.target.value)} />
+                <input
+                  type="time"
+                  value={form.dueTime || ''}
+                  onChange={(e) => set('dueTime', e.target.value)}
+                  title="Время (необязательно)"
+                />
+              </div>
             </div>
             <div className="field">
               <label>Приоритет</label>

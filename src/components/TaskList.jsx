@@ -18,7 +18,7 @@ export default function TaskList({ tasks, onOpenTask }) {
         const dept = byId(DEPARTMENTS, t.dept)
         const st = byId(STATUSES, t.status)
         const prio = byId(PRIORITIES, t.priority)
-        const dl = deadlineState(t.due)
+        const dl = deadlineState(t.due, t.dueTime)
         const isBurning = dl === 'overdue' && t.status !== 'done'
         return (
           <div className={`list-row ${isBurning ? 'burning-row' : ''}`} key={t.id} onClick={() => onOpenTask(t)}>
@@ -43,7 +43,7 @@ export default function TaskList({ tasks, onOpenTask }) {
                 {st?.name}
               </span>
             </span>
-            <span className={`due ${dl}`}>{t.due ? formatDate(t.due) : '—'}</span>
+            <span className={`due ${dl}`}>{t.due ? formatDate(t.due, t.dueTime) : '—'}</span>
             <span style={{ textAlign: 'right', color: 'var(--muted-2)' }}>›</span>
           </div>
         )
