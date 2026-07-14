@@ -138,10 +138,14 @@ export default function SettingsModal({ user, onClose, onSave }) {
                     : '🔔 Включить уведомления'}
                 </button>
               )}
-              {push === 'on' && (
-                <button type="button" className="btn btn-sm" style={{ marginTop: 8 }} onClick={sendTest}>
-                  📨 Отправить тестовое уведомление
-                </button>
+              <button type="button" className="btn btn-sm" style={{ marginTop: 8 }} onClick={sendTest}>
+                📨 Отправить тестовое уведомление
+              </button>
+              {push !== 'on' && (
+                <p className="push-note">
+                  Push на это устройство придёт только после нажатия «🔔 Включить уведомления» выше.
+                  Без этого тест проверит только колокольчик.
+                </p>
               )}
               {pushMsg && <p className="push-note">{pushMsg}</p>}
             </div>
