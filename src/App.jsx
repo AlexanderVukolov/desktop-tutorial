@@ -161,14 +161,40 @@ export default function App() {
     if (REMOTE) clearNotifsRemote(user.id)
   }
 
+  // Уведомить сотрудников, что на них поставлена задача (кроме самого автора)
+  const notifyAssigned = (task, userIds) => {
+    for (const userId of userIds || []) {
+      if (!userId || userId === user.id) continue
+      const payload = {
+        userId,
+        taskId: task.id || null,
+        taskTitle: task.title,
+        byName: user.name,
+        type: 'task_assigned',
+      }
+      if (REMOTE) {
+        insertNotification(payload).catch((e) => console.warn('Уведомление не отправлено:', e))
+      } else {
+        setNotifications((list) => pushNotification(list, payload))
+      }
+    }
+  }
+
   const handleSave = (data) => {
     if (modal && modal !== 'new' && modal.id) {
       store.updateTask(modal.id, data)
       if (data.status === 'done' && modal.status !== 'done') {
         notifyDone({ ...modal, ...data })
       }
+      // Уведомляем только новых ответственных, добавленных при редактировании
+      const before = modal.assignees || []
+      const added = (data.assignees || []).filter((id) => !before.includes(id))
+      if (added.length > 0) notifyAssigned({ ...modal, ...data }, added)
     } else {
-      store.addTask(data)
+      const created = store.addTask(data)
+      Promise.resolve(created).then((t) => {
+        if (t) notifyAssigned(t, t.assignees)
+      })
     }
   }
 

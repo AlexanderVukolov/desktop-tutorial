@@ -23,20 +23,20 @@ function save(list) {
 }
 
 // Добавить уведомление пользователю; возвращает обновлённый список
-export function pushNotification(list, { userId, taskId, taskTitle, byName }) {
+export function pushNotification(list, { userId, taskId, taskTitle, byName, type = 'task_done' }) {
   const notif = {
     id: `n${Date.now().toString(36)}${Math.floor(Math.random() * 1e4).toString(36)}`,
     userId,
     taskId,
     taskTitle,
     byName: byName || null,
-    type: 'task_done',
+    type,
     createdAt: new Date().toISOString(),
     read: false,
   }
-  // Не плодим дубли: одно непрочитанное «готово» на задачу для пользователя
+  // Не плодим дубли: одно непрочитанное уведомление данного типа на задачу
   const withoutDup = list.filter(
-    (n) => !(n.userId === userId && n.taskId === taskId && n.type === 'task_done' && !n.read),
+    (n) => !(n.userId === userId && n.taskId === taskId && n.type === type && !n.read),
   )
   const next = [notif, ...withoutDup]
   // Ограничиваем историю на пользователя

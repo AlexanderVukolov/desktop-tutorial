@@ -188,12 +188,13 @@ export async function fetchNotifications() {
   return (data || []).map(notifToApp)
 }
 
-export async function insertNotification({ userId, taskId, taskTitle, byName }) {
+export async function insertNotification({ userId, taskId, taskTitle, byName, type = 'task_done' }) {
   const { error } = await supabase.from('notifications').insert({
     user_id: userId,
-    task_id: taskId,
+    task_id: taskId || null,
     task_title: taskTitle,
     by_name: byName,
+    type,
   })
   if (error) throw error
 }

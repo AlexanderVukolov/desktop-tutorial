@@ -41,11 +41,16 @@ export function useRemoteStore(enabled, user) {
   }, [enabled, user?.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const addTask = useCallback(
-    (data) => {
+    (data) =>
       insertTask(data, user?.id)
-        .then((t) => setTasks((prev) => [t, ...prev.filter((x) => x.id !== t.id)]))
-        .catch((e) => setError(e))
-    },
+        .then((t) => {
+          setTasks((prev) => [t, ...prev.filter((x) => x.id !== t.id)])
+          return t
+        })
+        .catch((e) => {
+          setError(e)
+          return null
+        }),
     [user?.id],
   )
 

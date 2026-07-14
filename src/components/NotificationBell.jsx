@@ -57,18 +57,24 @@ export default function NotificationBell({ notifications, userId, onOpenTask, on
               <div className="notif-empty">Пока пусто — уведомления появятся, когда ваши задачи будут выполнены</div>
             ) : (
               <ul className="notif-list">
-                {mine.slice(0, 15).map((n) => (
-                  <li key={n.id} className={n.read ? '' : 'unread'} onClick={() => openTask(n)}>
-                    <span className="notif-icon">✅</span>
-                    <span className="notif-body">
-                      <span className="notif-text">
-                        Задача <b>«{n.taskTitle}»</b> выполнена
-                        {n.byName ? <> — {n.byName}</> : null}
+                {mine.slice(0, 15).map((n) => {
+                  const assigned = n.type === 'task_assigned'
+                  return (
+                    <li key={n.id} className={n.read ? '' : 'unread'} onClick={() => openTask(n)}>
+                      <span className="notif-icon">{assigned ? '📌' : '✅'}</span>
+                      <span className="notif-body">
+                        <span className="notif-text">
+                          {assigned ? (
+                            <>Вам поставлена задача <b>«{n.taskTitle}»</b>{n.byName ? <> — {n.byName}</> : null}</>
+                          ) : (
+                            <>Задача <b>«{n.taskTitle}»</b> выполнена{n.byName ? <> — {n.byName}</> : null}</>
+                          )}
+                        </span>
+                        <span className="notif-time">{timeAgo(n.createdAt)}</span>
                       </span>
-                      <span className="notif-time">{timeAgo(n.createdAt)}</span>
-                    </span>
-                  </li>
-                ))}
+                    </li>
+                  )
+                })}
               </ul>
             )}
           </div>
@@ -78,8 +84,8 @@ export default function NotificationBell({ notifications, userId, onOpenTask, on
       {toast && (
         <div className="toast toast-success" role="status" onClick={() => openTask(toast)}>
           <div className="toast-head">
-            <span className="toast-icon">✅</span>
-            <b>Задача выполнена</b>
+            <span className="toast-icon">{toast.type === 'task_assigned' ? '📌' : '✅'}</span>
+            <b>{toast.type === 'task_assigned' ? 'Вам поставлена задача' : 'Задача выполнена'}</b>
             <button
               className="icon-btn"
               onClick={(e) => {
@@ -92,7 +98,9 @@ export default function NotificationBell({ notifications, userId, onOpenTask, on
             </button>
           </div>
           <div className="toast-success-text">
-            «{toast.taskTitle}» переведена в «Готово»{toast.byName ? ` — ${toast.byName}` : ''}
+            {toast.type === 'task_assigned'
+              ? `«${toast.taskTitle}»${toast.byName ? ` — поставил(а) ${toast.byName}` : ''}`
+              : `«${toast.taskTitle}» переведена в «Готово»${toast.byName ? ` — ${toast.byName}` : ''}`}
           </div>
         </div>
       )}
