@@ -2,7 +2,31 @@ import { useEffect, useState } from 'react'
 import { DEPARTMENTS } from '../data.js'
 import { isRemoteMode } from '../config.js'
 import { pushStatus, enablePush, disablePush } from '../push.js'
-import { insertNotification } from '../remote.js'
+import { insertNotification, uploadAttachment } from '../remote.js'
+import { PersonCircle } from './TaskCard.jsx'
+
+// Сжать фото до квадрата 256×256 (JPEG) перед сохранением
+const resizeToJpeg = (file, size = 256) =>
+  new Promise((resolve, reject) => {
+    const img = new Image()
+    img.onload = () => {
+      const s = Math.min(img.width, img.height)
+      const c = document.createElement('canvas')
+      c.width = c.height = size
+      c.getContext('2d').drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, size, size)
+      c.toBlob((b) => (b ? resolve(b) : reject(new Error('не удалось обработать фото'))), 'image/jpeg', 0.85)
+    }
+    img.onerror = () => reject(new Error('не удалось прочитать изображение'))
+    img.src = URL.createObjectURL(file)
+  })
+
+const blobToDataURL = (blob) =>
+  new Promise((resolve, reject) => {
+    const r = new FileReader()
+    r.onload = () => resolve(r.result)
+    r.onerror = reject
+    r.readAsDataURL(blob)
+  })
 
 // Настройки кабинета: имя, отдел, должность
 export default function SettingsModal({ user, onClose, onSave }) {
@@ -13,7 +37,29 @@ export default function SettingsModal({ user, onClose, onSave }) {
   })
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const [avatarUrl, setAvatarUrl] = useState(user.avatar_url || '')
+  const [avatarBusy, setAvatarBusy] = useState(false)
   const [push, setPush] = useState('loading') // loading|on|off|denied|unsupported
+
+  // Загрузка фото профиля
+  const onPhoto = async (file) => {
+    if (!file) return
+    setAvatarBusy(true)
+    setError('')
+    try {
+      const blob = await resizeToJpeg(file)
+      if (isRemoteMode()) {
+        const url = await uploadAttachment(new File([blob], 'avatar.jpg', { type: 'image/jpeg' }))
+        setAvatarUrl(url)
+      } else {
+        setAvatarUrl(await blobToDataURL(blob))
+      }
+    } catch (e) {
+      setError('Не удалось загрузить фото: ' + e.message)
+    } finally {
+      setAvatarBusy(false)
+    }
+  }
   const [pushMsg, setPushMsg] = useState('')
 
   useEffect(() => {
@@ -69,7 +115,7 @@ export default function SettingsModal({ user, onClose, onSave }) {
     setBusy(true)
     setError('')
     try {
-      await onSave(form)
+      await onSave({ ...form, avatarUrl })
       onClose()
     } catch (err) {
       setError(err.message || 'Не удалось сохранить настройки')
@@ -87,6 +133,36 @@ export default function SettingsModal({ user, onClose, onSave }) {
         </div>
 
         <div className="modal-body">
+          <div className="field">
+            <label>Фото профиля</label>
+            <div className="ava-picker">
+              <PersonCircle
+                person={{ ...user, name: form.name, avatar_url: avatarUrl }}
+                className="circle settings-ava"
+              />
+              <div className="ava-picker-actions">
+                <label className="btn btn-sm file-btn">
+                  {avatarBusy ? 'Загружаю…' : avatarUrl ? 'Сменить фото' : '📷 Загрузить фото'}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    disabled={avatarBusy}
+                    onChange={(e) => {
+                      onPhoto(e.target.files?.[0])
+                      e.target.value = ''
+                    }}
+                  />
+                </label>
+                {avatarUrl && (
+                  <button type="button" className="btn btn-sm" onClick={() => setAvatarUrl('')}>
+                    Убрать
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
           <div className="field">
             <label>Имя и фамилия</label>
             <input value={form.name} onChange={(e) => set('name', e.target.value)} autoFocus />

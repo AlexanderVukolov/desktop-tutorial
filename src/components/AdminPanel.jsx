@@ -3,7 +3,7 @@ import { DEPARTMENTS, byId } from '../data.js'
 import { isRemoteMode } from '../config.js'
 import { loadLocalAccounts, updateLocalProfile } from '../auth.js'
 import { fetchProfiles, updateProfileRemote } from '../remote.js'
-import { avatarColor, initials } from './TaskCard.jsx'
+import { PersonCircle } from './TaskCard.jsx'
 
 // Панель администратора: все сотрудники, перемещение по отделам,
 // смена должности и имени
@@ -91,9 +91,7 @@ function EmployeeRow({ person, onSave }) {
 
   return (
     <div className="admin-row">
-      <span className="circle admin-ava" style={{ background: avatarColor(person.id) }}>
-        {initials(form.name)}
-      </span>
+      <PersonCircle person={{ ...person, name: form.name }} className="circle admin-ava" />
       <div className="admin-fields">
         <div className="admin-line">
           <input

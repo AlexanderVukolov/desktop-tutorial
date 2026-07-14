@@ -12,6 +12,7 @@ create table if not exists public.profiles (
   email      text not null,
   dept       text,
   role       text default 'Сотрудник',
+  avatar_url text,
   created_at timestamptz default now()
 );
 

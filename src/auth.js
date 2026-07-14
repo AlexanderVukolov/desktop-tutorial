@@ -119,6 +119,7 @@ export function updateLocalProfile(userId, patch) {
     name: patch.name?.trim() || users[idx].name,
     dept: patch.dept ?? users[idx].dept,
     role: patch.role?.trim() || users[idx].role,
+    ...(patch.avatarUrl !== undefined ? { avatar_url: patch.avatarUrl || null } : {}),
   }
   saveUsers(users)
   return publicUser(users[idx])

@@ -73,11 +73,13 @@ async function fetchMyProfile(authUser) {
   }
 }
 
-// Обновить свой профиль (имя, отдел, должность)
+// Обновить свой профиль (имя, отдел, должность, фото)
 export async function updateProfileRemote(userId, patch) {
+  const row = { name: patch.name?.trim(), dept: patch.dept, role: patch.role?.trim() }
+  if (patch.avatarUrl !== undefined) row.avatar_url = patch.avatarUrl || null
   const { data, error } = await supabase
     .from('profiles')
-    .update({ name: patch.name?.trim(), dept: patch.dept, role: patch.role?.trim() })
+    .update(row)
     .eq('id', userId)
     .select()
     .single()

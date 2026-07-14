@@ -2,7 +2,7 @@ import { DEPARTMENTS, byId } from '../data.js'
 import { deadlineState, formatDate } from '../useStore.js'
 import { getAllPeople, personById } from '../auth.js'
 import { timeAgo } from '../notifications.js'
-import { AvatarStack, avatarColor, initials } from './TaskCard.jsx'
+import { AvatarStack, PersonCircle } from './TaskCard.jsx'
 
 // Дашборд администратора: выполнение по сотрудникам + просроченные задачи
 export default function AdminDashboard({ tasks, onOpenTask }) {
@@ -62,9 +62,7 @@ export default function AdminDashboard({ tasks, onOpenTask }) {
           ) : (
             stats.map(({ person, total, done, overdue }) => (
               <div className="emp-row" key={person.id}>
-                <span className="circle emp-ava" style={{ background: avatarColor(person.id) }}>
-                  {initials(person.name)}
-                </span>
+                <PersonCircle person={person} className="circle emp-ava" />
                 <div className="emp-info">
                   <div className="emp-name-line">
                     <b>{person.name}</b>

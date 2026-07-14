@@ -986,6 +986,33 @@ textarea {
   height: 22px;
   font-size: 14px;
 }
+/* Фото-аватары: <img class="circle"> в любом контексте */
+img.circle {
+  object-fit: cover;
+  border: none;
+}
+.ava-picker {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.circle.settings-ava {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.ava-picker-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .task-author {
   font-size: 12px;
   color: var(--muted);

@@ -28,7 +28,7 @@ import { pushSupported, enablePush } from './push.js'
 import AdminPanel from './components/AdminPanel.jsx'
 import AdminDashboard from './components/AdminDashboard.jsx'
 import { loadNotifications, pushNotification, markAllRead, clearForUser } from './notifications.js'
-import { avatarColor, initials } from './components/TaskCard.jsx'
+import { PersonCircle } from './components/TaskCard.jsx'
 
 const DEFAULT_FILTERS = {
   query: '',
@@ -374,9 +374,7 @@ export default function App() {
                 onClick={() => setMenuOpen((v) => !v)}
                 title={user.email}
               >
-                <span className="circle" style={{ background: avatarColor(user.id) }}>
-                  {initials(user.name)}
-                </span>
+                <PersonCircle person={user} />
                 <span className="user-chip-name">{user.name.split(' ')[0]}</span>
                 <span className="caret">▾</span>
               </button>

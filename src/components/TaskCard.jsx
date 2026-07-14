@@ -16,6 +16,18 @@ export function avatarColor(id) {
   return palette[h]
 }
 
+// Кружок человека: фото профиля, если загружено, иначе цветные инициалы
+export function PersonCircle({ person, className = 'circle' }) {
+  if (person?.avatar_url) {
+    return <img className={className} src={person.avatar_url} alt={person.name || ''} />
+  }
+  return (
+    <span className={className} style={{ background: avatarColor(person?.id || '?') }}>
+      {initials(person?.name)}
+    </span>
+  )
+}
+
 // Стопка аватаров нескольких ответственных: до 3 кружков + счётчик
 export function AvatarStack({ userIds }) {
   const ids = userIds || []
@@ -27,9 +39,7 @@ export function AvatarStack({ userIds }) {
   return (
     <span className="avatar-stack" title={people.map((p) => p.name).join(', ')}>
       {shown.map((p) => (
-        <span className="circle" key={p.id} style={{ background: avatarColor(p.id) }}>
-          {initials(p.name)}
-        </span>
+        <PersonCircle key={p.id} person={p} />
       ))}
       {rest > 0 && <span className="circle more">+{rest}</span>}
     </span>
@@ -48,7 +58,7 @@ export function Avatar({ userId }) {
   }
   return (
     <span className="avatar" title={`${user.name} · ${user.role}`}>
-      <span className="circle" style={{ background: avatarColor(user.id) }}>{initials(user.name)}</span>
+      <PersonCircle person={user} />
       {user.name.split(' ')[0]}
     </span>
   )
