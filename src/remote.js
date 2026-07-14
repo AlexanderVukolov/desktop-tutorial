@@ -105,6 +105,7 @@ const taskToApp = (r) => ({
   priority: r.priority,
   due: r.due || '',
   createdAt: (r.created_at || '').slice(0, 10),
+  createdBy: r.created_by || null,
   tags: r.tags || [],
   attachments: r.attachments || [],
 })

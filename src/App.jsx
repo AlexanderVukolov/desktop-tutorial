@@ -110,26 +110,17 @@ export default function App() {
   const openTask = (task) => setModal(task)
   const closeModal = () => setModal(null)
 
-  // Уведомить всех ответственных, что их задача переведена в «Готово»
+  // Уведомить о выполнении: ответственных и автора задачи,
+  // кроме того, кто сам перевёл её в «Готово»
   const notifyDone = (task) => {
-    for (const userId of task?.assignees || []) {
+    const recipients = new Set([...(task?.assignees || []), task?.createdBy].filter(Boolean))
+    recipients.delete(user.id)
+    for (const userId of recipients) {
+      const payload = { userId, taskId: task.id, taskTitle: task.title, byName: user.name }
       if (REMOTE) {
-        // Своё уведомление придёт мгновенно; чужие доставит realtime подписка адресата
-        insertNotification({
-          userId,
-          taskId: task.id,
-          taskTitle: task.title,
-          byName: user.name,
-        }).catch((e) => console.warn('Уведомление не отправлено:', e))
+        insertNotification(payload).catch((e) => console.warn('Уведомление не отправлено:', e))
       } else {
-        setNotifications((list) =>
-          pushNotification(list, {
-            userId,
-            taskId: task.id,
-            taskTitle: task.title,
-            byName: user.name,
-          }),
-        )
+        setNotifications((list) => pushNotification(list, payload))
       }
     }
   }
@@ -191,7 +182,7 @@ export default function App() {
       const added = (data.assignees || []).filter((id) => !before.includes(id))
       if (added.length > 0) notifyAssigned({ ...modal, ...data }, added)
     } else {
-      const created = store.addTask(data)
+      const created = store.addTask({ ...data, createdBy: user.id })
       Promise.resolve(created).then((t) => {
         if (t) notifyAssigned(t, t.assignees)
       })

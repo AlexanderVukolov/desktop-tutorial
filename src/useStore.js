@@ -68,6 +68,7 @@ export function useStore() {
       priority: data.priority || 'medium',
       due: data.due || '',
       createdAt: new Date().toISOString().slice(0, 10),
+      createdBy: data.createdBy || null,
       tags: data.tags || [],
       attachments: data.attachments || [],
     }
