@@ -36,6 +36,15 @@ export async function remoteSignIn(email, password) {
   return fetchMyProfile(data.session.user)
 }
 
+// Повторно отправить письмо с подтверждением email
+export async function resendConfirmation(email) {
+  const { error } = await supabase.auth.resend({
+    type: 'signup',
+    email: email.trim().toLowerCase(),
+  })
+  if (error) throw ruError(error)
+}
+
 export async function remoteSignOut() {
   await supabase.auth.signOut()
 }

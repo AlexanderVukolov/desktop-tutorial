@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { DEPARTMENTS } from '../data.js'
 import { loginUser, registerUser } from '../auth.js'
 import { isRemoteMode } from '../config.js'
-import { remoteSignIn, remoteSignUp } from '../remote.js'
+import { remoteSignIn, remoteSignUp, resendConfirmation } from '../remote.js'
 
 // Экран входа и регистрации личного кабинета
 export default function AuthScreen({ onAuth }) {
@@ -17,6 +17,23 @@ export default function AuthScreen({ onAuth }) {
   const [error, setError] = useState('')
   const [info, setInfo] = useState('')
   const [busy, setBusy] = useState(false)
+  const [loginFails, setLoginFails] = useState(0)
+
+  const resend = async () => {
+    setError('')
+    setInfo('')
+    if (!form.email.trim()) {
+      setError('Введите email, на который регистрировались, и нажмите ещё раз')
+      return
+    }
+    try {
+      await resendConfirmation(form.email)
+      setInfo(`Письмо с подтверждением отправлено повторно на ${form.email.trim()}. Проверьте почту и папку «Спам».`)
+      setLoginFails(0)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }))
 
@@ -34,7 +51,13 @@ export default function AuthScreen({ onAuth }) {
     try {
       if (isRemoteMode()) {
         if (mode === 'login') {
-          onAuth(await remoteSignIn(form.email, form.password))
+          try {
+            onAuth(await remoteSignIn(form.email, form.password))
+            setLoginFails(0)
+          } catch (err) {
+            setLoginFails((n) => n + 1)
+            throw err
+          }
         } else {
           if (!form.name.trim()) throw new Error('Укажите имя и фамилию')
           const res = await remoteSignUp(form)
@@ -139,6 +162,16 @@ export default function AuthScreen({ onAuth }) {
 
         {error && <div className="auth-error">{error}</div>}
         {info && <div className="auth-info">{info}</div>}
+
+        {isRemoteMode() && mode === 'login' && loginFails > 0 && (
+          <div className="auth-info">
+            Вход не проходит? Чаще всего email ещё не подтверждён — проверьте почту и папку
+            «Спам».{' '}
+            <button type="button" className="link" onClick={resend}>
+              Отправить письмо ещё раз
+            </button>
+          </div>
+        )}
 
         <button className="btn btn-primary auth-submit" disabled={busy}>
           {busy ? 'Секунду…' : mode === 'login' ? 'Войти в кабинет' : 'Создать кабинет'}
