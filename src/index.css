@@ -1935,9 +1935,12 @@ img.circle {
     scroll-snap-align: start;
   }
 
-  /* Формы на весь экран */
+  /* Формы на весь экран — без отступа подложки, иначе съезжают вправо */
+  .overlay {
+    padding: 0;
+  }
   .modal {
-    width: 100vw;
+    width: 100%;
     max-width: none;
     height: 100dvh;
     max-height: none;
