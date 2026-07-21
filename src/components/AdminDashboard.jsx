@@ -1,12 +1,12 @@
 import { DEPARTMENTS, byId } from '../data.js'
 import { deadlineState, formatDate } from '../useStore.js'
-import { getAllPeople, personById } from '../auth.js'
+import { getActivePeople, personById } from '../auth.js'
 import { timeAgo } from '../notifications.js'
 import { AvatarStack, PersonCircle } from './TaskCard.jsx'
 
 // Дашборд администратора: выполнение по сотрудникам + просроченные задачи
 export default function AdminDashboard({ tasks, onOpenTask }) {
-  const people = getAllPeople()
+  const people = getActivePeople()
 
   // Статистика по каждому сотруднику
   const stats = people

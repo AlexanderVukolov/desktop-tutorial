@@ -106,6 +106,7 @@ function EmployeeRow({ person, pushStats, onSave }) {
           />
           <span className="admin-email" title={person.email}>{person.email}</span>
           {person.is_admin && <span className="chip admin-chip">админ</span>}
+          {person.is_active === false && <span className="chip push-off-chip">🚫 доступ закрыт</span>}
           {pushStats &&
             (pushStats[person.id] ? (
               <span className="chip push-on-chip" title={`Push включён на ${pushStats[person.id]} устр.`}>
@@ -136,6 +137,42 @@ function EmployeeRow({ person, pushStats, onSave }) {
           >
             {state === 'saving' ? '…' : state === 'saved' ? '✓ Сохранено' : 'Сохранить'}
           </button>
+          {!person.is_admin &&
+            (person.is_active === false ? (
+              <button
+                className="btn btn-sm"
+                onClick={async () => {
+                  setErrMsg('')
+                  try {
+                    await onSave(person, { ...form, isActive: true })
+                  } catch (e) {
+                    setErrMsg(e.message || 'Ошибка')
+                  }
+                }}
+              >
+                ✅ Вернуть доступ
+              </button>
+            ) : (
+              <button
+                className="btn btn-sm btn-danger"
+                onClick={async () => {
+                  if (
+                    !window.confirm(
+                      `Закрыть доступ для «${person.name}»?\n\nСотрудник не сможет войти в задачник и исчезнет из списков выбора. Его задачи и история сохранятся. Доступ можно вернуть в любой момент.`,
+                    )
+                  )
+                    return
+                  setErrMsg('')
+                  try {
+                    await onSave(person, { ...form, isActive: false })
+                  } catch (e) {
+                    setErrMsg(e.message || 'Ошибка')
+                  }
+                }}
+              >
+                🚫 Закрыть доступ
+              </button>
+            ))}
         </div>
         {errMsg && <div className="attach-error">{errMsg}</div>}
       </div>

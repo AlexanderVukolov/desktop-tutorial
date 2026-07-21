@@ -82,6 +82,7 @@ export async function loginUser(email, password) {
   if (!user) throw new Error('Аккаунт с таким email не найден')
   const hash = await hashPassword(password || '', user.salt)
   if (hash !== user.passwordHash) throw new Error('Неверный пароль')
+  if (user.is_active === false) throw new Error('Доступ закрыт администратором')
   setSession(user.id)
   return publicUser(user)
 }
@@ -120,6 +121,7 @@ export function updateLocalProfile(userId, patch) {
     dept: patch.dept ?? users[idx].dept,
     role: patch.role?.trim() || users[idx].role,
     ...(patch.avatarUrl !== undefined ? { avatar_url: patch.avatarUrl || null } : {}),
+    ...(patch.isActive !== undefined ? { is_active: patch.isActive } : {}),
   }
   saveUsers(users)
   return publicUser(users[idx])
@@ -146,4 +148,9 @@ export function getAllPeople() {
 
 export function personById(id) {
   return getAllPeople().find((p) => p.id === id) || null
+}
+
+// Только действующие сотрудники (без уволенных) — для списков выбора
+export function getActivePeople() {
+  return getAllPeople().filter((p) => p.is_active !== false)
 }

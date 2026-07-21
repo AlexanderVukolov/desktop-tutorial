@@ -1,12 +1,12 @@
 import { DEPARTMENTS, byId } from '../data.js'
 import { isRemoteMode, isAdminUser } from '../config.js'
-import { getAllPeople } from '../auth.js'
+import { getActivePeople } from '../auth.js'
 import { PersonCircle } from './TaskCard.jsx'
 
 // Навигация: обзор, мои задачи, все задачи и фильтр по отделам
 export default function Sidebar({ tasks, view, filters, user, open, onView, onSelectDept, onSelectPerson, onMyTasks }) {
   const countByDept = (id) => tasks.filter((t) => t.dept === id).length
-  const people = getAllPeople()
+  const people = getActivePeople()
   const myCount = user ? tasks.filter((t) => (t.assignees || []).includes(user.id)).length : 0
   const isMyTasks = !['dashboard', 'admin'].includes(view) && filters.assignee === user?.id
 

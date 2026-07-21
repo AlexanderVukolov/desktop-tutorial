@@ -37,7 +37,12 @@ export async function remoteSignIn(email, password) {
     password,
   })
   if (error) throw ruError(error)
-  return fetchMyProfile(data.session.user)
+  const profile = await fetchMyProfile(data.session.user)
+  if (profile.is_active === false) {
+    await supabase.auth.signOut()
+    throw new Error('Доступ закрыт администратором')
+  }
+  return profile
 }
 
 // Повторно отправить письмо с подтверждением email
@@ -56,7 +61,12 @@ export async function remoteSignOut() {
 export async function remoteGetUser() {
   const { data } = await supabase.auth.getSession()
   if (!data.session) return null
-  return fetchMyProfile(data.session.user)
+  const profile = await fetchMyProfile(data.session.user)
+  if (profile.is_active === false) {
+    await supabase.auth.signOut()
+    return null
+  }
+  return profile
 }
 
 // Профиль из таблицы profiles c запасным вариантом из метаданных сессии
@@ -77,6 +87,7 @@ async function fetchMyProfile(authUser) {
 export async function updateProfileRemote(userId, patch) {
   const row = { name: patch.name?.trim(), dept: patch.dept, role: patch.role?.trim() }
   if (patch.avatarUrl !== undefined) row.avatar_url = patch.avatarUrl || null
+  if (patch.isActive !== undefined) row.is_active = patch.isActive
   const { data, error } = await supabase
     .from('profiles')
     .update(row)

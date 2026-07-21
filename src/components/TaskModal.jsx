@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { DEPARTMENTS, STATUSES, PRIORITIES } from '../data.js'
-import { getAllPeople, personById } from '../auth.js'
+import { getActivePeople, personById } from '../auth.js'
 import { PersonCircle } from './TaskCard.jsx'
 import { isRemoteMode } from '../config.js'
 import { uploadAttachment } from '../remote.js'
@@ -78,7 +78,7 @@ export default function TaskModal({ task, onClose, onSave, onDelete, role = 'own
   const smartDone = Object.values(smart).filter(Boolean).length
 
   // Люди (аккаунты + сотрудники): сначала из выбранного отдела, затем остальные
-  const sortedEmployees = getAllPeople().sort((a, b) => {
+  const sortedEmployees = getActivePeople().sort((a, b) => {
     if (a.dept === form.dept && b.dept !== form.dept) return -1
     if (b.dept === form.dept && a.dept !== form.dept) return 1
     return 0

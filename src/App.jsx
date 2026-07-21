@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { DEPARTMENTS, PRIORITIES, byId } from './data.js'
 import { useStore, useFilteredTasks, deadlineState } from './useStore.js'
-import { getCurrentUser, getAllPeople, clearSession, setPeopleCache, updateLocalProfile } from './auth.js'
+import { getCurrentUser, getActivePeople, clearSession, setPeopleCache, updateLocalProfile } from './auth.js'
 import { isRemoteMode, isAdminUser } from './config.js'
 import { useRemoteStore } from './useRemoteStore.js'
 import {
@@ -165,7 +165,7 @@ export default function App() {
   }
   if (!user) return <AuthScreen onAuth={setUser} />
 
-  const people = getAllPeople()
+  const people = getActivePeople()
   const userDept = user.dept ? byId(DEPARTMENTS, user.dept) : null
   const admin = isAdminUser(user)
 
@@ -210,7 +210,7 @@ export default function App() {
 
   // Администраторы, которым дублируются все события (кроме их собственных)
   const otherAdminIds = () =>
-    getAllPeople()
+    getActivePeople()
       .filter((p) => p.id !== user.id && isAdminUser(p))
       .map((p) => p.id)
 
