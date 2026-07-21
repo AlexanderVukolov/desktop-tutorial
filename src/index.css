@@ -1939,6 +1939,71 @@ img.circle {
     border-radius: 0;
   }
 
+  /* Компактный ввод в формах */
+  .modal-head {
+    padding: 12px 14px;
+  }
+  .modal-head h2 {
+    font-size: 16px;
+  }
+  .modal-body {
+    padding: 12px 14px;
+    gap: 11px;
+  }
+  .modal-foot {
+    padding: 10px 14px;
+  }
+  .field label {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+  /* 16px в полях — iPhone перестаёт автоматически зумить страницу */
+  .modal input,
+  .modal select,
+  .modal textarea,
+  .picker-toggle {
+    font-size: 16px;
+    padding: 8px 10px;
+  }
+  .modal textarea {
+    min-height: 56px;
+  }
+  .smart-mark,
+  .result-mark {
+    font-size: 10px;
+    padding: 1px 5px;
+  }
+  .task-author-line {
+    font-size: 12px;
+    padding: 6px 9px;
+  }
+  /* SMART-индикатор: только буквы-кружки + счёт, в одну строку */
+  .smart-meter {
+    padding: 6px 9px;
+    gap: 4px;
+    flex-wrap: nowrap;
+  }
+  .smart-chip {
+    font-size: 0;
+    gap: 0;
+    padding: 2px;
+    border-radius: 50%;
+  }
+  .smart-chip .smart-letter {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+  }
+  .smart-score {
+    font-size: 12px;
+  }
+  .attach-controls {
+    flex-wrap: wrap;
+  }
+  .attach-controls input {
+    flex-basis: 100%;
+  }
+
   /* Всплывашки не шире экрана */
   .toast {
     right: 12px;
